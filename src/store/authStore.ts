@@ -1,24 +1,14 @@
 import { create } from "zustand";
-import type { User } from "../types/user";
 
-interface AuthState {
-  user: User | null;
-  token: string | null;
-}
+import type { AuthStore } from "../types/auth";
 
-interface AuthActions {
-  login: (user: User, token: string) => void;
-  logout: () => void;
-  setUser: (user: User) => void;
-}
-
-export type AuthStore = AuthState & AuthActions;
+const ACCESS_TOKEN_KEY = "ACCESS_TOKEN";
 
 export const useAuthStore = create<AuthStore>((set) => ({
   user: null,
-  token: localStorage.getItem("ACCESS_TOKEN"),
+  token: localStorage.getItem(ACCESS_TOKEN_KEY),
   login: (user, token) => {
-    localStorage.setItem("ACCESS_TOKEN", token);
+    localStorage.setItem(ACCESS_TOKEN_KEY, token);
     set({
       user,
       token,
@@ -26,7 +16,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
   },
 
   logout: () => {
-    localStorage.removeItem("ACCESS_TOKEN");
+    localStorage.removeItem(ACCESS_TOKEN_KEY);
     set({
       user: null,
       token: null,

@@ -7,7 +7,7 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: login,
     onSuccess: (data) => {
-      loginStore(data.user, data.accessToken);
+      loginStore(data.user, data.token);
     },
   });
 };
