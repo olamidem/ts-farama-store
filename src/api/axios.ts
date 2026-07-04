@@ -2,7 +2,6 @@ import axios from "axios";
 
 const axiosClient = axios.create({
   baseURL: "https://api.escuelajs.co/api/v1",
-
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
@@ -12,11 +11,9 @@ const axiosClient = axios.create({
 axiosClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("ACCESS_TOKEN");
-
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-
     return config;
   },
   (error) => Promise.reject(error),
@@ -31,5 +28,4 @@ axiosClient.interceptors.response.use(
     return Promise.reject(error);
   },
 );
-
 export default axiosClient;
