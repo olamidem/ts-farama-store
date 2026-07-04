@@ -4,21 +4,42 @@ import type { User } from "../types/user";
 interface AuthState {
   user: User | null;
   token: string | null;
+}
+
+interface AuthActions {
   login: (user: User, token: string) => void;
   logout: () => void;
   setUser: (user: User) => void;
 }
 
-export const AuthStore = create<AuthState>((set) => ({
+export type AuthStore = AuthState & AuthActions;
+
+export const useAuthStore = create<AuthStore>((set) => ({
   user: null,
+
   token: localStorage.getItem("ACCESS_TOKEN"),
-  login: (user: User, token: string) => {
+
+  login: (user, token) => {
     localStorage.setItem("ACCESS_TOKEN", token);
-    set({ user, token });
+
+    set({
+      user,
+      token,
+    });
   },
+
   logout: () => {
     localStorage.removeItem("ACCESS_TOKEN");
-    set({ user: null, token: null });
+
+    set({
+      user: null,
+      token: null,
+    });
   },
-  setUser: (user: User) => set({ user }),
+
+  setUser: (user) => {
+    set({
+      user,
+    });
+  },
 }));
