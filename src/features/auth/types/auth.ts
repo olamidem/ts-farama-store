@@ -1,4 +1,5 @@
-import type { User } from "./user";
+import type { User } from "../../../types/user";
+
 // Data sent when logging in
 export interface LoginRequest {
   phone_number: string;

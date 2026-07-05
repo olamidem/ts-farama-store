@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import type { AuthStore } from "../types/auth";
+import type { AuthStore } from "../features/auth/types/auth";
 
 const ACCESS_TOKEN_KEY = "ACCESS_TOKEN";
 
