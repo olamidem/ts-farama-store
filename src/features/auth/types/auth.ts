@@ -20,10 +20,11 @@ export interface AuthState {
 
 // Authentication actions
 export interface AuthActions {
-  login: (token: string) => void;
-  logout: () => void;
+  setToken: (token: string) => void;
   setUser: (user: User) => void;
+  logout: () => void;
 }
+
 
 // Complete auth store type
 export type AuthStore = AuthState & AuthActions;

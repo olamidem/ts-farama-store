@@ -3,12 +3,11 @@ import { useAuthStore } from "../../../store/authStore";
 import { login } from "../../../services/auth.service";
 
 export const useLogin = () => {
-  const loginStore = useAuthStore((state) => state.login);
+  const setToken = useAuthStore((state) => state.setToken);
   return useMutation({
     mutationFn: login,
     onSuccess: (data) => {
-      console.log("LOGIN RESPONSE:", data);
-      loginStore(data.access_token);
+      setToken(data.access_token);
     },
   });
 };

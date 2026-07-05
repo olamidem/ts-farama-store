@@ -11,6 +11,9 @@ import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../../types/api";
+import { queryClient } from "../../../lib/queryClient";
+import { getCurrentUser } from "../../../services/auth.service";
+
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false)
@@ -27,7 +30,10 @@ const loginMutation = useLogin();
 const onSubmit = async (data: LoginFormData) => {
   try {
     await loginMutation.mutateAsync(data);
-    //console.log("Data", data);
+     await queryClient.fetchQuery({
+       queryKey: ["current-user"],
+       queryFn: getCurrentUser,
+     });
     toast.success("Welcome back!");
     navigate({
       to: "/dashboard",
