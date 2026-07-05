@@ -1,7 +1,5 @@
-
-import bgImage from "../../assets/this.png";
-import LoginForm from "../features/auth/components/loginForm";
-
+import LoginForm from "../features/auth/components/LoginForm";
+import bgImage from "./../assets/this.png";
 
 const LoginScreen = () => {
   return (
@@ -33,7 +31,7 @@ const LoginScreen = () => {
           </div>
 
           {/* Login Form */}
-         <LoginForm />
+          <LoginForm />
 
           {/* Footer branding */}
           <div className="border-t border-slate-100 pt-6 text-center text-slate-400 text-[11px] font-medium">

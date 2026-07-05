@@ -8,9 +8,7 @@ import LoginScreen from "../pages/LoginScreen";
 import { requireAuth } from "./guard";
 import Dashboard from "../pages/Dashboard";
 
-
 const rootRoute = createRootRoute();
-
 const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
