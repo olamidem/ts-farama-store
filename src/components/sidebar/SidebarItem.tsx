@@ -9,7 +9,7 @@ const SidebarItem = ({ label, to, icon: Icon }: NavigationItem) => {
         className: "bg-blue-50 text-blue-600 font-semibold",
       }}
       inactiveProps={{
-        className: "text-slate-600 hover:bg-slate-100 hover:text-slate-900",
+        className: "text-slate-900 hover:bg-slate-100 hover:text-slate-900",
       }}
       className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-colors"
     >

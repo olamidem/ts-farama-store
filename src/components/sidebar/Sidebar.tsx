@@ -5,9 +5,9 @@ import SidebarSection from "./SidebarSection";
 
 const Sidebar = () => {
   return (
-    <aside className="hidden h-screen w-72 border-r border-slate-200 bg-white lg:flex lg:flex-col">
+    <aside className="hidden h-screen w-72 border-r border-slate-100 bg-white lg:flex lg:flex-col">
       {/* Logo */}
-      <div className="border-b border-slate-200 p-6">
+      <div className="border-b border-slate-100 p-6">
         <Logo />
       </div>
 

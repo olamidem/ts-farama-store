@@ -11,7 +11,7 @@ const Header = () => {
       .toUpperCase() || "?";
 
   return (
-    <header className="flex h-20 items-center justify-between border-b border-slate-200 bg-white px-8">
+    <header className="flex h-22.5 items-center justify-between border-b border-slate-100 bg-white px-8">
       {/* Page Title */}
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
