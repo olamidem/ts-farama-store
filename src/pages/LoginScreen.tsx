@@ -1,6 +1,6 @@
 import LoginForm from "../features/auth/components/LoginForm";
 import bgImage from "./../assets/this.png";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 
 const LoginScreen = () => {
   return (
@@ -32,14 +32,17 @@ const LoginScreen = () => {
           </div>
 
           {/* Login Form */}
-          <motion.section
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3 }}
-            className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl"
-          >
-            <LoginForm />
-          </motion.section>
+          <AnimatePresence mode="wait">
+            <motion.section
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl"
+            >
+              <LoginForm />
+            </motion.section>
+          </AnimatePresence>
 
           {/* Footer branding */}
           <div className="border-t border-slate-100 pt-6 text-center text-slate-400 text-[11px] font-medium">
