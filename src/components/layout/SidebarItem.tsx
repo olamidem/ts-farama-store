@@ -1,13 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import type { LucideIcon } from "lucide-react";
+import type { NavigationItem } from "./navigation.types";
 
-interface SidebarItemProp {
-  label: string;
-  to: string;
-  icon: LucideIcon;
-}
-
-const SidebarItem = ({ label, to, icon: Icon }: SidebarItemProp) => {
+const SidebarItem = ({ label, to, icon: Icon }: NavigationItem) => {
   return (
     <Link
       to={to}
