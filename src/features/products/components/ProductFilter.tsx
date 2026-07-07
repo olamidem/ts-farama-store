@@ -1,3 +1,5 @@
+import Select from "../../../components/ui/Select";
+
 interface ProductCategoryFilterProps {
   value: string;
   onChange: (value: string) => void;
@@ -10,14 +12,18 @@ const ProductCategoryFilter = ({
   return (
     <div className="flex items-center gap-2">
       <label className="font-semibold text-slate-700">Category</label>
-
-      <select
+      <Select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-10 rounded-lg border border-gray-300 px-4 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
-      >
-        <option value="">All Categories</option>
-      </select>
+        placeholder="All Categories"
+        options={[
+          {
+            label: "All Categories",
+            value: "",
+          },
+        ]}
+        className="min-w-52"
+      />
     </div>
   );
 };
