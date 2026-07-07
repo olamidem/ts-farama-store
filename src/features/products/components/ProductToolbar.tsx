@@ -1,33 +1,28 @@
-import Button from "../../../components/ui/Button";
-import Input from "../../../components/ui/Input";
+
+import ProductCategoryFilter from "./ProductFilter";
+import ProductSearch from "./ProductSearch";
 
 interface ProductToolbarProps {
   search: string;
+  category: string;
   onSearchChange: (value: string) => void;
-  onAddProduct: () => void;
+  onCategoryChange: (value: string) => void;
 }
 
 const ProductToolbar = ({
   search,
+  category,
   onSearchChange,
-  onAddProduct,
+  onCategoryChange,
 }: ProductToolbarProps) => {
   return (
-    <div className="flex flex-col gap-4 rounded-xl bg-white p-6 shadow-sm md:flex-row md:items-center md:justify-between">
-      {/* Search */}
-      <div className="w-full md:max-w-sm">
-        <Input
-          placeholder="Search products..."
-          value={search}
-          onChange={(e) => onSearchChange(e.target.value)}
-        />
-      </div>
+    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex-1">
+          <ProductSearch value={search} onChange={onSearchChange} />
+        </div>
 
-      {/* Actions */}
-      <div className="flex gap-3">
-        <Button variant="secondary">Download Inventory</Button>
-
-        <Button onClick={onAddProduct}>+ Add Product</Button>
+        <ProductCategoryFilter value={category} onChange={onCategoryChange} />
       </div>
     </div>
   );

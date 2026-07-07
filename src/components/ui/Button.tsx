@@ -19,12 +19,14 @@ const Button = ({
   ...props
 }: ButtonProps) => {
   const variants = {
-    primary: "bg-blue-600 text-white hover:bg-blue-700",
+    primary:
+      "px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs flex items-center gap-1.5 transition-colors shadow-sm cursor-pointer",
 
     secondary:
-      "border border-gray-300 bg-white text-gray-700 hover:bg-gray-100",
+      "px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg text-xs flex items-center gap-1.5 transition-colors border border-slate-200 cursor-pointer shadow-xs",
 
-    danger: "bg-red-600 text-white hover:bg-red-700",
+    danger:
+      "bg-red-600 text-white hover:bg-red-700 font-bold rounded-lg text-xs flex items-center gap-1.5 transition-colors shadow-sm cursor-pointer",
   };
 
   const sizes = {
