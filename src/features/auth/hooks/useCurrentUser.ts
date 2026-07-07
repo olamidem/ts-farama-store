@@ -3,7 +3,7 @@ import { useAuthStore } from "../../../store/authStore";
 import { getCurrentUser } from "../../../services/auth.service";
 
 export const useCurrentUser = () => {
-  const token = useAuthStore((state) => state.token);
+  const session = useAuthStore((state) => state.session);
   const setUser = useAuthStore((state) => state.setUser);
   return useQuery({
     queryKey: ["current-user"],
@@ -12,7 +12,7 @@ export const useCurrentUser = () => {
       setUser(user);
       return user;
     },
-    enabled: !!token,
+    enabled: !!session,
     retry: false,
     staleTime: 1000 * 60 * 5,
   });

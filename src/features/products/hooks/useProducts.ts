@@ -59,10 +59,8 @@ export const useUpdateProduct = () => {
 
 export const useDeleteProduct = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: deleteProduct,
-
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: PRODUCT_QUERY_KEY,
