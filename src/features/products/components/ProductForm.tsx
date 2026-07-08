@@ -60,6 +60,7 @@ const ProductForm = ({
           ...data,
           barcode: data.barcode?.trim() || "",
         };
+
         onSubmit(payload);
       })}
       className="space-y-5"

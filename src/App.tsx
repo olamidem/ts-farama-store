@@ -14,7 +14,8 @@ export default function App() {
          <Toaster
         position="top-right"
         richColors
-        closeButton
+          closeButton
+          expand={false}
       />
       </AppInitializer>
     </QueryClientProvider>
