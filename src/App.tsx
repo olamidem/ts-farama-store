@@ -3,6 +3,7 @@ import { RouterProvider } from "@tanstack/react-router";
 import AppInitializer from "./app/AppInitializer";
 import { router } from "./router";
 import { queryClient } from "./lib/queryClient";
+import { Toaster } from "sonner";
 
 
 export default function App() {
@@ -10,6 +11,11 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <AppInitializer>
         <RouterProvider router={router} />
+         <Toaster
+        position="top-right"
+        richColors
+        closeButton
+      />
       </AppInitializer>
     </QueryClientProvider>
   );

@@ -27,7 +27,6 @@ export const useProduct = (id: string) => {
 
 export const useCreateProduct = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: (product: CreateProductInput) => createProduct(product),
     onSuccess: () => {
@@ -40,7 +39,6 @@ export const useCreateProduct = () => {
 
 export const useUpdateProduct = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: ({
       id,

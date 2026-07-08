@@ -2,11 +2,17 @@ import { supabase } from "../../../api/supabase";
 import type { CreateProductInput, Product, UpdateProductInput } from "../types/product";
 
 export const createProduct = async (
-  product: CreateProductInput
+  product: CreateProductInput,
 ): Promise<Product> => {
+  const payload: CreateProductInput = {
+    ...product,
+    barcode:
+      product.barcode?.trim() ||
+      `P${Date.now()}${Math.floor(Math.random() * 1000)}`,
+  };
   const { data, error } = await supabase
     .from("products")
-    .insert(product)
+    .insert(payload)
     .select()
     .single();
   if (error) {
