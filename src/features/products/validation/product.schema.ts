@@ -1,22 +1,19 @@
 import { z } from "zod";
 
-export const productSchema = z.object({
-  name: z.string().trim().min(2, "Product name must be at least 2 characters"),
-  barcode: z.string().trim().optional(),
-  sellingPrice: z.coerce
-    .number({
-      error: "Selling price is required",
-    })
-    .int()
-    .positive("Selling price must be greater than zero"),
-  costPrice: z.coerce.number().int().nonnegative("Cost price cannot be negative"),
-  stock: z.coerce
-    .number({
-      error: "Stock is required",
-    })
-    .int()
-    .nonnegative("Stock cannot be negative"),
-  minStockAlert: z.coerce.number().int().nonnegative().default(10),
-  categoryId: z.string(),
+export const createProductSchema = z.object({
+  name: z.string().min(2, "Product name must be at least 2 characters"),
+
+  barcode: z.string().optional(),
+
+  price: z.number().min(0, "Selling price cannot be negative"),
+
+  cost_price: z.number().min(0, "Cost price cannot be negative"),
+
+  stock: z.number().min(0, "Stock cannot be negative"),
+
+  min_stock_alert: z.number().min(0),
+
+  category_id: z.string().min(1, "Please select a category"),
 });
-export type ProductFormData = z.infer<typeof productSchema>;
+
+export type ProductFormData = z.infer<typeof createProductSchema>;

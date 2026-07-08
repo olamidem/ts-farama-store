@@ -1,4 +1,5 @@
 import Modal from "../../../components/ui/Modal";
+import ProductForm from "./ProductForm";
 
 interface AddProductModalProps {
   open: boolean;
@@ -11,6 +12,7 @@ const AddProductModal = ({ open, onClose }: AddProductModalProps) => {
       <div className="space-y-5">
         <p className="text-sm text-slate-500">Product form coming next...</p>
       </div>
+      <ProductForm onCancel={onClose } />
     </Modal>
   );
 };
