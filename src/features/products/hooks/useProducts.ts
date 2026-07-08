@@ -7,6 +7,8 @@ import {
   updateProduct,
 } from "../services/product.service";
 import type { CreateProductInput, UpdateProductInput } from "../types/product";
+import { toast } from "sonner";
+import { getReadableError } from "../../../utils/error";
 
 export const PRODUCT_QUERY_KEY = ["products"];
 
@@ -33,6 +35,10 @@ export const useCreateProduct = () => {
       queryClient.invalidateQueries({
         queryKey: PRODUCT_QUERY_KEY,
       });
+      toast.success("Product created successfully");
+    },
+    onError: (error) => {
+      toast.error(getReadableError(error));
     },
   });
 };
