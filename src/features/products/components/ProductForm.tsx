@@ -4,6 +4,10 @@ import Input from "../../../components/ui/Input";
 import Label from "../../../components/ui/Label";
 import Select from "../../../components/ui/Select";
 
+interface ProductFormProps {
+  onCancel: () => void;
+}
+
 const categoryOptions = [
   {
     label: "Select Category",
@@ -19,13 +23,15 @@ const categoryOptions = [
   },
 ];
 
-const ProductForm = () => {
-    const [category, setCategory] = useState("");
+const ProductForm = ({ onCancel }: ProductFormProps) => {
+  const [category, setCategory] = useState("");
 
   return (
     <form className="space-y-5">
       <div className="space-y-1">
-        <Label>Product Name *</Label>
+        <Label className="block text-[10px] font-bold text-slate-400 uppercase">
+          Product Name *
+        </Label>
 
         <Input id="name" placeholder="e.g. Coca-Cola 50cl" />
       </div>
@@ -75,7 +81,7 @@ const ProductForm = () => {
       </div>
 
       <div className="flex justify-end gap-3 border-t border-slate-200 pt-5">
-        <Button type="button" variant="secondary">
+        <Button type="button" variant="secondary" onClick={onCancel}>
           Cancel
         </Button>
 

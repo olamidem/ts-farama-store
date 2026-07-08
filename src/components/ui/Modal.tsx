@@ -33,7 +33,6 @@ const Modal = ({ open, title, children, onClose }: ModalProps) => {
         </div>
 
         {/* Body */}
-
         <div className="px-6 py-5">{children}</div>
       </div>
     </div>
