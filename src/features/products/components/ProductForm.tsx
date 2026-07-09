@@ -2,6 +2,7 @@ import Button from "../../../components/ui/Button";
 import Input from "../../../components/ui/Input";
 import Label from "../../../components/ui/Label";
 import Select from "../../../components/ui/Select";
+import { useCategories } from "../../categories/hooks/useCategories";
 import type { CreateProductInput } from "../types/product";
 import {
   createProductSchema,
@@ -17,17 +18,6 @@ interface ProductFormProps {
   onSubmit: (data: CreateProductInput) => Promise<void> | void;
 }
 
-const categoryOptions = [
-  {
-    label: "Beverages",
-    value: "beverages",
-  },
-  {
-    label: "Groceries",
-    value: "groceries",
-  },
-];
-
 const ProductForm = ({
   onCancel,
   defaultValues,
@@ -37,7 +27,7 @@ const ProductForm = ({
   const {
     register,
     handleSubmit,
-      control,
+    control,
     reset,
     formState: { errors },
   } = useForm<ProductFormData>({
@@ -54,6 +44,21 @@ const ProductForm = ({
     },
   });
 
+  const { data: categories = [] } = useCategories();
+
+  const categoryOptions =
+    categories.length === 0
+      ? [
+          {
+            label: "No categories available",
+            value: "",
+          },
+        ]
+      : categories.map((category) => ({
+          label: category.name,
+          value: category.id,
+        }));
+
   return (
     <form
       onSubmit={handleSubmit((data) => {
@@ -61,9 +66,8 @@ const ProductForm = ({
           ...data,
           barcode: data.barcode?.trim() || "",
         };
-
-          onSubmit(payload);
-          reset()
+        onSubmit(payload);
+        reset();
       })}
       className="space-y-5"
     >
@@ -200,6 +204,8 @@ const ProductForm = ({
         <Button
           type="submit"
           loading={loading}
+          fullWidth
+          disabled={loading || categories.length === 0}
           className="flex-1 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold disabled:opacity-50 cursor-pointer"
         >
           Add Product
