@@ -5,8 +5,10 @@ import Button from "../../../components/ui/Button";
 import type { Category } from "../../categories/types/category";
 import type { Product } from "../types/product";
 import { formatCurrency } from "../../../utils/format";
+import { selectionColumn } from "../../../components/ui/DataTable/SelectionColumn";
 
 export const productColumns = (categories: Category[]): ColumnDef<Product>[] => [
+  selectionColumn<Product>(),
   {
     accessorKey: "barcode",
     header: "Barcode",
