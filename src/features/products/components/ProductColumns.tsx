@@ -1,81 +1,108 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { Product } from "../types/product";
+import type { Category } from "../../categories/types/category";
 
-export const productColumns: ColumnDef<Product>[] = [
-  {
-    accessorKey: "barcode",
-    header: "Barcode",
-    cell: ({ row }) => (
-      <span className="font-mono text-[11px] text-slate-500">
-        {row.original.barcode}
-      </span>
-    ),
-  },
+export const productColumns = (
+  categories: Category[],
+): ColumnDef<Product>[] => {
+  const categoryMap = new Map(
+    categories.map((category) => [category.id, category.name]),
+  );
 
-  {
-    accessorKey: "name",
-    header: "Product Name",
-    cell: ({ row }) => (
-      <div>
-        <p className="font-bold text-slate-950">{row.original.name}</p>
+  return [
+    {
+      accessorKey: "barcode",
+      header: "Barcode",
 
-        {row.original.stock <= row.original.min_stock_alert && (
-          <span className="mt-1 inline-block rounded-sm bg-rose-100 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-rose-700">
-            Low Stock
-          </span>
-        )}
-      </div>
-    ),
-  },
+      cell: ({ row }) => (
+        <span className="font-mono text-xs text-slate-500">
+          {row.original.barcode}
+        </span>
+      ),
+    },
 
-  {
-    accessorKey: "categoryId",
-    header: "Category",
-  },
+    {
+      accessorKey: "name",
 
-  {
-    accessorKey: "selling_price",
-    header: "Selling Price",
-    cell: ({ row }) => (
-      <span className="font-extrabold text-slate-900">
-        € {row.original.selling_price.toFixed(2)}
-      </span>
-    ),
-  },
+      header: "Product Name",
 
-  {
-    accessorKey: "cost_price",
-    header: "Cost Price",
-    cell: ({ row }) => (
-      <span className="font-mono font-semibold text-slate-500">
-        € {row.original.cost_price.toFixed(2)}
-      </span>
-    ),
-  },
+      cell: ({ row }) => (
+        <div>
+          <p className="font-bold text-slate-900">{row.original.name}</p>
 
-  {
-    accessorKey: "stock",
-    header: "Stock",
-    cell: ({ row }) => (
-      <span
-        className={`font-mono font-bold ${
-          row.original.stock <= row.original.min_stock_alert
-            ? "text-rose-600"
-            : "text-slate-800"
-        }`}
-      >
-        {row.original.stock} Units
-      </span>
-    ),
-  },
+          {row.original.stock <= row.original.min_stock_alert && (
+            <span className="mt-1 inline-block rounded bg-rose-100 px-2 py-0.5 text-[10px] font-bold uppercase text-rose-700">
+              Low Stock
+            </span>
+          )}
+        </div>
+      ),
+    },
 
-  {
-    id: "actions",
-    header: "Actions",
-    cell: () => (
-      <button className="rounded bg-slate-100 px-2.5 py-1 text-[11px] font-bold text-slate-700 transition hover:bg-slate-200">
-        Edit
-      </button>
-    ),
-  },
-];
+    {
+      accessorKey: "category_id",
+
+      header: "Category",
+
+      cell: ({ row }) => (
+        <span className="rounded bg-slate-100 px-2 py-1 text-xs font-semibold">
+          {categoryMap.get(row.original.category_id) ?? "Unknown"}
+        </span>
+      ),
+    },
+
+    {
+      accessorKey: "selling_price",
+
+      header: "Selling Price",
+
+      cell: ({ row }) => (
+        <span className="font-bold">
+          ₦{row.original.selling_price.toLocaleString()}
+        </span>
+      ),
+    },
+
+    {
+      accessorKey: "cost_price",
+
+      header: "Cost Price",
+
+      cell: ({ row }) => (
+        <span className="text-slate-500">
+          ₦{row.original.cost_price.toLocaleString()}
+        </span>
+      ),
+    },
+
+    {
+      accessorKey: "stock",
+
+      header: "Stock",
+
+      cell: ({ row }) => (
+        <span
+          className={`font-mono font-bold ${
+            row.original.stock <= row.original.min_stock_alert
+              ? "text-rose-600"
+              : "text-slate-800"
+          }`}
+        >
+          {row.original.stock} Units
+        </span>
+      ),
+    },
+
+    {
+      id: "actions",
+
+      header: "Actions",
+
+      cell: () => (
+        <button className="rounded bg-slate-100 px-3 py-1 text-xs font-bold hover:bg-slate-200">
+          Edit
+        </button>
+      ),
+    },
+  ];
+};

@@ -6,6 +6,7 @@ import { useProducts } from "../features/products/hooks/useProducts";
 import ProductTable from "../features/products/components/ProductTable";
 import LoadingScreen from "../components/common/LoadingScreen";
 import AddProductModal from "../features/products/components/AddProductModal";
+import { useCategories } from "../features/categories/hooks/useCategories";
 
 const ProductsPage = () => {
   const [open, setOpen] = useState(false);
@@ -13,6 +14,7 @@ const ProductsPage = () => {
   const [category, setCategory] = useState("");
 
   const { data: products = [], isLoading, error } = useProducts();
+  const { data: categories = [] } = useCategories();
   if (isLoading) {
     return <LoadingScreen text="Loading products..." />;
   }
@@ -42,7 +44,7 @@ const ProductsPage = () => {
           onCategoryChange={setCategory}
         />
         {/* Table */}
-        <ProductTable products={products} />
+        <ProductTable products={products} categories={ categories} />
 
         {/* Modal */}
         <AddProductModal

@@ -21,6 +21,8 @@ const DataTable = <T,>({ data, columns }: DataTableProps<T>) => {
     <div className="bg-white rounded-xl border border-slate-100 overflow-hidden shadow-xs">
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs border-collapse">
+          {/* Header */}
+
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr
@@ -30,7 +32,7 @@ const DataTable = <T,>({ data, columns }: DataTableProps<T>) => {
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="p-3.5 text-center w-12 col-span-1"
+                    className="whitespace-nowrap px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-slate-500"
                   >
                     {header.isPlaceholder
                       ? null
@@ -44,22 +46,38 @@ const DataTable = <T,>({ data, columns }: DataTableProps<T>) => {
             ))}
           </thead>
 
+          {/* Body */}
+
           <tbody className="divide-y divide-slate-100">
-            {table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                className="border-b last:border-0 hover:bg-slate-50"
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className="px-6 py-4 text-sm text-slate-700"
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
+            {table.getRowModel().rows.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={columns.length}
+                  className="py-14 text-center text-sm text-slate-400"
+                >
+                  No records found.
+                </td>
               </tr>
-            ))}
+            ) : (
+              table.getRowModel().rows.map((row) => (
+                <tr
+                  key={row.id}
+                  className="transition-colors hover:bg-slate-50"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <td
+                      key={cell.id}
+                      className="whitespace-nowrap px-4 py-3 text-sm text-slate-700 align-middle"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

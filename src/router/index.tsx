@@ -9,6 +9,7 @@ import DashboardLayout from "../layout/DashboardLayout";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import LoginScreen from "../pages/Login/LoginScreen";
 import ProductsPage from "../pages/ProductsPage";
+import CategoryPage from "../pages/CategoryPage";
 
 const rootRoute = createRootRoute();
 const loginRoute = createRoute({
@@ -38,12 +39,17 @@ const productsRoute = createRoute({
   path: "/products",
   component: ProductsPage,
 });
+const CategoryRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
+  path: "/categories",
+  component: CategoryPage,
+});
 /**
  * Route Tree
  */
 const routeTree = rootRoute.addChildren([
   loginRoute,
-  appLayoutRoute.addChildren([dashboardRoute, productsRoute]),
+  appLayoutRoute.addChildren([dashboardRoute, productsRoute, CategoryRoute]),
 ]);
 
 /**
