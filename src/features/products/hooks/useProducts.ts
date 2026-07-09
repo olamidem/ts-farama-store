@@ -9,19 +9,18 @@ import {
 import type { CreateProductInput, UpdateProductInput } from "../types/product";
 import { toast } from "sonner";
 import { getReadableError } from "../../../utils/error";
-
-export const PRODUCT_QUERY_KEY = ["products"];
+import { QUERY_KEYS } from "../../../lib/queryKey";
 
 export const useProducts = () => {
   return useQuery({
-    queryKey: PRODUCT_QUERY_KEY,
+    queryKey: QUERY_KEYS.products,
     queryFn: getProducts,
   });
 };
 
 export const useProduct = (id: string) => {
   return useQuery({
-    queryKey: [...PRODUCT_QUERY_KEY, id],
+    queryKey: [...QUERY_KEYS.products, id],
     queryFn: () => getProduct(id),
     enabled: !!id,
   });
@@ -33,7 +32,7 @@ export const useCreateProduct = () => {
     mutationFn: (product: CreateProductInput) => createProduct(product),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: PRODUCT_QUERY_KEY,
+        queryKey: QUERY_KEYS.products,
       });
       toast.success("Product created successfully");
     },
@@ -55,7 +54,7 @@ export const useUpdateProduct = () => {
     }) => updateProduct(id, product),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: PRODUCT_QUERY_KEY,
+        queryKey: QUERY_KEYS.products,
       });
     },
   });
@@ -67,7 +66,7 @@ export const useDeleteProduct = () => {
     mutationFn: deleteProduct,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: PRODUCT_QUERY_KEY,
+        queryKey: QUERY_KEYS.products,
       });
     },
   });
