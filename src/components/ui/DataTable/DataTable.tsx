@@ -6,30 +6,32 @@ import {
   type OnChangeFn,
   type RowSelectionState,
 } from "@tanstack/react-table";
-import { Package } from "lucide-react";
 import DataTableEmpty from "./DataTableEmpty";
+import { Package } from "lucide-react";
 
 interface DataTableProps<T> {
   data: T[];
   columns: ColumnDef<T>[];
   enableRowSelection?: boolean;
   rowSelection?: RowSelectionState;
- onRowSelectionChange?: OnChangeFn<RowSelectionState>;
+  onRowSelectionChange?: OnChangeFn<RowSelectionState>;
+  getRowId?: (originalRow: T) => string;
 }
 
 const DataTable = <T,>({
   data,
   columns,
   enableRowSelection = false,
-  rowSelection = {},
+  rowSelection,
   onRowSelectionChange,
+  getRowId,
 }: DataTableProps<T>) => {
   if (data.length === 0) {
     return (
       <DataTableEmpty
         icon={Package}
         title="No data found"
-        description="There is nothing to display."
+        description="There is nothing to display yet."
       />
     );
   }
@@ -43,20 +45,20 @@ const DataTable = <T,>({
     enableRowSelection,
     onRowSelectionChange,
     getCoreRowModel: getCoreRowModel(),
+    getRowId,
   });
 
   return (
     <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
       <div className="overflow-x-auto">
-        <table className="min-w-full table-auto">
-          {/* Header */}
-          <thead className="bg-slate-50">
+        <table className="min-w-full">
+          <thead className="border-b border-slate-200 bg-slate-50">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-500"
+                    className="px-6 py-4 text-left text-sm font-semibold text-slate-700"
                   >
                     {header.isPlaceholder
                       ? null
@@ -70,7 +72,6 @@ const DataTable = <T,>({
             ))}
           </thead>
 
-          {/* Body */}
           <tbody className="divide-y divide-slate-100 bg-white">
             {table.getRowModel().rows.map((row) => (
               <tr key={row.id} className="transition-colors hover:bg-slate-50">

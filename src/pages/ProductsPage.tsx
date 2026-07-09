@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { motion } from "motion/react";
+import { useMemo, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import ProductHeader from "../features/products/components/ProductHeader";
 import ProductToolbar from "../features/products/components/ProductToolbar";
 import ProductTable from "../features/products/components/ProductTable";
@@ -8,6 +8,7 @@ import { useProducts } from "../features/products/hooks/useProducts";
 import { useCategories } from "../features/categories/hooks/useCategories";
 import ErrorState from "../components/common/ErrorState";
 import type { RowSelectionState } from "@tanstack/react-table";
+import ProductBulkActions from "../features/products/components/ProductBulkActions";
 
 const ProductsPage = () => {
   const [open, setOpen] = useState(false);
@@ -17,14 +18,18 @@ const ProductsPage = () => {
   const { data: products = [], isLoading, error } = useProducts();
   const { data: categories = [] } = useCategories();
 
- if (error) {
-   return (
-     <ErrorState
-       title="Unable to load products"
-       description="We couldn't retrieve your products. Please try again."
-     />
-   );
- }
+  const selectedProducts = useMemo(() => {
+    return products.filter((product) => rowSelection[String(product.id)]);
+  }, [products, rowSelection]);
+
+  if (error) {
+    return (
+      <ErrorState
+        title="Unable to load products"
+        description="We couldn't retrieve your products. Please try again."
+      />
+    );
+  }
 
   return (
     <motion.div
@@ -45,6 +50,17 @@ const ProductsPage = () => {
         onSearchChange={setSearch}
         onCategoryChange={setCategory}
       />
+
+      {/* Bulk Selection for Update */}
+      <AnimatePresence mode="wait">
+        {selectedProducts.length > 0 && (
+          <ProductBulkActions
+            selectedCount={selectedProducts.length}
+            onClearSelection={() => setRowSelection({})}
+            onBulkUpdate={() => console.log(selectedProducts)}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Table */}
       <ProductTable
