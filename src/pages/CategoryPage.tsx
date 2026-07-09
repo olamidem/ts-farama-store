@@ -1,22 +1,17 @@
 import { useState } from "react";
+import PageHeader from "../components/ui/PageHeader";
+import Button from "../components/ui/Button";
+import CategoryGrid from "../features/categories/components/CategoryGrid";
+import AddCategoryModal from "../features/categories/components/AddCategoryModal";
+import { useCategories } from "../features/categories/hooks/useCategories";
+import { useProducts } from "../features/products/hooks/useProducts";
 
-import Button from "../../../components/ui/Button";
 
-import CategoryGrid from "../components/CategoryGrid";
-import AddCategoryModal from "../components/AddCategoryModal";
-
-import { useCategories } from "../hooks/useCategories";
-import { useProducts } from "../../product/hooks/useProducts";
-import PageHeader from "../../../components/ui/PageHeader";
 
 const CategoryPage = () => {
   const [open, setOpen] = useState(false);
-
-  const { data: categories = [], isLoading } =
-    useCategories();
-
-  const { data: products = [] } =
-    useProducts();
+  const { data: categories = [], isLoading } =useCategories();
+  const { data: products = [] } = useProducts();
 
   return (
     <div className="space-y-6">

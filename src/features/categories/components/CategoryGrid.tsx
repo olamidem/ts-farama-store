@@ -1,7 +1,8 @@
 import { FolderOpen } from "lucide-react";
 import CategoryCard from "./CategoryCard";
 import type { Category } from "../types/category";
-import type { Product } from "../../product/types/product";
+import type { Product } from "../../products/types/product";
+
 
 interface CategoryGridProps {
   categories: Category[];
