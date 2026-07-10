@@ -52,7 +52,6 @@ export const productColumns = (categories: Category[]): ColumnDef<Product>[] => 
   },
   {
     accessorKey: "selling_price",
-
     header: "Selling Price",
     cell: ({ row }) => (
       <span className="font-bold text-slate-900">
