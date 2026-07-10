@@ -9,12 +9,14 @@ import { useCategories } from "../features/categories/hooks/useCategories";
 import ErrorState from "../components/common/ErrorState";
 import type { RowSelectionState } from "@tanstack/react-table";
 import ProductBulkActions from "../features/products/components/ProductBulkActions";
+import BulkUpdateModal from "../features/products/components/BulkUpdateModal";
 
 const ProductsPage = () => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [bulkModalOpen, setBulkModalOpen] = useState(false);
   const { data: products = [], isLoading, error } = useProducts();
   const { data: categories = [] } = useCategories();
 
@@ -57,7 +59,7 @@ const ProductsPage = () => {
           <ProductBulkActions
             selectedCount={selectedProducts.length}
             onClearSelection={() => setRowSelection({})}
-            onBulkUpdate={() => console.log(selectedProducts)}
+            onBulkUpdate={() => setBulkModalOpen(true)}
           />
         )}
       </AnimatePresence>
@@ -74,6 +76,13 @@ const ProductsPage = () => {
 
       {/* Modal */}
       <AddProductModal open={open} onClose={() => setOpen(false)} />
+
+      {/* Modal for product bulks update */}
+      <BulkUpdateModal
+        open={bulkModalOpen}
+        onClose={() => setBulkModalOpen(false)}
+        selectedProducts={selectedProducts}
+      />
     </motion.div>
   );
 };
