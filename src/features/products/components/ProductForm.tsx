@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Button from "../../../components/ui/Button";
 import Input from "../../../components/ui/Input";
 import Label from "../../../components/ui/Label";
@@ -14,6 +15,7 @@ import { Controller, useForm } from "react-hook-form";
 interface ProductFormProps {
   defaultValues?: Partial<CreateProductInput>;
   loading?: boolean;
+  submitText?:string,
   onCancel: () => void;
   onSubmit: (data: CreateProductInput) => Promise<void> | void;
 }
@@ -22,6 +24,7 @@ const ProductForm = ({
   onCancel,
   defaultValues,
   loading = false,
+  submitText="Add Product",
   onSubmit,
 }: ProductFormProps) => {
   const {
@@ -29,7 +32,7 @@ const ProductForm = ({
     handleSubmit,
     control,
     reset,
-    formState: { errors },
+    formState: { errors,isDirty },
   } = useForm<ProductFormData>({
     resolver: zodResolver(createProductSchema),
     defaultValues: {
@@ -59,16 +62,26 @@ const ProductForm = ({
           value: category.id,
         }));
 
+  useEffect(() => {
+    reset({
+      name: "",
+      barcode: "",
+      selling_price: 0,
+      cost_price: 0,
+      stock: 0,
+      min_stock_alert: 10,
+      category_id: "",
+      ...defaultValues,
+    });
+  }, [defaultValues, reset]);
   return (
     <form
-      onSubmit={handleSubmit((data) => {
+      onSubmit={handleSubmit(async (data) => {
         const payload: CreateProductInput = {
           ...data,
           barcode: data.barcode?.trim() || "",
         };
-        onSubmit(payload);
-        console.log(payload);
-
+        await onSubmit(payload);
         reset();
       })}
       className="space-y-5"
@@ -79,6 +92,7 @@ const ProductForm = ({
         </Label>
 
         <Input
+          autoFocus
           id="name"
           {...register("name")}
           placeholder="e.g. Coca-Cola 50cl"
@@ -207,10 +221,10 @@ const ProductForm = ({
           type="submit"
           loading={loading}
           fullWidth
-          disabled={loading || categories.length === 0}
+          disabled={!isDirty || loading || categories.length === 0}
           className="flex-1 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold disabled:opacity-50 cursor-pointer"
         >
-          Add Product
+          {submitText ?? "Add Product"}
         </Button>
       </div>
     </form>

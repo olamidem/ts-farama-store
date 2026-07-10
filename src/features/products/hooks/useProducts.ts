@@ -57,6 +57,7 @@ export const useUpdateProduct = () => {
       queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.products,
       });
+      toast.success("Product updated successfully");
     },
   });
 };

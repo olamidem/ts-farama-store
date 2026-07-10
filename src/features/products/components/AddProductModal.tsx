@@ -23,6 +23,7 @@ const AddProductModal = ({ open, onClose }: AddProductModalProps) => {
         onCancel={onClose}
         onSubmit={handleSubmit}
         loading={addProduct.isPending}
+        submitText="Add Product"
       />
     </Modal>
   );

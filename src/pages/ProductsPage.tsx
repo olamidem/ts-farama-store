@@ -10,11 +10,15 @@ import ErrorState from "../components/common/ErrorState";
 import type { RowSelectionState } from "@tanstack/react-table";
 import ProductBulkActions from "../features/products/components/ProductBulkActions";
 import BulkUpdateModal from "../features/products/components/BulkUpdateModal";
+import type { Product } from "../features/products/types/product";
+import EditProductModal from "../features/products/components/EditProductModal";
 
 const ProductsPage = () => {
-  const [open, setOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [bulkModalOpen, setBulkModalOpen] = useState(false);
   const { data: products = [], isLoading, error } = useProducts();
@@ -23,6 +27,16 @@ const ProductsPage = () => {
   const selectedProducts = useMemo(() => {
     return products.filter((product) => rowSelection[String(product.id)]);
   }, [products, rowSelection]);
+
+  const handleEditProduct = (product: Product) => {
+    setSelectedProduct(product);
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setSelectedProduct(null);
+    setIsEditModalOpen(false);
+  };
 
   if (error) {
     return (
@@ -42,7 +56,7 @@ const ProductsPage = () => {
     >
       {/* Header */}
       <ProductHeader
-        onAddProduct={() => setOpen(true)}
+        onAddProduct={() => setIsAddModalOpen(true)}
         onDownload={() => console.log("Download")}
       />
       {/* Toolbar */}
@@ -72,10 +86,14 @@ const ProductsPage = () => {
         enableRowSelection
         rowSelection={rowSelection}
         onRowSelectionChange={setRowSelection}
+        onEdit={handleEditProduct}
       />
 
       {/* Modal */}
-      <AddProductModal open={open} onClose={() => setOpen(false)} />
+      <AddProductModal
+        open={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+      />
 
       {/* Modal for product bulks update */}
       <BulkUpdateModal
@@ -83,6 +101,13 @@ const ProductsPage = () => {
         onClose={() => setBulkModalOpen(false)}
         onSuccess={() => setRowSelection({})}
         selectedProducts={selectedProducts}
+      />
+
+      {/* Edit product Modal */}
+      <EditProductModal
+        open={isEditModalOpen}
+        onClose={handleCloseEditModal}
+        product={selectedProduct}
       />
     </motion.div>
   );

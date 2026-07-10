@@ -7,13 +7,16 @@ import type { Product } from "../types/product";
 import { formatCurrency } from "../../../utils/format";
 import { selectionColumn } from "../../../components/ui/DataTable/SelectionColumn";
 
-export const productColumns = (categories: Category[]): ColumnDef<Product>[] => [
+export const productColumns = (
+  categories: Category[],
+  onEdit: (product: Product) => void,
+): ColumnDef<Product>[] => [
   selectionColumn<Product>(),
   {
     accessorKey: "barcode",
     header: "Barcode",
     cell: ({ row }) => (
-      <span className="rounded-md bg-slate-100 px-2 py-1 font-mono text-xs font-semibold text-slate-600">
+      <span className="rounded-md px-2 py-1 font-mono text-xs font-semibold text-slate-600">
         {row.original.barcode}
       </span>
     ),
@@ -44,7 +47,7 @@ export const productColumns = (categories: Category[]): ColumnDef<Product>[] => 
         (c) => c.id === row.original.category_id,
       );
       return (
-        <Badge variant="info" size="sm">
+        <Badge variant="info" size="sm" className="text-slate-800">
           {category?.name ?? "Uncategorized"}
         </Badge>
       );
@@ -54,7 +57,7 @@ export const productColumns = (categories: Category[]): ColumnDef<Product>[] => 
     accessorKey: "selling_price",
     header: "Selling Price",
     cell: ({ row }) => (
-      <span className="font-bold text-slate-900">
+      <span className="font-semibold text-slate-900">
         {formatCurrency(row.original.selling_price)}
       </span>
     ),
@@ -88,8 +91,12 @@ export const productColumns = (categories: Category[]): ColumnDef<Product>[] => 
   {
     id: "actions",
     header: "Actions",
-    cell: () => (
-      <Button size="sm" variant="secondary">
+    cell: ({ row }) => (
+      <Button
+        size="sm"
+        variant="secondary"
+        onClick={() => onEdit(row.original)}
+      >
         <Pencil size={12} />
         Edit
       </Button>
