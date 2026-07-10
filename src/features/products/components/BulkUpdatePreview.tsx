@@ -1,3 +1,6 @@
+import { ArrowRight } from "lucide-react";
+import type { BulkUpdateType } from "../../../utils/calculateBulkPrice";
+import { formatCurrency } from "../../../utils/format";
 import type { Product } from "../types/product";
 
 interface PreviewProduct extends Product {
@@ -9,15 +12,12 @@ interface PreviewProduct extends Product {
 
 interface BulkUpdatePreviewProps {
   products: PreviewProduct[];
+  updateType: BulkUpdateType;
+  operation: "increase" | "decrease";
 }
 
-const formatPrice = (price: number) =>
-  new Intl.NumberFormat("en-NG", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(price);
-
-const BulkUpdatePreview = ({ products }: BulkUpdatePreviewProps) => {
+const BulkUpdatePreview = ({ products, updateType, operation }: BulkUpdatePreviewProps) => {
+     const newPriceColor =  operation === "increase" ? "text-emerald-600" : "text-red-600";
   return (
     <div className="space-y-2">
       <label className="block text-[10px] font-bold uppercase tracking-wide text-slate-400">
@@ -40,39 +40,40 @@ const BulkUpdatePreview = ({ products }: BulkUpdatePreviewProps) => {
               </p>
 
               <div className="mt-2 space-y-1 text-xs">
-                {/* Selling Price */}
-                <div className="flex justify-between">
-                  <span className="text-slate-500">Selling</span>
-
-                  <span>
-                    <span className="text-slate-400 line-through">
-                      ₦{formatPrice(product.oldSellingPrice)}
+                {(updateType === "selling" || updateType === "both") && (
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Retail:</span>
+                    <span>
+                      <span className="line-through text-slate-400">
+                        {formatCurrency(product.oldSellingPrice)}
+                      </span>
+                      <span className="mx-1">➜</span>
+                      <span className={`font-bold ${newPriceColor}`}>
+                        {formatCurrency(product.newSellingPrice)}
+                      </span>
                     </span>
+                  </div>
+                )}
 
-                    <span className="mx-2">→</span>
-
-                    <span className="font-bold text-slate-900">
-                      ₦{formatPrice(product.newSellingPrice)}
+                {(updateType === "cost" || updateType === "both") && (
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Wholesale:</span>
+                    <span>
+                      <span className="line-through text-slate-400">
+                        {formatCurrency(product.oldCostPrice)}
+                      </span>
+                      <span className="mx-1">
+                        <ArrowRight
+                          size={12}
+                          className="inline mx-1 text-slate-400"
+                        />
+                      </span>
+                      <span className={`font-bold ${newPriceColor}`}>
+                        {formatCurrency(product.newCostPrice)}
+                      </span>
                     </span>
-                  </span>
-                </div>
-
-                {/* Cost Price */}
-                <div className="flex justify-between">
-                  <span className="text-slate-500">Cost</span>
-
-                  <span>
-                    <span className="text-slate-400 line-through">
-                      ₦{formatPrice(product.oldCostPrice)}
-                    </span>
-
-                    <span className="mx-2">→</span>
-
-                    <span className="font-bold text-slate-900">
-                      ₦{formatPrice(product.newCostPrice)}
-                    </span>
-                  </span>
-                </div>
+                  </div>
+                )}
               </div>
             </div>
           ))

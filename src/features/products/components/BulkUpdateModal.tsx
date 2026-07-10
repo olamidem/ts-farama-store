@@ -40,6 +40,7 @@ const BulkUpdateModal = ({
       amount,
       selectedProducts,
     });
+      setAmount("")
     onClose();
   };
 
@@ -64,7 +65,7 @@ const BulkUpdateModal = ({
           onUpdateTypeChange={setUpdateType}
         />
 
-        <BulkUpdatePreview products={previewProducts} />
+        <BulkUpdatePreview products={previewProducts} updateType={updateType} operation={operation} />
         <BulkUpdateActions onCancel={onClose} onApply={handleApply} />
       </div>
     </Modal>
