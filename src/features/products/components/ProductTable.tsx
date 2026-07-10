@@ -12,18 +12,18 @@ interface ProductTableProps {
   enableRowSelection?: boolean;
   rowSelection?: RowSelectionState;
   onRowSelectionChange?: OnChangeFn<RowSelectionState>;
-
+  onEdit: (product: Product) => void;
 }
 
 const ProductTable = ({
   products,
   categories,
+  onEdit,
   enableRowSelection,
   rowSelection,
   onRowSelectionChange,
-
 }: ProductTableProps) => {
-  const columns = productColumns(categories);
+  const columns = productColumns(categories,onEdit);
 
   return (
     <motion.div

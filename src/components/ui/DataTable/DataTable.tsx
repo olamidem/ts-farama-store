@@ -78,7 +78,7 @@ const DataTable = <T,>({
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={cell.id}
-                    className="px-6 py-5 align-middle text-sm text-slate-700"
+                    className="px-5 py-2 align-middle text-sm text-slate-700"
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
