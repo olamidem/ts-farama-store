@@ -1,20 +1,28 @@
 import { X } from "lucide-react";
 import type { ReactNode } from "react";
+import { cn } from "../../utils/cn";
 
 interface ModalProps {
   open: boolean;
   title: string;
   children: ReactNode;
   onClose: () => void;
+  size?: "sm" | "md" | "lg" | "xl";
 }
+const sizes = {
+  sm: "max-w-md",
+  md: "max-w-2xl",
+  lg: "max-w-4xl",
+  xl: "max-w-6xl",
+};
 
-const Modal = ({ open, title, children, onClose }: ModalProps) => {
+const Modal = ({ open, title, children, onClose,size="md" }: ModalProps) => {
   if (!open) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-      <div
-        className="bg-white rounded-xl shadow-xl max-w-2xl w-full overflow-hidden"
+      <div className={cn("bg-white rounded-xl shadow-xl w-full overflow-hidden", sizes[size]
+)}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
