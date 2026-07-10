@@ -1,5 +1,4 @@
 import { supabase } from "../../../api/supabase";
-import type { BulkProductUpdate } from "../types/bulkUpdate";
 import type { CreateProductInput, Product, UpdateProductInput } from "../types/product";
 
 export const createProduct = async (
@@ -62,23 +61,6 @@ export const updateProduct = async (
     throw new Error(error.message);
   }
   return data;
-};
-
-
-export const bulkUpdateProducts = async (
-  products: BulkProductUpdate[],
-): Promise<void> => {
-  const updates = products.map(({ id, updates }) =>
-    supabase.
-      from("products")
-      .update(updates)
-      .eq("id", id),
-  );
-  const results = await Promise.all(updates);
-  const failed = results.find((result) => result.error);
-  if (failed?.error) {
-    throw new Error(failed.error.message);
-  }
 };
 
 export const deleteProduct = async (

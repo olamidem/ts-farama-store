@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  bulkUpdateProducts,
   createProduct,
   deleteProduct,
   getProduct,
@@ -57,22 +56,6 @@ export const useUpdateProduct = () => {
       queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.products,
       });
-    },
-  });
-};
-
-export const useBulkUpdateProducts = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: bulkUpdateProducts,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.products,
-      });
-      toast.success("Products updated successfully");
-    },
-    onError: (error) => {
-      toast.error(getReadableError(error));
     },
   });
 };

@@ -81,7 +81,6 @@ const ProductsPage = () => {
       <BulkUpdateModal
         open={bulkModalOpen}
         onClose={() => setBulkModalOpen(false)}
-        onSuccess={() => setRowSelection({})}
         selectedProducts={selectedProducts}
       />
     </motion.div>

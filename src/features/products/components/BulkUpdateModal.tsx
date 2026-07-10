@@ -5,21 +5,16 @@ import BulkUpdateForm from "./BulkUpdateForm";
 import BulkUpdatePreview from "./BulkUpdatePreview";
 import BulkUpdateActions from "./BulkUpdateActions";
 import { useBulkPricePreview } from "../hooks/useBulkPricePreview";
-import { useBulkUpdateProducts } from "../hooks/useProducts";
-
-interface BulkUpdateModalProps {
-  open: boolean;
-  onClose: () => void;
-  onSuccess: () => void;
-  selectedProducts: Product[];
-}
 
 const BulkUpdateModal = ({
   open,
   onClose,
-  onSuccess,
   selectedProducts,
-}: BulkUpdateModalProps) => {
+}: {
+  open: boolean;
+  onClose: () => void;
+  selectedProducts: Product[];
+}) => {
   const [amount, setAmount] = useState("");
   const [updateType, setUpdateType] = useState<"selling" | "cost" | "both">(
     "selling",
@@ -37,52 +32,22 @@ const BulkUpdateModal = ({
     operation,
   });
 
-  const bulkUpdateMutation = useBulkUpdateProducts();
-
-  const resetForm = () => {
-    setAmount("");
-    setUpdateType("selling");
-    setMethod("percentage");
-    setOperation("increase");
-  };
-
-  const handleClose = () => {
-    resetForm();
+  const handleApply = () => {
+    console.log({
+      updateType,
+      method,
+      operation,
+      amount,
+      selectedProducts,
+    });
+      setAmount("")
     onClose();
-  };
-
-  const handleApply = async () => {
-    if (!amount || Number(amount) <= 0) {
-      return;
-    }
-    const updates = previewProducts.map((product) => ({
-      id: product.id,
-      updates: {
-        ...(updateType !== "cost" && {
-          selling_price: product.newSellingPrice,
-        }),
-        ...(updateType !== "selling" && {
-          cost_price: product.newCostPrice,
-        }),
-      },
-    }));
-    try {
-      await bulkUpdateMutation.mutateAsync(updates);
-      // Reset form
-      resetForm();
-      // Clear selected rows
-      onSuccess();
-      // Close modal
-      handleClose();
-    } catch {
-      // Error toast handled in mutation hook
-    }
   };
 
   return (
     <Modal
       open={open}
-      onClose={handleClose}
+      onClose={onClose}
       size="md"
       title={`Bulk Update Prices (${selectedProducts.length} ${
         selectedProducts.length === 1 ? "Item" : "Items"
@@ -100,17 +65,8 @@ const BulkUpdateModal = ({
           onUpdateTypeChange={setUpdateType}
         />
 
-        <BulkUpdatePreview
-          products={previewProducts}
-          updateType={updateType}
-          operation={operation}
-        />
-        <BulkUpdateActions
-          loading={bulkUpdateMutation.isPending}
-          disabled={!amount || Number(amount) <= 0}
-          onCancel={handleClose}
-          onApply={handleApply}
-        />
+        <BulkUpdatePreview products={previewProducts} updateType={updateType} operation={operation} />
+        <BulkUpdateActions onCancel={onClose} onApply={handleApply} />
       </div>
     </Modal>
   );

@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { calculateBulkPrice, type BulkUpdateMethod, type BulkUpdateOperation, type BulkUpdateType } from "../../../utils/calculateBulkPrice";
 import type { Product } from "../types/product";
-import type { BulkPricePreview } from "../types/bulkUpdate";
 
 interface UseBulkPricePreviewParams {
   products: Product[];
@@ -17,7 +16,7 @@ export const useBulkPricePreview = ({
   updateType,
   method,
   operation,
-}: UseBulkPricePreviewParams):BulkPricePreview[] => {
+}: UseBulkPricePreviewParams) => {
   return useMemo(() => {
     return products.map((product) => {
       const sellingPrice =
@@ -44,6 +43,7 @@ export const useBulkPricePreview = ({
         ...product,
         oldSellingPrice: product.selling_price,
         newSellingPrice: sellingPrice,
+
         oldCostPrice: product.cost_price,
         newCostPrice: costPrice,
       };
