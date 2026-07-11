@@ -22,6 +22,7 @@ const ProductsPage = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [bulkModalOpen, setBulkModalOpen] = useState(false);
+  const [status, setStatus] = useState("all");
   const { data: products = [], isLoading, error } = useProducts();
   const { data: categories = [] } = useCategories();
   const [productToDeactivate, setProductToDeactivate] =
@@ -30,6 +31,24 @@ const ProductsPage = () => {
   const selectedProducts = useMemo(() => {
     return products.filter((product) => rowSelection[String(product.id)]);
   }, [products, rowSelection]);
+
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
+      const matchesSearch =
+        product.name.toLowerCase().includes(search.toLowerCase()) ||
+        (product.barcode ?? "").toLowerCase().includes(search.toLowerCase());
+
+      const matchesCategory =
+        category === "" || product.category_id === category;
+
+      const matchesStatus =
+        status === "all" ||
+        (status === "active" && product.is_active) ||
+        (status === "inactive" && !product.is_active);
+
+      return matchesSearch && matchesCategory && matchesStatus;
+    });
+  }, [products, search, category, status]);
 
   const handleEditProduct = (product: Product) => {
     setSelectedProduct(product);
@@ -72,6 +91,9 @@ const ProductsPage = () => {
         category={category}
         onSearchChange={setSearch}
         onCategoryChange={setCategory}
+        status={status}
+        onStatusChange={setStatus}
+        categories={categories}
       />
 
       {/* Bulk Selection for Update */}
@@ -86,8 +108,9 @@ const ProductsPage = () => {
       </AnimatePresence>
 
       {/* Table */}
+
       <ProductTable
-        products={products}
+        products={filteredProducts}
         categories={categories}
         isLoading={isLoading}
         enableRowSelection
