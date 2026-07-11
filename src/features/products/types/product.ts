@@ -7,6 +7,7 @@ export interface Product {
   stock: number;
   category_id: string;
   min_stock_alert: number;
+  is_active: boolean;
   created_at: string;
   updated_at: string;
   // category?: Category;

@@ -58,7 +58,7 @@ const DataTable = <T,>({
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="px-6 py-4 text-left text-sm font-semibold text-slate-700"
+                    className="px-6 py-4 text-left text-sm font-semibold text-slate-400 uppercase bg-slate-50 border-b border-slate-100"
                   >
                     {header.isPlaceholder
                       ? null
@@ -78,7 +78,7 @@ const DataTable = <T,>({
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={cell.id}
-                    className="px-5 py-2 align-middle text-sm text-slate-700"
+                    className="px-6 py-3 align-middle text-sm text-slate-700"
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>

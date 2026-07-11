@@ -24,7 +24,7 @@ export const productColumns = ({
     accessorKey: "barcode",
     header: "Barcode",
     cell: ({ row }) => (
-      <span className="rounded-md px-2 py-1 font-mono text-xs font-semibold text-slate-600">
+      <span className="rounded-md font-mono text-xs font-semibold text-slate-600">
         {row.original.barcode}
       </span>
     ),
@@ -103,6 +103,15 @@ export const productColumns = ({
         </span>
       );
     },
+  },
+  {
+    accessorKey: "is_active",
+    header: "Status",
+    cell: ({ row }) => (
+      <Badge variant={row.original.is_active ? "success" : "danger"}>
+        {row.original.is_active ? "Active" : "Inactive"}
+      </Badge>
+    ),
   },
   {
     id: "actions",
