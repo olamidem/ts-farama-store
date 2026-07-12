@@ -23,6 +23,7 @@ export const useProductImport = (
     setFile(null);
     setRecords([]);
     setSummary(null);
+    setIsProcessing(false)
   };
 
   /**

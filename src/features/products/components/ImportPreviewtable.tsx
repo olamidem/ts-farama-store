@@ -107,4 +107,3 @@ export const ImportPreviewTable = ({ records }: ImportPreviewTableProps) => {
   );
 };
 
-export default ImportPreviewTable;
