@@ -34,22 +34,28 @@ export const productColumns = ({
     accessorKey: "name",
     header: "Product",
     cell: ({ row }) => {
-      const product = row.original;
-      const isLowStock = product.stock <= product.min_stock_alert;
-      return (
-        <div className="flex items-center justify-between gap-3">
-          <span className="font-semibold text-slate-900">{product.name}</span>
-          {isLowStock && (
-            <Badge
-              variant="danger"
-              size="sm"
-              className="inline-block mt-0.5 px-1.5 py-0.2 bg-rose-100 text-rose-700 font-bold rounded-sm text-[8px] uppercase tracking-wider"
-            >
-              Low Stock
-            </Badge>
-          )}
-        </div>
-      );
+       const product = row.original;
+       const isLowStock = product.stock <= product.min_stock_alert;
+       const firstLetter = product.name
+         ? product.name.charAt(0).toUpperCase()
+         : "P";
+       return (
+         <div className="flex items-center gap-3">
+           <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-100 text-xs font-black text-slate-600 border border-slate-200 uppercase shrink-0">
+             {firstLetter}
+           </div>
+           <div className="flex flex-col min-w-0">
+             <span className="font-bold text-slate-900 truncate">
+               {product.name}
+             </span>
+             {isLowStock && (
+               <span className="text-[9px] font-black tracking-wider text-rose-600 uppercase mt-0.5">
+                 ⚠️ Below Alert Limit
+               </span>
+             )}
+           </div>
+         </div>
+       );
     },
   },
   {
