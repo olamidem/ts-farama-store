@@ -32,12 +32,13 @@ const ProductForm = ({
     handleSubmit,
     control,
     reset,
-    formState: { errors,isDirty },
+    formState: { errors, isDirty },
   } = useForm<ProductFormData>({
     resolver: zodResolver(createProductSchema),
     defaultValues: {
       name: "",
       barcode: "",
+      sku: "",
       selling_price: 0,
       cost_price: 0,
       stock: 0,
@@ -66,6 +67,7 @@ const ProductForm = ({
     reset({
       name: "",
       barcode: "",
+      sku: "",
       selling_price: 0,
       cost_price: 0,
       stock: 0,
@@ -76,14 +78,16 @@ const ProductForm = ({
   }, [defaultValues, reset]);
   return (
     <form
-      onSubmit={handleSubmit(async (data) => {
-        const payload: CreateProductInput = {
-          ...data,
-          barcode: data.barcode?.trim() || "",
-        };
-        await onSubmit(payload);
-        reset();
-      })}
+      onSubmit={(e) => {
+        handleSubmit(async (data) => {
+          const payload: CreateProductInput = {
+            ...data,
+            barcode: data.barcode?.trim() || "",
+          };
+          await onSubmit(payload);
+          reset();
+        })(e);
+      }}
       className="space-y-5"
     >
       <div className="space-y-1">
@@ -180,7 +184,7 @@ const ProductForm = ({
             placeholder="10"
             className="w-full py-2 px-3 border border-slate-200 rounded-lg focus:outline-none font-mono"
           />
-          {errors.stock && (
+          {errors.min_stock_alert && (
             <p className="text-xs text-red-500 mt-1">
               {errors.min_stock_alert?.message}
             </p>

@@ -66,3 +66,20 @@ The next milestone focuses on improving product browsing performance by introduc
 - Empty state handling
 
 This work prepares the product module for large inventories while maintaining a fast and responsive user experience.
+
+
+## 🚧 Upcoming
+
+### 017 Product SKU System
+
+The next iteration of the product module introduces a complete SKU management system.
+
+Planned improvements include:
+
+- Automatic SKU generation
+- Duplicate product prevention
+- Product identity management
+- Improved product import workflow
+- SKU search support
+- SKU export support
+- Foundation for purchase orders and barcode printing
