@@ -60,3 +60,16 @@ All notable changes to this project will be documented here.
 - Automatic page reset when filters change.
 - Sorting integration.
 - Improved page navigation.
+
+
+# Changelog
+
+## [Unreleased]
+
+### Planned
+
+- Introduce SKU system for products.
+- Prevent duplicate products.
+- Improve product import workflow.
+- Add SKU support to exports.
+- Prepare inventory architecture for purchasing.
