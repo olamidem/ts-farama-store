@@ -1,7 +1,10 @@
+import { useState } from "react";
 import Modal from "../../../components/ui/Modal";
 import { useCreateProduct } from "../hooks/useProducts";
-import type { CreateProductInput } from "../types/product";
+import type { CreateProductInput, Product } from "../types/product";
 import ProductForm from "./ProductForm";
+import { checkDuplicateProduct } from "../services/checkDuplicateProduct.service";
+import DuplicateProductModal from "./DuplicateProductModal";
 
 interface AddProductModalProps {
   open: boolean;
@@ -9,23 +12,55 @@ interface AddProductModalProps {
 }
 
 const AddProductModal = ({ open, onClose }: AddProductModalProps) => {
+  const [duplicateProduct, setDuplicateProduct] = useState<Product | null>(
+    null,
+  );
+  const [pendingProduct, setPendingProduct] =
+    useState<CreateProductInput | null>(null);
   const addProduct = useCreateProduct();
 
-  const handleSubmit = async (data: CreateProductInput) => {
-    await addProduct.mutateAsync(data);
-    console.log(data);
-    
+  const handleSubmit = async (values: CreateProductInput) => {
+   const duplicate = await checkDuplicateProduct(
+     values.name,
+     values.category_id,
+   );
+    if (duplicate) {
+      setDuplicateProduct(duplicate);
+      setPendingProduct(values);
+      return;
+    }
+    await addProduct.mutateAsync(values);
+    onClose();
+  };
+
+  const handleCreateAnyway = async () => {
+    if (!pendingProduct) return;
+    await addProduct.mutateAsync(pendingProduct);
+    setDuplicateProduct(null);
+    setPendingProduct(null);
     onClose();
   };
   return (
-    <Modal open={open} onClose={onClose} title="Add Product" size="sm">
-      <ProductForm
-        onCancel={onClose}
-        onSubmit={handleSubmit}
-        loading={addProduct.isPending}
-        submitText="Add Product"
+    <>
+      <Modal open={open} onClose={onClose} title="Add Product" size="sm">
+        <ProductForm
+          onCancel={onClose}
+          onSubmit={handleSubmit}
+          loading={addProduct.isPending}
+          submitText="Add Product"
+        />
+      </Modal>
+
+      <DuplicateProductModal
+        open={!!duplicateProduct}
+        product={duplicateProduct}
+        onCancel={() => {
+          setDuplicateProduct(null);
+          setPendingProduct(null);
+        }}
+        onCreateAnyway={handleCreateAnyway}
       />
-    </Modal>
+    </>
   );
 };
 

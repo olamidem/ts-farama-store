@@ -2,8 +2,8 @@ Authentication          ✅
 Dashboard               ✅
 Products CRUD           ✅
 Product Import          ✅
-Issue #14 Pagination    🚧
-Categories              ⏳
+Issue #14 Pagination    ✅
+Categories              ✅
 Customers               ⏳
 Inventory               ⏳
 POS                     ⏳
@@ -22,7 +22,7 @@ Product SKU System
 ✅ Populate existing products.
 ✅ Make sku unique.
 ✅ Create a PostgreSQL trigger to generate SKUs automatically.
-⏳ Update Supabase types.
+✅ Update Supabase types.
 ⏳ Display SKU in the Product Table.
 ⏳ Add SKU to Product Details.
 ⏳ Search by SKU.
