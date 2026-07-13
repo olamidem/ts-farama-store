@@ -7,7 +7,6 @@ import { formatCurrency } from "../../../utils/format";
 import { selectionColumn } from "../../../components/ui/DataTable/SelectionColumn";
 import SortableHeader from "../../../components/ui/DataTable/SortableHeader";
 
-
 interface ProductColumnsProps {
   categories: Category[];
   onEdit: (product: Product) => void;

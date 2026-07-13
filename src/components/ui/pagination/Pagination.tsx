@@ -21,6 +21,36 @@ const Pagination = ({
 
   const endRecord = Math.min(page * pageSize, totalItems);
 
+  const getPageNumbers = () => {
+    const pages: (number | string)[] = [];
+    const maxVisible = 5;
+
+    if (totalPages <= maxVisible) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      pages.push(1);
+      const start = Math.max(2, page - 1);
+      const end = Math.min(totalPages - 1, page + 1);
+
+      if (start > 2) {
+        pages.push("...");
+      }
+
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+
+      if (end < totalPages - 1) {
+        pages.push("...");
+      }
+
+      pages.push(totalPages);
+    }
+    return pages;
+  };
+
   return (
     <div className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm md:flex-row md:items-center md:justify-between">
       {/* Left */}
@@ -66,21 +96,31 @@ const Pagination = ({
           <ChevronLeft size={16} />
         </button>
 
-        {Array.from({ length: totalPages }).map((_, index) => {
-          const pageNumber = index + 1;
+        {getPageNumbers().map((pageNumber, index) => {
+          if (pageNumber === "...") {
+            return (
+              <span
+                key={`ellipsis-${index}`}
+                className="flex h-9 w-9 items-center justify-center text-sm font-medium text-slate-400"
+              >
+                ...
+              </span>
+            );
+          }
 
+          const num = pageNumber as number;
           return (
             <button
-              key={pageNumber}
+              key={num}
               type="button"
-              onClick={() => onPageChange(pageNumber)}
+              onClick={() => onPageChange(num)}
               className={`h-9 min-w-9 rounded-lg text-sm font-semibold transition ${
-                page === pageNumber
+                page === num
                   ? "bg-slate-900 text-white"
                   : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
               }`}
             >
-              {pageNumber}
+              {num}
             </button>
           );
         })}
