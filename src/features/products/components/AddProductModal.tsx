@@ -9,9 +9,10 @@ import DuplicateProductModal from "./DuplicateProductModal";
 interface AddProductModalProps {
   open: boolean;
   onClose: () => void;
+  onViewExisting: (product: Product) => void;
 }
 
-const AddProductModal = ({ open, onClose }: AddProductModalProps) => {
+const AddProductModal = ({ open, onClose, onViewExisting }: AddProductModalProps) => {
   const [duplicateProduct, setDuplicateProduct] = useState<Product | null>(
     null,
   );
@@ -21,7 +22,7 @@ const AddProductModal = ({ open, onClose }: AddProductModalProps) => {
 
   const handleSubmit = async (values: CreateProductInput) => {
    const duplicate = await checkDuplicateProduct(
-     values.name,
+     values.name.trim(),
      values.category_id,
    );
     if (duplicate) {
@@ -59,6 +60,11 @@ const AddProductModal = ({ open, onClose }: AddProductModalProps) => {
           setPendingProduct(null);
         }}
         onCreateAnyway={handleCreateAnyway}
+         onViewProduct={() => {
+        if (!duplicateProduct) return;
+        setDuplicateProduct(null);
+        onViewExisting(duplicateProduct);
+    }}
       />
     </>
   );

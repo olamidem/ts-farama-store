@@ -22,7 +22,7 @@ import type { Product } from "../features/products/types/product";
 const ProductsPage = () => {
   // ==========================
   // Modals
-  // ==========================
+
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
@@ -245,6 +245,11 @@ const ProductsPage = () => {
       <AddProductModal
         open={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
+        onViewExisting={(product) => {
+          setIsAddModalOpen(false);
+          setSelectedProduct(product);
+          setIsEditModalOpen(true);
+        }}
       />
 
       <ProductImportModal

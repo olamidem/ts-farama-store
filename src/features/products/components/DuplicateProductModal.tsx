@@ -18,6 +18,7 @@ const DuplicateProductModal = ({
   onCreateAnyway,
   onViewProduct,
 }: DuplicateProductModalProps) => {
+    
   if (!product) return null;
 
   return (
@@ -29,8 +30,7 @@ const DuplicateProductModal = ({
           </h3>
 
           <p className="mt-2 text-sm text-amber-700">
-            Creating another product with the same name and category may split
-            your inventory.
+            A product with the same name already exists in this category. If this is the same physical product, updating the existing item is recommended to keep stock levels accurate. Only create another product if it represents a genuinely different item (for example, a different size, packaging, or variant).
           </p>
         </div>
 
