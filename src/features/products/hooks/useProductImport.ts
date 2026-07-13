@@ -18,12 +18,14 @@ export const useProductImport = (
   const [records, setRecords] = useState<ValidatedImportRecord[]>([]);
   const [summary, setSummary] = useState<ImportSummary | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [importCompleted, setImportCompleted] = useState(false);
 
   const resetImportState = () => {
     setFile(null);
     setRecords([]);
     setSummary(null);
     setIsProcessing(false)
+     setImportCompleted(false);
   };
 
   /**
@@ -62,7 +64,7 @@ const processImportFile = async (selectedFile: File) => {
         .filter((record) => record.isValid)
         .map((record) => ({
           name: record.name,
-          barcode: record.barcode || undefined,
+          barcode: record.barcode,
           selling_price: record.selling_price,
           cost_price: record.cost_price,
           stock: record.stock,
@@ -73,7 +75,6 @@ const processImportFile = async (selectedFile: File) => {
       if (validProducts.length === 0) {
         throw new Error("No valid products to import.");
       }
-
       await createProducts(validProducts);
     },
     onSuccess: async () => {
@@ -81,8 +82,8 @@ const processImportFile = async (selectedFile: File) => {
       await queryClient.invalidateQueries({
         queryKey: ["products"],
       });
-      resetImportState();
-      onSuccess?.();
+      setImportCompleted(true)
+         onSuccess?.();
     },
     onError: (error) => {
       console.error(error);
@@ -98,5 +99,6 @@ const processImportFile = async (selectedFile: File) => {
     processImportFile,
     confirmImport: importMutation.mutate,
     resetImportState,
+    importCompleted,
   };
 };

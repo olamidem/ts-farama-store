@@ -6,12 +6,14 @@ interface ImportFooterProps {
   summary: ImportSummary;
   onBack: () => void;
   onConfirm: () => void;
+  loading: boolean;
 }
 
 const ImportFooter = ({
   summary,
   onBack,
   onConfirm,
+  loading
 }: ImportFooterProps) => {
   return (
     <div className="flex items-center justify-between border-t border-slate-100 pt-4">
@@ -30,18 +32,12 @@ const ImportFooter = ({
       </p>
 
       <div className="flex gap-2">
-        <Button
-          variant="ghost"
-          onClick={onBack}
-        >
+        <Button variant="ghost" onClick={onBack}>
           Back to Upload
         </Button>
 
-        <Button
-          onClick={onConfirm}
-          disabled={summary.valid === 0}
-        >
-          Confirm Import ({summary.valid})
+        <Button onClick={onConfirm} disabled={summary.valid === 0 || loading}>
+          {loading ? "Importing..." : `Confirm Import (${summary.valid})`}
         </Button>
       </div>
     </div>
