@@ -1,16 +1,12 @@
 import { supabase } from "../../../api/supabase";
 import type { BulkProductUpdate } from "../types/bulkUpdate";
 import type { CreateProductInput, Product, UpdateProductInput } from "../types/product";
+import { buildProductPayload } from "../utils/buildProductPayload";
 
 export const createProduct = async (
   product: CreateProductInput,
 ): Promise<Product> => {
-  const payload: CreateProductInput = {
-    ...product,
-    barcode:
-      product.barcode?.trim() ||
-      `P${Date.now()}${Math.floor(Math.random() * 1000)}`,
-  };
+ const payload = buildProductPayload(product);
   const { data, error } = await supabase
     .from("products")
     .insert(payload)

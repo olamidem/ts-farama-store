@@ -82,7 +82,6 @@ export const useBulkUpdateProducts = () => {
 
 export const useRestoreProduct = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: restoreProduct,
     onSuccess: () => {

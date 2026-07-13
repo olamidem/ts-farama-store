@@ -14,9 +14,12 @@ import type { Product } from "../features/products/types/product";
 import EditProductModal from "../features/products/components/EditProductModal";
 import DeleteProductModal from "../features/products/components/DeleteProductModal";
 import RestoreProductModal from "../features/products/components/RestoreProductModal";
+import ExportProductDropdown from "../features/products/components/ExportProductDropdown";
+import ProductImportModal from "../features/products/components/ProductImportModal";
 
 const ProductsPage = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -68,9 +71,9 @@ const ProductsPage = () => {
     setProductToDeactivate(product);
   };
 
- const handleRestoreProduct = (product: Product) => {
-   setProductToRestore(product);
- };
+  const handleRestoreProduct = (product: Product) => {
+    setProductToRestore(product);
+  };
 
   if (error) {
     return (
@@ -91,8 +94,16 @@ const ProductsPage = () => {
       {/* Header */}
       <ProductHeader
         onAddProduct={() => setIsAddModalOpen(true)}
-        onDownload={() => console.log("Download")}
+        onImportProduct={() => setIsImportModalOpen(true)}
+        exportMenu={
+          <ExportProductDropdown
+            products={products}
+            filteredProducts={filteredProducts}
+            categories={categories}
+          />
+        }
       />
+
       {/* Toolbar */}
       <ProductToolbar
         search={search}
@@ -133,6 +144,13 @@ const ProductsPage = () => {
       <AddProductModal
         open={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
+      />
+
+      <ProductImportModal
+        open={isImportModalOpen}
+        onClose={() => setIsImportModalOpen(false)}
+        existingProducts={products}
+        categories={categories}
       />
 
       {/* Modal for product bulks update */}
