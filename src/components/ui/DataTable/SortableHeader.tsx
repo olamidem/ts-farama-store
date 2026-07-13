@@ -1,5 +1,4 @@
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
-import { cn } from "../../../utils/cn";
 
 interface SortableHeaderProps<T extends string> {
   label: string;
@@ -22,23 +21,20 @@ const SortableHeader = <T extends string>({
     <button
       type="button"
       onClick={() => onSort(column)}
-      className="group flex items-center gap-2 font-semibold text-slate-700 transition-colors hover:text-slate-900"
+      className="group flex items-center gap-2 text-xs font-semibold text-slate-500 uppercase tracking-wider transition-colors hover:text-slate-800"
     >
       <span>{label}</span>
 
       {active ? (
         ascending ? (
-          <ArrowUp size={15} className="text-blue-600 transition-transform" />
+          <ArrowUp size={14} className="text-blue-600 transition-transform" />
         ) : (
-          <ArrowDown size={15} className="text-blue-600 transition-transform" />
+          <ArrowDown size={14} className="text-blue-600 transition-transform" />
         )
       ) : (
         <ArrowUpDown
-          size={15}
-          className={cn(
-            "text-slate-400 transition-opacity",
-            "opacity-0 group-hover:opacity-100",
-          )}
+          size={14}
+          className="text-slate-400 transition-opacity opacity-70 group-hover:opacity-100"
         />
       )}
     </button>

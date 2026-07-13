@@ -1,10 +1,9 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import type { RowSelectionState } from "@tanstack/react-table";
-
 import ErrorState from "../components/common/ErrorState";
 import Pagination from "../components/ui/pagination/Pagination";
-
 import ProductHeader from "../features/products/components/ProductHeader";
 import ProductToolbar from "../features/products/components/ProductToolbar";
 import ProductTable from "../features/products/components/ProductTable";
@@ -53,9 +52,9 @@ const ProductsPage = () => {
   // Sorting
   // ==========================
 
-  const [sortBy] = useState<"created_at" | "name" | "selling_price" | "stock">(
-    "created_at",
-  );
+  const [sortBy, setSortBy] = useState<
+    "created_at" | "name" | "selling_price" | "stock"
+  >("created_at");
 
   const [ascending, setAscending] = useState(false);
 
@@ -154,16 +153,16 @@ const ProductsPage = () => {
   };
 
   const handleSort = (
-  column: "created_at" | "name" | "selling_price" | "stock"
-) => {
-  if (sortBy === column) {
-    setAscending((prev) => !prev);
-  } else {
-    setSortBy(column);
-    setAscending(true);
-  }
-  setPage(1);
-};
+    column: "created_at" | "name" | "selling_price" | "stock",
+  ) => {
+    if (sortBy === column) {
+      setAscending((prev) => !prev);
+    } else {
+      setSortBy(column);
+      setAscending(true);
+    }
+    setPage(1);
+  };
 
   // ==========================
   // Error
