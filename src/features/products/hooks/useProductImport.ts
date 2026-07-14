@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import type { Product } from "../types/product";
 import type { Category } from "../../categories/types/category";
 import type { ValidatedImportRecord, ImportSummary } from "../types/import";
 import { createProducts } from "../services/productImportExport.service";
 import { parseImportFile } from "../utils/parseImportFiles";
 import { validateImportRecords } from "../utils/ValidateImport";
+import { getExistingProductsForImport } from "../services/getExistingProductsForImport.service";
+import { mapRowToProduct } from "../utils/mapRowToProduct";
 
 export const useProductImport = (
-  existingProducts: Product[],
   categories: Category[],
   onSuccess?: () => void,
 ) => {
@@ -24,10 +24,9 @@ export const useProductImport = (
     setFile(null);
     setRecords([]);
     setSummary(null);
-    setIsProcessing(false)
-     setImportCompleted(false);
+    setIsProcessing(false);
+    setImportCompleted(false);
   };
-
   /**
    * Parse + Validate
    */
@@ -35,26 +34,45 @@ const processImportFile = async (selectedFile: File) => {
   try {
     setIsProcessing(true);
     setFile(selectedFile);
-    const rawRecords = await parseImportFile(selectedFile);
 
-    const { validatedRecords, summary: importSummary } = validateImportRecords(
-      rawRecords,
-      existingProducts,
+    // 1. Read spreadsheet
+    const rawRows = await parseImportFile(selectedFile);
+
+    // 2. Normalize spreadsheet columns
+    const parsedRows = rawRows.map(mapRowToProduct);
+
+    // 3. Fetch existing products by imported names
+    const names = [
+      ...new Set(
+        parsedRows
+          .map((row) => row.name.trim())
+          .filter((name) => name.length > 0),
+      ),
+    ];
+    const existingDatabaseProducts =
+      await getExistingProductsForImport(names);
+
+    // 4. Validate
+    const {
+      validatedRecords,
+      summary: importSummary,
+    } = validateImportRecords(
+      parsedRows,
+      existingDatabaseProducts,
       categories,
     );
+
+    // 5. Store results
     setRecords(validatedRecords);
     setSummary(importSummary);
-
   } catch (error) {
     toast.error("Unable to read the selected file.");
     console.error("Product import failed:", error);
     resetImportState();
-    
   } finally {
     setIsProcessing(false);
   }
 };
-
   /**
    * Import Mutation
    */
@@ -68,9 +86,10 @@ const processImportFile = async (selectedFile: File) => {
           selling_price: record.selling_price,
           cost_price: record.cost_price,
           stock: record.stock,
+          sku: record.sku,
           category_id: record.category_id,
-            min_stock_alert: record.min_stock_alert,
-            is_active: true,
+          min_stock_alert: record.min_stock_alert,
+          is_active: true,
         }));
       if (validProducts.length === 0) {
         throw new Error("No valid products to import.");
@@ -82,8 +101,8 @@ const processImportFile = async (selectedFile: File) => {
       await queryClient.invalidateQueries({
         queryKey: ["products"],
       });
-      setImportCompleted(true)
-         onSuccess?.();
+      setImportCompleted(true);
+      onSuccess?.();
     },
     onError: (error) => {
       console.error(error);

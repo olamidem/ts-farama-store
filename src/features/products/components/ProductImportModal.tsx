@@ -9,20 +9,17 @@ import ImportFooter from "./ImportFooter";
 import ImportProgress from "./ImportProgress";
 import ImportFileInfo from "./ImportFileInfo";
 import { ImportPreviewTable } from "./ImportPreviewtable";
-import type { Product } from "../types/product";
 import type { Category } from "../../categories/types/category";
 
 interface ProductImportModalProps {
   open: boolean;
   onClose: () => void;
-  existingProducts: Product[];
   categories: Category[];
 }
 
 const ProductImportModal = ({
   open,
   onClose,
-  existingProducts,
   categories,
 }: ProductImportModalProps) => {
   const {
@@ -34,7 +31,7 @@ const ProductImportModal = ({
     confirmImport,
     resetImportState,
     importCompleted,
-  } = useProductImport(existingProducts, categories, onClose);
+  } = useProductImport( categories, onClose);
 
   const handleClose = () => {
     resetImportState();
@@ -51,6 +48,7 @@ const ProductImportModal = ({
       ? Math.round((summary.failed / summary.total) * 100)
       : 0;
 
+      
   return (
     <Modal
       open={open}
@@ -158,7 +156,7 @@ const ProductImportModal = ({
                     Spreadsheet Row Preview
                   </h4>
                   <div className="rounded-xl border border-slate-200">
-                    <div className="max-h-[350px] overflow-y-auto">
+                    <div className="max-h-87.5 overflow-y-auto">
                       <ImportPreviewTable records={records} />
                     </div>
                   </div>

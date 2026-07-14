@@ -1,14 +1,20 @@
+import type { ParsedImportRecord } from "./importFile";
+import type { Product } from "./product";
+
 export interface ValidatedImportRecord {
   rowNumber: number;
-  raw: Record<string, unknown>;
+  raw: ParsedImportRecord;
   name: string;
   barcode: string;
+  sku: string;
   selling_price: number;
   cost_price: number;
   stock: number;
+  category_identifier: string;
   category_id: string;
   category_name: string;
   min_stock_alert: number;
+  duplicateProduct: Product | null;
   isValid: boolean;
   errors: string[];
 }

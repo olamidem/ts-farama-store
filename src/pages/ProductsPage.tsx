@@ -255,7 +255,6 @@ const ProductsPage = () => {
       <ProductImportModal
         open={isImportModalOpen}
         onClose={() => setIsImportModalOpen(false)}
-        existingProducts={products}
         categories={categories}
       />
 

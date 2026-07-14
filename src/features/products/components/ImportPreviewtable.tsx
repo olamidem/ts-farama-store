@@ -15,7 +15,7 @@ export const ImportPreviewTable = ({
           <tr className="uppercase tracking-wider">
             <th className="w-12 p-3 text-center">Row</th>
             <th className="p-3">Status</th>
-            <th className="min-w-[180px] p-3">Product Name</th>
+            <th className="min-w-45 p-3">Product Name</th>
             <th className="p-3">Barcode</th>
             <th className="p-3">Category</th>
             <th className="p-3 text-right">Selling Price</th>
@@ -61,7 +61,7 @@ export const ImportPreviewTable = ({
                 </td>
 
                 <td
-                  className="max-w-[220px] truncate p-3 font-medium text-slate-900"
+                  className="max-w-55 truncate p-3 font-medium text-slate-900"
                   title={record.name}
                 >
                   {record.name || (
