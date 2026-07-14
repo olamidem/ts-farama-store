@@ -41,7 +41,7 @@ export const ImportValidationTable = ({
                   {record.rowNumber}
                 </td>
                 <td
-                  className="p-3 font-semibold text-slate-800 truncate max-w-[200px]"
+                  className="p-3 font-semibold text-slate-800 truncate max-w-50"
                   title={record.name}
                 >
                   {record.name || (

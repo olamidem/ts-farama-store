@@ -124,7 +124,6 @@ export const useProductImport = (
       await queryClient.invalidateQueries({
         queryKey: ["products"],
       });
-      resetImportState();
       setImportCompleted(true);
       onSuccess?.();
     },

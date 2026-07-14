@@ -12,6 +12,7 @@ import { ImportPreviewTable } from "./ImportPreviewtable";
 import type { Category } from "../../categories/types/category";
 import DuplicateHandling from "./DuplicateHandling";
 import ImportPlan from "./ImportantPlan";
+import { useEffect } from "react";
 
 interface ProductImportModalProps {
   open: boolean;
@@ -41,6 +42,12 @@ const ProductImportModal = ({
     resetImportState();
     onClose();
   };
+
+  useEffect(() => {
+  if (open) {
+    resetImportState();
+  }
+}, [open]);
 
   const validPercentage =
     summary && summary.total > 0
@@ -80,27 +87,48 @@ const ProductImportModal = ({
             {/* ================= Upload ================= */}
             {!file && (
               <div className="space-y-5">
-                <div className="flex gap-3 rounded-xl border border-blue-200/60 bg-blue-50/50 p-4 text-xs leading-relaxed text-blue-800">
-                  <HelpCircle className="shrink-0 text-blue-500" size={18} />
+                <div className="bg-linear-to-r from-blue-50/60 to-indigo-50/60 border border-blue-100 rounded-2xl p-5 text-slate-700 flex gap-4 leading-relaxed shadow-xs">
+                  <div className="w-9 h-9 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-600 shrink-0 shadow-xs">
+                    <HelpCircle size={18} />
+                  </div>
                   <div>
-                    <p className="mb-1 text-[10px] font-bold uppercase tracking-wider text-blue-900">
-                      Import Validation Guidelines
+                    <p className="font-black uppercase tracking-wider text-[10px] text-blue-900 mb-1.5">
+                      Spreadsheet Import Guidelines
                     </p>
-                    <ul className="list-disc space-y-1 pl-4">
-                      <li>
-                        <strong>Product Name</strong> is required.
+                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1.5 text-xs text-slate-600 font-medium">
+                      <li className="flex items-start gap-1.5">
+                        <span className="text-blue-500 mt-0.5">•</span>
+                        <span>
+                          <strong className="text-slate-800">
+                            Product Name:
+                          </strong>{" "}
+                          Required, must be unique.
+                        </span>
                       </li>
-                      <li>
-                        <strong>Barcode</strong> must be unique if provided.
-                        Empty values are auto-generated.
+                      <li className="flex items-start gap-1.5">
+                        <span className="text-blue-500 mt-0.5">•</span>
+                        <span>
+                          <strong className="text-slate-800">Barcode:</strong>{" "}
+                          Left blank to auto-generate codes.
+                        </span>
                       </li>
-                      <li>
-                        <strong>Category</strong> must exist in your product
-                        categories.
+                      <li className="flex items-start gap-1.5">
+                        <span className="text-blue-500 mt-0.5">•</span>
+                        <span>
+                          <strong className="text-slate-800">
+                            Category ID:
+                          </strong>{" "}
+                          Matches existing registered categories.
+                        </span>
                       </li>
-                      <li>
-                        <strong>Selling Price</strong> must be greater than
-                        zero. Cost Price and Stock cannot be negative.
+                      <li className="flex items-start gap-1.5">
+                        <span className="text-blue-500 mt-0.5">•</span>
+                        <span>
+                          <strong className="text-slate-800">
+                            Pricing & Stock:
+                          </strong>{" "}
+                          Sell Price &gt; 0, and Stock &ge; 0.
+                        </span>
                       </li>
                     </ul>
                   </div>
@@ -150,19 +178,16 @@ const ProductImportModal = ({
                     iconTextColor="text-rose-600"
                     progressColor="bg-rose-500"
                   />
-                  </div>
-                  
-                  {summary.duplicateProducts > 0 && (
-                    <DuplicateHandling
-                      duplicateCount={summary.duplicateProducts}
-                      strategy={duplicateStrategy}
-                      onChange={applyDuplicateStrategy}
-                    />
-                  )}
-               <ImportPlan
-                  records={records}
-                  summary={summary}
-               />
+                </div>
+
+                {summary.duplicateProducts > 0 && (
+                  <DuplicateHandling
+                    duplicateCount={summary.duplicateProducts}
+                    strategy={duplicateStrategy}
+                    onChange={applyDuplicateStrategy}
+                  />
+                )}
+                <ImportPlan records={records} summary={summary} />
                 {summary.failed > 0 && (
                   <ImportValidationTable records={records} />
                 )}
@@ -187,9 +212,7 @@ const ProductImportModal = ({
                       again.
                     </p>
                   </div>
-                  )}
-                  
-
+                )}
 
                 <ImportFooter
                   summary={summary}

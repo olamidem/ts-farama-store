@@ -156,13 +156,20 @@ export const bulkCreateImportProducts = async (
   }
 };
 
+/**
+ * TODO:
+ * Replace with a PostgreSQL RPC when imports become large
+ * (1000+ updates) or performance becomes a bottleneck.
+ */
 export const bulkUpdateImportProducts = async (
   products: ValidatedImportRecord[],
 ): Promise<void> => {
   if (products.length === 0) return;
-  for (const product of products) {
-    if (!product.duplicateProduct) continue;
-    const payload = buildProductPayload({
+
+  const payload = products
+    .filter((product) => product.duplicateProduct)
+    .map((product) => ({
+      id: product.duplicateProduct!.id,
       name: product.name,
       barcode: product.barcode,
       sku: product.sku,
@@ -172,15 +179,42 @@ export const bulkUpdateImportProducts = async (
       category_id: product.category_id,
       min_stock_alert: product.min_stock_alert,
       is_active: true,
-    });
+    }));
 
-    const { error } = await supabase
-      .from("products")
-      .update(payload)
-      .eq("id", product.duplicateProduct.id);
+  const { error } = await supabase.rpc("bulk_update_products", {
+    products: payload,
+  });
 
-    if (error) {
-      throw new Error(error.message);
-    }
+  if (error) {
+    throw new Error(error.message);
   }
 };
+
+// export const bulkUpdateImportProducts = async (
+//   products: ValidatedImportRecord[],
+// ): Promise<void> => {
+//   if (products.length === 0) return;
+//   for (const product of products) {
+//     if (!product.duplicateProduct) continue;
+//     const payload = buildProductPayload({
+//       name: product.name,
+//       barcode: product.barcode,
+//       sku: product.sku,
+//       selling_price: product.selling_price,
+//       cost_price: product.cost_price,
+//       stock: product.stock,
+//       category_id: product.category_id,
+//       min_stock_alert: product.min_stock_alert,
+//       is_active: true,
+//     });
+
+//     const { error } = await supabase
+//       .from("products")
+//       .update(payload)
+//       .eq("id", product.duplicateProduct.id);
+
+//     if (error) {
+//       throw new Error(error.message);
+//     }
+//   }
+// };
