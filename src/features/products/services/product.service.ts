@@ -1,13 +1,22 @@
 import { supabase } from "../../../api/supabase";
-import type { PaginatedResponse, PaginationParams } from "../../../types/pagination";
+import type {
+  PaginatedResponse,
+  PaginationParams,
+} from "../../../types/pagination";
 import type { BulkProductUpdate } from "../types/bulkUpdate";
-import type { CreateProductInput, Product, UpdateProductInput } from "../types/product";
+import type { ValidatedImportRecord } from "../types/import";
+import type {
+  CreateProductInput,
+  Product,
+  UpdateProductInput,
+} from "../types/product";
 import { buildProductPayload } from "../utils/buildProductPayload";
+
 
 export const createProduct = async (
   product: CreateProductInput,
 ): Promise<Product> => {
- const payload = buildProductPayload(product);
+  const payload = buildProductPayload(product);
   const { data, error } = await supabase
     .from("products")
     .insert(payload)
@@ -63,9 +72,7 @@ export const getProducts = async ({
   };
 };
 
-export const getProduct = async (
-  id: string
-): Promise<Product> => {
+export const getProduct = async (id: string): Promise<Product> => {
   const { data, error } = await supabase
     .from("products")
     .select("*")
@@ -79,7 +86,7 @@ export const getProduct = async (
 
 export const updateProduct = async (
   id: string,
-  product: UpdateProductInput
+  product: UpdateProductInput,
 ): Promise<Product> => {
   const { data, error } = await supabase
     .from("products")
@@ -93,15 +100,11 @@ export const updateProduct = async (
   return data;
 };
 
-
 export const bulkUpdateProducts = async (
   products: BulkProductUpdate[],
 ): Promise<void> => {
   const updates = products.map(({ id, updates }) =>
-    supabase.
-      from("products")
-      .update(updates)
-      .eq("id", id),
+    supabase.from("products").update(updates).eq("id", id),
   );
   const results = await Promise.all(updates);
   const failed = results.find((result) => result.error);
@@ -134,15 +137,50 @@ export const restoreProduct = async (id: string): Promise<void> => {
   }
 };
 
-export const deleteProduct = async (
-  id: string
-): Promise<void> => {
-  const { error } = await supabase
-    .from("products")
-    .delete()
-    .eq("id", id);
+export const deleteProduct = async (id: string): Promise<void> => {
+  const { error } = await supabase.from("products").delete().eq("id", id);
   if (error) {
     throw new Error(error.message);
   }
 };
 
+export const bulkCreateImportProducts = async (
+  products: CreateProductInput[],
+): Promise<void> => {
+  if (products.length === 0) return;
+  const payload = products.map(buildProductPayload);
+  const { error } = await supabase.from("products").insert(payload);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const bulkUpdateImportProducts = async (
+  products: ValidatedImportRecord[],
+): Promise<void> => {
+  if (products.length === 0) return;
+  for (const product of products) {
+    if (!product.duplicateProduct) continue;
+    const payload = buildProductPayload({
+      name: product.name,
+      barcode: product.barcode,
+      sku: product.sku,
+      selling_price: product.selling_price,
+      cost_price: product.cost_price,
+      stock: product.stock,
+      category_id: product.category_id,
+      min_stock_alert: product.min_stock_alert,
+      is_active: true,
+    });
+
+    const { error } = await supabase
+      .from("products")
+      .update(payload)
+      .eq("id", product.duplicateProduct.id);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+  }
+};
