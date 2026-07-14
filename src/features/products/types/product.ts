@@ -22,6 +22,7 @@ export interface CreateProductInput {
   stock: number;
   category_id: string;
   min_stock_alert: number;
+  is_active:boolean
 }
 
 export type UpdateProductInput = Partial<CreateProductInput>;

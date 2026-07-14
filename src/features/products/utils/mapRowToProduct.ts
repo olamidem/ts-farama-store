@@ -1,4 +1,4 @@
-import type { Product } from "../types/product";
+import type { ParsedImportRecord } from "../types/importFile";
 
 const normalizeKey = (key: string): string => {
   return key.toLowerCase().replace(/[\s_-]/g, "");
@@ -6,10 +6,17 @@ const normalizeKey = (key: string): string => {
 
 export const mapRowToProduct = (
   row: Record<string, unknown>,
-): Partial<Product> & { category_identifier?: string } => {
-  const result: Partial<Product> & {
-    category_identifier?: string;
-  } = {};
+): ParsedImportRecord => {
+  const result: ParsedImportRecord = {
+    name: "",
+    barcode: "",
+    sku: "",
+    selling_price: 0,
+    cost_price: 0,
+    stock: 0,
+    category_identifier: "",
+    min_stock_alert: 0,
+  };
 
   for (const key of Object.keys(row)) {
     const normalizedKey = normalizeKey(key);
@@ -24,10 +31,11 @@ export const mapRowToProduct = (
     } else if (
       normalizedKey === "barcode" ||
       normalizedKey === "code" ||
-      normalizedKey === "upc" ||
-      normalizedKey === "sku"
+      normalizedKey === "upc"
     ) {
       result.barcode = String(value ?? "").trim();
+    } else if (normalizedKey === "sku") {
+      result.sku = String(value ?? "").trim();
     } else if (
       normalizedKey === "sellingprice" ||
       normalizedKey === "price" ||
@@ -57,5 +65,6 @@ export const mapRowToProduct = (
       result.min_stock_alert = Number(value);
     }
   }
+
   return result;
 };

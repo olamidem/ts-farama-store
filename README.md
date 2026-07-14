@@ -83,3 +83,7 @@ Planned improvements include:
 - SKU search support
 - SKU export support
 - Foundation for purchase orders and barcode printing
+
+## 🚧 In Progress
+
+- [ ] Smart Duplicate Detection During Product Import (#18)

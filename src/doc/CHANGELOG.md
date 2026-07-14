@@ -73,3 +73,9 @@ All notable changes to this project will be documented here.
 - Improve product import workflow.
 - Add SKU support to exports.
 - Prepare inventory architecture for purchasing.
+
+### Planned
+
+- Smart duplicate detection during CSV product import.
+- Import validation before database insertion.
+- Import summary and duplicate review workflow.
