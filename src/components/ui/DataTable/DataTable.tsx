@@ -9,6 +9,7 @@ import {
 import DataTableEmpty from "./DataTableEmpty";
 import DataTableSkeleton from "./DataTableSkeleton";
 import { Package } from "lucide-react";
+import { motion } from "motion/react";
 
 interface DataTableProps<T> {
   data: T[];
@@ -84,8 +85,17 @@ const DataTable = <T,>({
           </thead>
 
           <tbody className="bg-white">
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="transition-colors hover:bg-slate-50">
+            {table.getRowModel().rows.map((row, index) => (
+              <motion.tr
+                key={row.id}
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.18,
+                  delay: Math.min(index * 0.02, 0.25),
+                }}
+                className="transition-colors hover:bg-slate-50"
+              >
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={cell.id}
@@ -94,7 +104,7 @@ const DataTable = <T,>({
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
-              </tr>
+              </motion.tr>
             ))}
           </tbody>
         </table>

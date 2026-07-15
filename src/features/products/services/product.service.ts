@@ -3,7 +3,7 @@ import type {
   PaginatedResponse,
   PaginationParams,
 } from "../../../types/pagination";
-import { getNextSku } from "../../categories/services/getNextSku.service";
+import { generateSku } from "../../../utils/generateSku";
 import type { Category } from "../../categories/types/category";
 import type { BulkProductUpdate } from "../types/bulkUpdate";
 import type { ValidatedImportRecord } from "../types/import";
@@ -13,7 +13,6 @@ import type {
   UpdateProductInput,
 } from "../types/product";
 import { buildProductPayload } from "../utils/buildProductPayload";
-
 
 export const createProduct = async (
   product: CreateProductInput,
@@ -127,6 +126,19 @@ export const deactivateProduct = async (id: string): Promise<void> => {
   }
 };
 
+export const bulkDeactivateProducts = async (ids: string[]): Promise<void> => {
+  if (ids.length === 0) return;
+  const { error } = await supabase
+    .from("products")
+    .update({
+      is_active: false,
+    })
+    .in("id", ids);
+  if (error) {
+    throw new Error(error.message);
+  }
+};
+
 export const restoreProduct = async (id: string): Promise<void> => {
   const { error } = await supabase
     .from("products")
@@ -151,25 +163,59 @@ export const bulkCreateImportProducts = async (
   categories: Category[],
 ): Promise<void> => {
   if (products.length === 0) return;
-  const payload = await Promise.all(
-    products.map(async (product) => {
-      const category = categories.find((c) => c.id === product.category_id);
-      if (!category) {
-        throw new Error(`Category not found for product "${product.name}"`);
-      }
-      const sku = await getNextSku(category.id, category.sku_prefix);
-      return buildProductPayload({
-        ...product,
-        sku,
-      });
-    }),
-  );
+
+  const categorySkuCounters: Record<string, number> = {};
+  const uniqueCategoryIds = [...new Set(products.map((p) => p.category_id))];
+
+  // Fetch the latest existing sequence for each category being imported
+  for (const categoryId of uniqueCategoryIds) {
+    const category = categories.find((c) => c.id === categoryId);
+    if (!category) continue;
+
+    const { data, error } = await supabase
+      .from("products")
+      .select("sku")
+      .eq("category_id", categoryId)
+      .order("sku", { ascending: false })
+      .limit(1);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    let currentSeq = 0;
+    const latestSku = data?.[0]?.sku;
+    if (latestSku) {
+      const lastPart = latestSku.split("-").at(-1);
+      const sequence = Number(lastPart);
+      currentSeq = Number.isNaN(sequence) ? 0 : sequence;
+    }
+    categorySkuCounters[categoryId] = currentSeq;
+  }
+
+  // Generate unique sequential SKUs in memory
+  const payload = products.map((product) => {
+    const category = categories.find((c) => c.id === product.category_id);
+    if (!category) {
+      throw new Error(`Category not found for product "${product.name}"`);
+    }
+
+    const currentSeq = (categorySkuCounters[category.id] || 0) + 1;
+    categorySkuCounters[category.id] = currentSeq;
+
+    const sku = generateSku(category.sku_prefix, currentSeq);
+
+    return buildProductPayload({
+      ...product,
+      sku,
+    });
+  });
+
   const { error } = await supabase.from("products").insert(payload);
   if (error) {
     throw new Error(error.message);
   }
 };
-
 
 export const bulkUpdateImportProducts = async (
   products: ValidatedImportRecord[],

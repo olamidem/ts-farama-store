@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  bulkDeactivateProducts,
   bulkUpdateProducts,
   createProduct,
   deactivateProduct,
@@ -122,6 +123,22 @@ export const useDeactivateProduct = () => {
         queryKey: QUERY_KEYS.products,
       });
       toast.success("Product deactivated successfully");
+    },
+    onError: (error) => {
+      toast.error(getReadableError(error));
+    },
+  });
+};
+
+export const useBulkDeactivateProducts = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: bulkDeactivateProducts,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.products,
+      });
+      toast.success("Selected products deactivated successfully");
     },
     onError: (error) => {
       toast.error(getReadableError(error));

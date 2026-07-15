@@ -15,19 +15,23 @@ import RestoreProductModal from "../features/products/components/RestoreProductM
 import BulkUpdateModal from "../features/products/components/BulkUpdateModal";
 import ProductImportModal from "../features/products/components/ProductImportModal";
 import ExportProductDropdown from "../features/products/components/ExportProductDropdown";
-import { useProducts } from "../features/products/hooks/useProducts";
+import {
+  useProducts,
+  useBulkDeactivateProducts,
+} from "../features/products/hooks/useProducts";
 import { useCategories } from "../features/categories/hooks/useCategories";
 import type { Product } from "../features/products/types/product";
+import ConfirmDialog from "../components/ui/ConfirmDialog";
 
 const ProductsPage = () => {
   // ==========================
   // Modals
 
-
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [bulkModalOpen, setBulkModalOpen] = useState(false);
+  const [isBulkDeleteOpen, setIsBulkDeleteOpen] = useState(false);
 
   // ==========================
   // Filters
@@ -95,6 +99,8 @@ const ProductsPage = () => {
     ascending,
   });
 
+  const bulkDeactivate = useBulkDeactivateProducts();
+
   const products = useMemo(() => data?.data ?? [], [data?.data]);
   const totalProducts = data?.count ?? 0;
 
@@ -150,6 +156,17 @@ const ProductsPage = () => {
 
   const handleRestoreProduct = (product: Product) => {
     setProductToRestore(product);
+  };
+
+  const handleBulkDeactivate = async () => {
+    try {
+      const ids = selectedProducts.map((p) => p.id);
+      await bulkDeactivate.mutateAsync(ids);
+      setRowSelection({});
+      setIsBulkDeleteOpen(false);
+    } catch {
+      // toast is already handled in the hook
+    }
   };
 
   const handleSort = (
@@ -212,6 +229,7 @@ const ProductsPage = () => {
             selectedCount={selectedProducts.length}
             onClearSelection={() => setRowSelection({})}
             onBulkUpdate={() => setBulkModalOpen(true)}
+            onBulkDelete={() => setIsBulkDeleteOpen(true)}
           />
         )}
       </AnimatePresence>
@@ -281,6 +299,19 @@ const ProductsPage = () => {
         open={!!productToRestore}
         product={productToRestore}
         onClose={() => setProductToRestore(null)}
+      />
+
+      <ConfirmDialog
+        open={isBulkDeleteOpen}
+        title="Batch Deactivation"
+        subtitle="Moving multiple products to inactive state."
+        description={`Are you sure you want to deactivate ${selectedProducts.length} selected products? They will be removed from your active catalog but can be restored later.`}
+        confirmationKeyword="DEACTIVATE ALL"
+        confirmText="Deactivate Products"
+        cancelText="Cancel"
+        loading={bulkDeactivate.isPending}
+        onCancel={() => setIsBulkDeleteOpen(false)}
+        onConfirm={handleBulkDeactivate}
       />
     </motion.div>
   );
