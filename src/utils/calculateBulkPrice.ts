@@ -1,7 +1,5 @@
 export type BulkUpdateType = "selling" | "cost" | "both";
-
 export type BulkUpdateMethod = "percentage" | "fixed";
-
 export type BulkUpdateOperation = "increase" | "decrease";
 
 interface CalculateBulkPriceParams {
@@ -21,7 +19,7 @@ export function calculateBulkPrice({
     return currentPrice;
   }
 
-  let updatedPrice = currentPrice;
+  let updatedPrice: number;
 
   if (method === "percentage") {
     const change = (currentPrice * amount) / 100;

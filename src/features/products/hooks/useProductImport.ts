@@ -50,14 +50,23 @@ export const useProductImport = (
       // 2. Normalize spreadsheet columns
       const parsedRows = rawRows.map(mapRowToProduct);
 
-      // 3. Fetch existing products by imported names
+      // 3. Fetch existing products by imported names and barcodes
       const names = [
         ...new Set(
           parsedRows.map((row) => row.name).filter((name) => name.length > 0),
         ),
       ];
-      const existingDatabaseProducts =
-        await getExistingProductsForImport(names);
+      const barcodes = [
+        ...new Set(
+          parsedRows
+            .map((row) => row.barcode)
+            .filter((barcode) => barcode.length > 0),
+        ),
+      ];
+      const existingDatabaseProducts = await getExistingProductsForImport(
+        names,
+        barcodes,
+      );
 
       // 4. Validate
       const { validatedRecords, summary: importSummary } =
@@ -114,9 +123,9 @@ export const useProductImport = (
         (r) => r.action === "update" && r.isValid,
       ).length;
 
-     const skipped = records.filter(
-       (r) => r.isValid && r.action === "skip",
-     ).length;
+      const skipped = records.filter(
+        (r) => r.isValid && r.action === "skip",
+      ).length;
 
       toast.success(
         `Import completed. ${created} created, ${updated} updated, ${skipped} skipped.`,
@@ -128,13 +137,18 @@ export const useProductImport = (
       onSuccess?.();
     },
     onError: (error) => {
-    console.error(error);
-    toast.error(
-        error instanceof Error
-            ? error.message
-            : "Failed to import products."
-    );
-},
+      console.error(error);
+      let friendlyMessage = "Failed to import products.";
+      if (error instanceof Error) {
+        if (error.message.includes("products_barcode_key")) {
+          friendlyMessage =
+            "One or more products being imported have a barcode that already exists in your inventory. Please make sure all barcodes are unique.";
+        } else {
+          friendlyMessage = error.message;
+        }
+      }
+      toast.error(friendlyMessage);
+    },
   });
 
   const updateImportAction = (
@@ -182,5 +196,3 @@ export const useProductImport = (
     applyDuplicateStrategy,
   };
 };
-
-

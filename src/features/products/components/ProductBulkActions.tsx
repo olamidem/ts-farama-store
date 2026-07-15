@@ -1,17 +1,19 @@
 import { motion } from "motion/react";
 import Button from "../../../components/ui/Button";
-import { PencilLine, X } from "lucide-react";
+import { PencilLine, Trash2, X } from "lucide-react";
 
 interface ProductBulkActionsProps {
   selectedCount: number;
   onClearSelection: () => void;
   onBulkUpdate: () => void;
+  onBulkDelete: () => void;
 }
 
 const ProductBulkActions = ({
   selectedCount,
   onClearSelection,
   onBulkUpdate,
+  onBulkDelete,
 }: ProductBulkActionsProps) => {
   return (
     <motion.div
@@ -28,7 +30,7 @@ const ProductBulkActions = ({
         </span>
 
         <span className="text-sm font-medium text-blue-700">
-          for bulk pricing actions
+          for bulk actions
         </span>
       </div>
 
@@ -42,6 +44,11 @@ const ProductBulkActions = ({
         <Button size="sm" onClick={onBulkUpdate}>
           <PencilLine size={16} />
           Bulk Update Prices
+        </Button>
+
+        <Button size="sm" variant="danger" onClick={onBulkDelete}>
+          <Trash2 size={16} />
+          Batch Delete
         </Button>
       </div>
     </motion.div>
