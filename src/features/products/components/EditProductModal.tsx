@@ -28,6 +28,7 @@ const EditProductModal = ({
   return (
     <Modal open={open} onClose={onClose} title={`Edit ${product.name}`} size="sm">
       <ProductForm
+        isEditing
         defaultValues={product}
         submitText="Save Changes"
         loading={updateProduct.isPending}
