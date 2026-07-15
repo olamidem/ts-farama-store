@@ -2,12 +2,12 @@ import type { ColumnDef } from "@tanstack/react-table";
 import Badge from "../../../components/ui/Badge";
 import type { Category } from "../../categories/types/category";
 import type { Product } from "../types/product";
-import { formatCurrency } from "../../../utils/format";
 import { selectionColumn } from "../../../components/ui/DataTable/SelectionColumn";
 import SortableHeader from "../../../components/ui/DataTable/SortableHeader";
 import { ProductAvatar } from "./ProductAvatar";
 import { Eye, Pencil, Trash2, RotateCcw } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { formatCurrency } from "../../../utils/formatCurrenty";
 
 interface ProductColumnsProps {
   categories: Category[];
