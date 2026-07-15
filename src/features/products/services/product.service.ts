@@ -3,6 +3,8 @@ import type {
   PaginatedResponse,
   PaginationParams,
 } from "../../../types/pagination";
+import { getNextSku } from "../../categories/services/getNextSku.service";
+import type { Category } from "../../categories/types/category";
 import type { BulkProductUpdate } from "../types/bulkUpdate";
 import type { ValidatedImportRecord } from "../types/import";
 import type {
@@ -146,30 +148,36 @@ export const deleteProduct = async (id: string): Promise<void> => {
 
 export const bulkCreateImportProducts = async (
   products: CreateProductInput[],
+  categories: Category[],
 ): Promise<void> => {
   if (products.length === 0) return;
-  const payload = products.map(buildProductPayload);
+  const payload = await Promise.all(
+    products.map(async (product) => {
+      const category = categories.find((c) => c.id === product.category_id);
+      if (!category) {
+        throw new Error(`Category not found for product "${product.name}"`);
+      }
+      const sku = await getNextSku(category.id, category.sku_prefix);
+      return buildProductPayload({
+        ...product,
+        sku,
+      });
+    }),
+  );
   const { error } = await supabase.from("products").insert(payload);
-
   if (error) {
     throw new Error(error.message);
   }
 };
 
-/**
- * TODO:
- * Replace with a PostgreSQL RPC when imports become large
- * (1000+ updates) or performance becomes a bottleneck.
- */
+
 export const bulkUpdateImportProducts = async (
   products: ValidatedImportRecord[],
 ): Promise<void> => {
   if (products.length === 0) return;
-
-  const payload = products
-    .filter((product) => product.duplicateProduct)
-    .map((product) => ({
-      id: product.duplicateProduct!.id,
+  for (const product of products) {
+    if (!product.duplicateProduct) continue;
+    const payload = buildProductPayload({
       name: product.name,
       barcode: product.barcode,
       sku: product.sku,
@@ -179,14 +187,14 @@ export const bulkUpdateImportProducts = async (
       category_id: product.category_id,
       min_stock_alert: product.min_stock_alert,
       is_active: true,
-    }));
-
-  const { error } = await supabase.rpc("bulk_update_products", {
-    products: payload,
-  });
-
-  if (error) {
-    throw new Error(error.message);
+    });
+    const { error } = await supabase
+      .from("products")
+      .update(payload)
+      .eq("id", product.duplicateProduct.id);
+    if (error) {
+      throw new Error(error.message);
+    }
   }
 };
 

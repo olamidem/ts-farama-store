@@ -98,7 +98,7 @@ export const useProductImport = (
       );
 
       if (productsToCreate.length > 0) {
-        await bulkCreateImportProducts(productsToCreate);
+        await bulkCreateImportProducts(productsToCreate, categories);
       }
 
       if (productsToUpdate.length > 0) {
