@@ -14,12 +14,23 @@ import RestoreProductModal from "../features/products/components/RestoreProductM
 import BulkUpdateModal from "../features/products/components/BulkUpdateModal";
 import ProductImportModal from "../features/products/components/ProductImportModal";
 import ExportProductDropdown from "../features/products/components/ExportProductDropdown";
-import { useProducts, useBulkDeactivateProducts, useProductStats } from "../features/products/hooks/useProducts";
+import {
+  useProducts,
+  useBulkDeactivateProducts,
+  useProductStats,
+} from "../features/products/hooks/useProducts";
 import { useCategories } from "../features/categories/hooks/useCategories";
 import type { Product } from "../features/products/types/product";
 import ConfirmDialog from "../components/ui/ConfirmDialog";
 import { useProductExport } from "../features/products/hooks/useProductExport";
-import { Plus, Search, Bell, ChevronDown, Upload, Download, FileText } from "lucide-react";
+import {
+  Plus,
+  Bell,
+  ChevronDown,
+  Upload,
+  Download,
+  FileText,
+} from "lucide-react";
 import ProductStatCards from "../features/products/components/ProductStartCards";
 
 const ProductsPage = () => {
@@ -40,7 +51,9 @@ const ProductsPage = () => {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [status, setStatus] = useState("all");
-  const [stockStatus, setStockStatus] = useState<"all" | "in_stock" | "low_stock" | "out_of_stock">("all");
+  const [stockStatus, setStockStatus] = useState<
+    "all" | "in_stock" | "low_stock" | "out_of_stock"
+  >("all");
 
   // ==========================
   // Pagination
@@ -226,18 +239,6 @@ const ProductsPage = () => {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          {/* Search bar */}
-          <div className="relative w-72">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="h-10 w-full pl-9 pr-4 rounded-xl border border-slate-200 bg-white text-sm outline-none transition focus:border-slate-400 focus:ring-1 focus:ring-slate-400 shadow-sm"
-            />
-          </div>
-
           {/* Bell Icon Notification */}
           <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 transition cursor-pointer shadow-sm">
             <Bell size={18} />
@@ -290,13 +291,19 @@ const ProductsPage = () => {
 
       {/* Filters & Actions Toolbar */}
       <ProductToolbar
+        search={search}
+        onSearchChange={setSearch}
         category={category}
         status={status}
         stockStatus={stockStatus}
         categories={categories}
         onCategoryChange={setCategory}
         onStatusChange={setStatus}
-        onStockStatusChange={(val) => setStockStatus(val as "all" | "in_stock" | "low_stock" | "out_of_stock")}
+        onStockStatusChange={(val) =>
+          setStockStatus(
+            val as "all" | "in_stock" | "low_stock" | "out_of_stock",
+          )
+        }
         exportMenu={
           <ExportProductDropdown
             products={products}

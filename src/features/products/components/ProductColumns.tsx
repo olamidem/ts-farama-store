@@ -7,6 +7,7 @@ import { selectionColumn } from "../../../components/ui/DataTable/SelectionColum
 import SortableHeader from "../../../components/ui/DataTable/SortableHeader";
 import { ProductAvatar } from "./ProductAvatar";
 import { Eye, Pencil, Trash2, RotateCcw } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 interface ProductColumnsProps {
   categories: Category[];
@@ -53,7 +54,9 @@ export const productColumns = ({
       const category = categories.find((c) => c.id === product.category_id);
       return (
         <div className="flex items-center gap-3">
-          <ProductAvatar name={product.name} />
+          <ProductAvatar
+            name={product.name}
+          />
           <div className="flex flex-col min-w-0">
             <span className="font-bold text-slate-900 truncate">
               {product.name}
@@ -166,13 +169,14 @@ export const productColumns = ({
       if (product.is_active) {
         return (
           <div className="flex items-center gap-1.5">
-            <button
-              onClick={() => onEdit(product)}
+            <Link
+              to="/products/$productId"
+              params={{ productId: String(product.id) }}
               className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-400 hover:bg-slate-50 hover:text-slate-700 transition duration-150"
               title="View details"
             >
               <Eye size={15} />
-            </button>
+            </Link>
             <button
               onClick={() => onEdit(product)}
               className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-400 hover:bg-slate-50 hover:text-slate-700 transition duration-150"
