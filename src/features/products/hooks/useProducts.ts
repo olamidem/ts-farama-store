@@ -57,11 +57,14 @@ export const useUpdateProduct = () => {
       id: string;
       product: UpdateProductInput;
     }) => updateProduct(id, product),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.products,
       });
       toast.success("Product updated successfully");
+    },
+    onError: (error) => {
+      toast.error(getReadableError(error));
     },
   });
 };
@@ -86,9 +89,9 @@ export const useRestoreProduct = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: restoreProduct,
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Product restored successfully.");
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["products"],
       });
     },

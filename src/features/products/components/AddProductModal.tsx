@@ -45,6 +45,7 @@ const AddProductModal = ({ open, onClose, onViewExisting }: AddProductModalProps
     <>
       <Modal open={open} onClose={onClose} title="Add Product" size="sm">
         <ProductForm
+        isEditing={false}
           onCancel={onClose}
           onSubmit={handleSubmit}
           loading={addProduct.isPending}

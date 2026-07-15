@@ -17,6 +17,7 @@ interface ProductFormProps {
   defaultValues?: Partial<CreateProductInput>;
   loading?: boolean;
   submitText?: string;
+  isEditing?: boolean;
   onCancel: () => void;
   onSubmit: (data: CreateProductInput) => Promise<void> | void;
 }
@@ -26,6 +27,7 @@ const ProductForm = ({
   defaultValues,
   loading = false,
   submitText = "Add Product",
+  isEditing = false,
   onSubmit,
 }: ProductFormProps) => {
   const {
@@ -71,6 +73,8 @@ const ProductForm = ({
     name: "category_id",
   });
 
+  const originalCategoryId = defaultValues?.category_id;
+
   const selectedCategory = categories.find(
     (category) => category.id === selectedCategoryId,
   );
@@ -87,45 +91,48 @@ const ProductForm = ({
     });
   }, [defaultValues, reset]);
 
-  useEffect(() => {
+useEffect(() => {
     if (!selectedCategory) {
-      setValue("sku", "");
-      return;
+        setValue("sku", "");
+        return;
     }
-
-    const generateNextSku = async () => {
-      try {
-        const sku = await getNextSku(
-          selectedCategory.id,
-          selectedCategory.sku_prefix,
-        );
-
-        setValue("sku", sku, {
-          shouldDirty: true,
-          shouldValidate: true,
-        });
-      } catch (error) {
-        console.error("Failed to generate SKU", error);
-      }
-      console.log("Generating SKU...");
+    // Editing + category hasn't changed
+    if (
+        isEditing &&
+        selectedCategory.id === originalCategoryId
+    ) {
+        setValue("sku", defaultValues?.sku ?? "");
+        return;
+    }
+    const generateSku = async () => {
+        try {
+            const sku = await getNextSku(
+                selectedCategory.id,
+                selectedCategory.sku_prefix
+            );
+            setValue("sku", sku, {
+                shouldDirty: true,
+                shouldValidate: true,
+            });
+        } catch (error) {
+            console.error(error);
+        }
     };
+    generateSku();
+}, [
+    selectedCategory,
+    isEditing,
+    originalCategoryId,
+    defaultValues,
+    setValue,
+]);
 
-    generateNextSku();
-  }, [selectedCategory, setValue]);
-
-  console.log("Selected Category ID:", selectedCategoryId);
-  console.log("Selected Category:", selectedCategory);
 
   return (
     <form
       onSubmit={(e) => {
         handleSubmit(async (data) => {
-          const payload: CreateProductInput = {
-            ...data,
-            barcode: data.barcode?.trim() || "",
-          };
-          await onSubmit(payload);
-          reset();
+          await onSubmit(data);
         })(e);
       }}
       className="space-y-5"

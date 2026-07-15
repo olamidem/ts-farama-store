@@ -86,11 +86,11 @@ export const getProduct = async (id: string): Promise<Product> => {
 
 export const updateProduct = async (
   id: string,
-  product: UpdateProductInput,
+  payload: UpdateProductInput,
 ): Promise<Product> => {
   const { data, error } = await supabase
     .from("products")
-    .update(product)
+    .update(payload)
     .eq("id", id)
     .select()
     .single();
