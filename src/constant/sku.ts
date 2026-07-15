@@ -1,0 +1,1 @@
+export const STORE_SKU_PREFIX = "FRM"

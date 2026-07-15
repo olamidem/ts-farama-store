@@ -10,12 +10,13 @@ import {
   type ProductFormData,
 } from "../validation/product.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
+import { getNextSku } from "../../categories/services/getNextSku.service";
 
 interface ProductFormProps {
   defaultValues?: Partial<CreateProductInput>;
   loading?: boolean;
-  submitText?:string,
+  submitText?: string;
   onCancel: () => void;
   onSubmit: (data: CreateProductInput) => Promise<void> | void;
 }
@@ -24,7 +25,7 @@ const ProductForm = ({
   onCancel,
   defaultValues,
   loading = false,
-  submitText="Add Product",
+  submitText = "Add Product",
   onSubmit,
 }: ProductFormProps) => {
   const {
@@ -32,8 +33,10 @@ const ProductForm = ({
     handleSubmit,
     control,
     reset,
-    formState: { errors, isDirty },
+    setValue,
+    formState: { errors, isValid },
   } = useForm<ProductFormData>({
+    mode: "onChange",
     resolver: zodResolver(createProductSchema),
     defaultValues: {
       name: "",
@@ -63,19 +66,56 @@ const ProductForm = ({
           value: category.id,
         }));
 
+  const selectedCategoryId = useWatch({
+    control,
+    name: "category_id",
+  });
+
+  const selectedCategory = categories.find(
+    (category) => category.id === selectedCategoryId,
+  );
   useEffect(() => {
     reset({
-      name: "",
-      barcode: "",
-      sku: "",
-      selling_price: 0,
-      cost_price: 0,
-      stock: 0,
-      min_stock_alert: 10,
-      category_id: "",
-      ...defaultValues,
+      name: defaultValues?.name ?? "",
+      barcode: defaultValues?.barcode ?? "",
+      sku: defaultValues?.sku ?? "",
+      selling_price: defaultValues?.selling_price ?? 0,
+      cost_price: defaultValues?.cost_price ?? 0,
+      stock: defaultValues?.stock ?? 0,
+      min_stock_alert: defaultValues?.min_stock_alert ?? 10,
+      category_id: defaultValues?.category_id ?? "",
     });
   }, [defaultValues, reset]);
+
+  useEffect(() => {
+    if (!selectedCategory) {
+      setValue("sku", "");
+      return;
+    }
+
+    const generateNextSku = async () => {
+      try {
+        const sku = await getNextSku(
+          selectedCategory.id,
+          selectedCategory.sku_prefix,
+        );
+
+        setValue("sku", sku, {
+          shouldDirty: true,
+          shouldValidate: true,
+        });
+      } catch (error) {
+        console.error("Failed to generate SKU", error);
+      }
+      console.log("Generating SKU...");
+    };
+
+    generateNextSku();
+  }, [selectedCategory, setValue]);
+
+  console.log("Selected Category ID:", selectedCategoryId);
+  console.log("Selected Category:", selectedCategory);
+
   return (
     <form
       onSubmit={(e) => {
@@ -211,6 +251,22 @@ const ProductForm = ({
         />
       </div>
 
+      <div className="space-y-1">
+        <Label className="block text-[10px] font-bold text-slate-400 uppercase">
+          SKU
+        </Label>
+
+        <Input
+          {...register("sku")}
+          readOnly
+          className="w-full py-2 px-3 border border-slate-200 rounded-lg bg-slate-100 font-mono text-slate-700 cursor-not-allowed"
+        />
+
+        {errors.sku && (
+          <p className="text-xs text-red-500 mt-1">{errors.sku.message}</p>
+        )}
+      </div>
+
       <div className="flex justify-end gap-3 border-t border-slate-200 pt-5">
         <Button
           type="button"
@@ -225,7 +281,7 @@ const ProductForm = ({
           type="submit"
           loading={loading}
           fullWidth
-          disabled={!isDirty || loading || categories.length === 0}
+          disabled={!isValid || loading || categories.length === 0}
           className="flex-1 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold disabled:opacity-50 cursor-pointer"
         >
           {submitText ?? "Add Product"}

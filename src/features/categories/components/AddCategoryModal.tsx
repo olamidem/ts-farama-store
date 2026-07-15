@@ -1,7 +1,8 @@
+import { toast } from "sonner";
 import Modal from "../../../components/ui/Modal";
 import { useCreateCategory } from "../hooks/useCategories";
+import { checkSkuPrefixExists } from "../services/checkSkuPrefixExists.service";
 import CategoryForm from "./CategoryForm";
-
 
 interface AddCategoryModalProps {
   open: boolean;
@@ -18,8 +19,14 @@ const AddCategoryModal = ({ open, onClose }: AddCategoryModalProps) => {
         submitLabel="Create Category"
         onCancel={onClose}
         onSubmit={async (data) => {
+          const exists = await checkSkuPrefixExists(data.sku_prefix);
+          if (exists) {
+            toast.error(
+              `SKU Prefix "${data.sku_prefix}" already belongs to another category.`,
+            );
+            return;
+          }
           await createCategory.mutateAsync(data);
-
           onClose();
         }}
       />

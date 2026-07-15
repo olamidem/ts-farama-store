@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const createProductSchema = z.object({
   name: z.string().min(2, "Product name must be at least 2 characters"),
-  barcode: z.string().optional(),
+  barcode: z.string().trim().optional(),
   sku: z.string(),
   selling_price: z.number().min(0, "Selling price cannot be negative"),
   cost_price: z.number().min(0, "Cost price cannot be negative"),
