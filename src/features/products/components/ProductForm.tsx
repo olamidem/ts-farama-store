@@ -12,6 +12,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { getNextSku } from "../../categories/services/getNextSku.service";
+import { useUnits } from "../../units/hooks/useUnits";
 
 interface ProductFormProps {
   defaultValues?: Partial<CreateProductInput>;
@@ -49,11 +50,13 @@ const ProductForm = ({
       stock: 0,
       min_stock_alert: 10,
       category_id: "",
+      base_unit_id: "",
       ...defaultValues,
     },
   });
 
   const { data: categories = [] } = useCategories();
+  const { data: units = [], isLoading: unitsLoading } = useUnits();
 
   const categoryOptions =
     categories.length === 0
@@ -67,6 +70,20 @@ const ProductForm = ({
           label: category.name,
           value: category.id,
         }));
+
+
+        const unitOptions =
+          units.length === 0
+            ? [
+                {
+                  label: "No units available",
+                  value: "",
+                },
+              ]
+            : units.map((unit) => ({
+                label: `${unit.name} (${unit.symbol})`,
+                value: unit.id,
+              }));
 
   const selectedCategoryId = useWatch({
     control,
@@ -88,6 +105,7 @@ const ProductForm = ({
       stock: defaultValues?.stock ?? 0,
       min_stock_alert: defaultValues?.min_stock_alert ?? 10,
       category_id: defaultValues?.category_id ?? "",
+      base_unit_id: defaultValues?.base_unit_id ?? "",
     });
   }, [defaultValues, reset]);
 
@@ -169,6 +187,31 @@ useEffect(() => {
         )}
       </div>
 
+      <div className="space-y-1">
+        <Label className="block text-[10px] font-bold text-slate-400 uppercase">
+          Base Unit
+        </Label>
+
+        <Controller
+          control={control}
+          name="base_unit_id"
+          render={({ field }) => (
+            <Select
+              options={unitOptions}
+              value={field.value}
+              onChange={field.onChange}
+              disabled={unitsLoading}
+              className="w-full py-2 px-3 border border-slate-200 rounded-lg bg-white"
+            />
+          )}
+        />
+
+        {errors.base_unit_id && (
+          <p className="text-xs text-red-500 mt-1">
+            {errors.base_unit_id.message}
+          </p>
+        )}
+      </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
           <Label className="block text-[10px] font-bold text-slate-400 uppercase">
@@ -204,11 +247,11 @@ useEffect(() => {
           )}
         </div>
       </div>
-
+      
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
           <Label className="block text-[10px] font-bold text-slate-400 uppercase">
-            Stock Quantity *
+            Opening Stock *
           </Label>
           <Input
             type="number"
@@ -223,7 +266,7 @@ useEffect(() => {
 
         <div className="space-y-1">
           <Label className="block text-[10px] font-bold text-slate-400 uppercase">
-            Low Stock Alert Level
+            Minimum Stock Level Alert
           </Label>
           <Input
             type="number"

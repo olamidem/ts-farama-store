@@ -8,8 +8,8 @@ export interface Product {
   cost_price: number;
   stock: number;
   category_id: string;
+  base_unit_id: string;
   min_stock_alert: number;
-  is_active: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -23,8 +23,8 @@ export interface CreateProductInput {
   cost_price: number;
   stock: number;
   category_id: string;
+  base_unit_id: string;
   min_stock_alert: number;
-  is_active: boolean;
 }
 
 export type UpdateProductInput = Partial<CreateProductInput>;

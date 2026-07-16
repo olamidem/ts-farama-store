@@ -215,7 +215,6 @@ export const bulkCreateImportProducts = async (
     if (error) {
       throw new Error(error.message);
     }
-
     let currentSeq = 0;
     const latestSku = data?.[0]?.sku;
     if (latestSku) {
@@ -266,7 +265,8 @@ export const bulkUpdateImportProducts = async (
       stock: product.stock,
       category_id: product.category_id,
       min_stock_alert: product.min_stock_alert,
-      is_active: true,
+      base_unit_id: product.base_unit_id,
+   
     });
     const { error } = await supabase
       .from("products")

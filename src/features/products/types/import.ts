@@ -15,6 +15,7 @@ export interface ValidatedImportRecord {
   stock: number;
   category_identifier: string;
   category_id: string;
+  base_unit_id: string;
   category_name: string;
   min_stock_alert: number;
   duplicateProduct: Product | null;

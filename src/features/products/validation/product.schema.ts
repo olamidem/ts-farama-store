@@ -9,6 +9,7 @@ export const createProductSchema = z.object({
   stock: z.number().min(0, "Stock cannot be negative"),
   min_stock_alert: z.number().min(0),
   category_id: z.string().min(1, "Please select a category"),
+  base_unit_id: z.string().min(1, "Base unit is required"),
 });
 
 export type ProductFormData = z.infer<typeof createProductSchema>;
