@@ -56,3 +56,18 @@ export const archiveUnit = async (id: string): Promise<Unit> => {
   throwSupabaseError(error);
   return data;
 };
+
+export const restoreUnit = async (
+  id: string,
+): Promise<void> => {
+  const { error } = await supabase
+    .from("units")
+    .update({
+      is_active: true,
+    })
+    .eq("id", id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+};
