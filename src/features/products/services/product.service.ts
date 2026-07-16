@@ -4,7 +4,9 @@ import type {
   PaginationParams,
 } from "../../../types/pagination";
 import { generateSku } from "../../../utils/generateSku";
+import { throwSupabaseError } from "../../../utils/supabaseError";
 import type { Category } from "../../categories/types/category";
+import { createDefaultProductUnit } from "../product-units/services/createDefaultProductUnit.service";
 import type { BulkProductUpdate } from "../types/bulkUpdate";
 import type { ValidatedImportRecord } from "../types/import";
 import type {
@@ -13,7 +15,6 @@ import type {
   UpdateProductInput,
 } from "../types/product";
 import { buildProductPayload } from "../utils/buildProductPayload";
-
 
 export const createProduct = async (
   product: CreateProductInput,
@@ -24,9 +25,9 @@ export const createProduct = async (
     .insert(payload)
     .select()
     .single();
-  if (error) {
-    throw new Error(error.message);
-  }
+  throwSupabaseError(error);
+
+  await createDefaultProductUnit(data);
   return data;
 };
 
