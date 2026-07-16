@@ -5,4 +5,5 @@ export const QUERY_KEYS = {
   inventory: ["inventory"],
   users: ["users"],
   units: ["units"],
+  productUnits: ["product-units"],
 } as const;
