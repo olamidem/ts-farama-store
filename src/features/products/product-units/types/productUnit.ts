@@ -2,6 +2,7 @@ export interface ProductUnit {
   id: string;
   product_id: string;
   unit_id: string;
+  sku: string; 
   conversion_factor: number;
   selling_price: number;
   cost_price: number;
@@ -16,6 +17,7 @@ export interface ProductUnit {
 export interface CreateProductUnitInput {
   product_id: string;
   unit_id: string;
+  sku: string; 
   conversion_factor: number;
   selling_price: number;
   cost_price: number;
@@ -23,5 +25,3 @@ export interface CreateProductUnitInput {
   is_default?: boolean;
   sort_order?: number;
 }
-
-export type UpdateProductUnitInput = Partial<CreateProductUnitInput>;

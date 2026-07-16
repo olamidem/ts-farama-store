@@ -1,4 +1,9 @@
 import { useProductUnits } from "../hooks/useProductUnits";
+import ProductUnitForm from "./ProductUnitForm";
+import ProductUnitList from "./ProductUnitList";
+import EmptySellingUnits from "./EmptySellingUnits";
+import LoadingSellingUnits from "./LoadingSellingUnits";
+import type { ProductWithRelations } from "../../products/types/product";
 
 interface ProductSellingUnitsProps {
   product: ProductWithRelations;
@@ -7,18 +12,20 @@ interface ProductSellingUnitsProps {
 const ProductSellingUnits = ({ product }: ProductSellingUnitsProps) => {
   const { data: units = [], isLoading } = useProductUnits(product.id);
 
-  return (
-    <>
-      <ProductUnitHeader product={product} />
+  if (isLoading) {
+    return <LoadingSellingUnits />;
+  }
 
-      {isLoading ? (
-        <LoadingSellingUnits />
-      ) : units.length === 0 ? (
+  return (
+    <div className="space-y-6">
+      <ProductUnitForm product={product} />
+
+      {units.length === 0 ? (
         <EmptySellingUnits />
       ) : (
         <ProductUnitList product={product} units={units} />
       )}
-    </>
+    </div>
   );
 };
 

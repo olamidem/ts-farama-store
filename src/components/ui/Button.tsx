@@ -2,7 +2,6 @@ import type { ButtonHTMLAttributes } from "react";
 import { cn } from "../../utils/cn";
 
 type ButtonVariant = "primary" | "secondary" | "danger" | "ghost" | "success";
-
 type ButtonSize = "sm" | "md" | "lg";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

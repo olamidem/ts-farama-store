@@ -1,6 +1,7 @@
 import { supabase } from "../../../../api/supabase";
 import { throwSupabaseError } from "../../../../utils/supabaseError";
 import type { CreateProductUnitInput, ProductUnit, UpdateProductUnitInput } from "../types/productUnit";
+import { buildProductUnitPayload } from "../utils/buildProductUnitPayload";
 
 
 export const getProductUnits = async (
@@ -23,13 +24,13 @@ export const getProductUnits = async (
 };
 
 export const createProductUnit = async (
-    productUnit: CreateProductUnitInput,
+    payload: CreateProductUnitInput,
 ): Promise<ProductUnit> => {
     const { data, error } = await supabase
-        .from("product_units")
-        .insert(productUnit)
-        .select()
-        .single();
+      .from("product_units")
+      .insert(payload)
+      .select()
+      .single();
      throwSupabaseError(error);
     return data;
 };
