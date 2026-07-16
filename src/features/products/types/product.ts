@@ -10,7 +10,6 @@ export interface Product {
   category_id: string;
   base_unit_id: string;
   min_stock_alert: number;
-  is_active: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -26,7 +25,6 @@ export interface CreateProductInput {
   category_id: string;
   base_unit_id: string;
   min_stock_alert: number;
-  is_active: boolean;
 }
 
 export type UpdateProductInput = Partial<CreateProductInput>;
