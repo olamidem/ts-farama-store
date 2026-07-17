@@ -7,6 +7,9 @@ import type { ProductUnit } from "../types/productUnit";
 import type { ProductUnitFormData } from "../validation/productUnit.schema";
 import { useUnits } from "../../../units/hooks/useUnits";
 import { useCreateProductUnit, useUpdateProductUnit } from "../hooks/useProductUnitMutations";
+import ProductUnitsTable from "./ProductUntsTable";
+import { useProductUnits } from "../hooks/useProductUnits";
+import { formatCurrency } from "../../../../utils/formatCurrenty";
 
 interface ProductUnitsManagerProps {
   product: Product;
@@ -21,6 +24,7 @@ export default function ProductUnitsManager({
  const { data: generalUnits = [] } = useUnits();
   const { mutateAsync: createProductUnit, isPending } = useCreateProductUnit();
   const { mutateAsync: updateProductUnit, isPending: isUpdating } = useUpdateProductUnit();
+  const { data: productUnits = [], isLoading } =useProductUnits(product.id);
 
     
 const handleSubmit = async (
@@ -74,10 +78,15 @@ const handleSubmit = async (
 
       {/* Table */}
       <ProductUnitsTable
-        product={product}
+        productUnits={productUnits}
+        generalUnits={generalUnits}
+        formatCurrency={formatCurrency}
         onEdit={(unit) => {
           setEditingUnit(unit);
           setIsFormOpen(true);
+        }}
+        onDelete={(id) => {
+          // archive mutation
         }}
       />
     </div>
