@@ -54,23 +54,30 @@ export const ProductUnitsTable = ({
         header: "Unit",
         cell: ({ row }) => {
           const unit = generalUnits.find((u) => u.id === row.original.unit_id);
-          const uomName = unit ? `${unit.name} (${unit.symbol})` : "Unknown Unit";
+          const uomName = unit
+            ? `${unit.name} (${unit.symbol})`
+            : "Unknown Unit";
           const isActive = row.original.is_active;
 
           return (
-            <div className={cn("flex items-center gap-2 font-sans", !isActive && "opacity-60")}>
+            <div
+              className={cn(
+                "flex items-center gap-2 font-sans",
+                !isActive && "opacity-60",
+              )}
+            >
               <div
                 className={cn(
-                  "h-7 w-7 rounded bg-blue-50 text-blue-600 flex items-center justify-center font-extrabold text-[10px] uppercase tracking-wide border border-blue-100/50 shrink-0 shadow-inner",
-                  !isActive && "bg-slate-100 text-slate-400 border-slate-200"
+                  "h-8 w-8 rounded bg-blue-50 text-blue-600 flex items-center justify-center font-extrabold text-[11px] uppercase tracking-wide border border-blue-100/50 shrink-0 shadow-inner",
+                  !isActive && "bg-slate-100 text-slate-400 border-slate-200",
                 )}
               >
                 {unit?.symbol || "UN"}
               </div>
               <span
                 className={cn(
-                  "truncate max-w-[150px] text-xs font-bold text-slate-800",
-                  !isActive && "text-slate-400 line-through font-medium"
+                  "truncate max-w-37.5 text-sm font-bold text-slate-800",
+                  !isActive && "text-slate-400 line-through font-medium",
                 )}
                 title={uomName}
               >
@@ -91,16 +98,16 @@ export const ProductUnitsTable = ({
           return (
             <div
               className={cn(
-                "flex items-center gap-1.5 text-xs font-medium text-slate-600 font-sans",
-                !isActive && "opacity-60"
+                "flex items-center gap-1.5 text-sm font-medium text-slate-600 font-sans",
+                !isActive && "opacity-60",
               )}
             >
               <span>1 {unitSymbol}</span>
-              <ArrowRight size={11} className="text-slate-400" />
+              <ArrowRight size={12} className="text-slate-400" />
               <span
                 className={cn(
-                  "font-bold font-mono text-blue-600 bg-blue-50/50 px-1.5 py-0.5 rounded text-[11px]",
-                  !isActive && "text-slate-400 bg-slate-100"
+                  "font-bold font-mono text-blue-600 bg-blue-50/50 px-1.5 py-0.5 rounded text-xs",
+                  !isActive && "text-slate-400 bg-slate-100",
                 )}
               >
                 {row.original.conversion_factor} {baseUnitSymbol}
@@ -116,18 +123,18 @@ export const ProductUnitsTable = ({
           const isActive = row.original.is_active;
 
           return (
-            <div className={cn("font-sans text-xs", !isActive && "opacity-60")}>
+            <div className={cn("font-sans text-sm", !isActive && "opacity-60")}>
               <span
                 className={cn(
-                  "font-mono text-[11px] font-bold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200/50",
-                  !isActive && "text-slate-400 border-slate-200 bg-slate-50"
+                  "font-mono text-xs font-bold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200/50",
+                  !isActive && "text-slate-400 border-slate-200 bg-slate-50",
                 )}
               >
                 {row.original.sku}
               </span>
               {row.original.barcode && (
-                <div className="text-[10px] text-slate-500 flex items-center gap-0.5 font-mono mt-1">
-                  <Barcode size={11} className="text-slate-400 shrink-0" />
+                <div className="text-[11px] text-slate-500 flex items-center gap-0.5 font-mono mt-1">
+                  <Barcode size={12} className="text-slate-400 shrink-0" />
                   <span>{row.original.barcode}</span>
                 </div>
               )}
@@ -143,8 +150,8 @@ export const ProductUnitsTable = ({
           return (
             <span
               className={cn(
-                "font-semibold font-mono text-xs text-slate-600 block text-right",
-                !isActive && "text-slate-400 opacity-60"
+                "font-semibold font-mono text-sm text-slate-600 block text-right",
+                !isActive && "text-slate-400 opacity-60",
               )}
             >
               {formatCurrency(row.original.cost_price)}
@@ -160,8 +167,8 @@ export const ProductUnitsTable = ({
           return (
             <span
               className={cn(
-                "font-extrabold font-mono text-xs text-slate-800 block text-right",
-                !isActive && "text-slate-400 line-through opacity-60"
+                "font-extrabold font-mono text-sm text-slate-800 block text-right",
+                !isActive && "text-slate-400 line-through opacity-60",
               )}
             >
               {formatCurrency(row.original.selling_price)}
@@ -178,8 +185,10 @@ export const ProductUnitsTable = ({
           return (
             <span
               className={cn(
-                "font-bold font-mono text-xs block text-right",
-                isActive ? "text-emerald-600" : "text-slate-400 line-through opacity-60"
+                "font-bold font-mono text-sm block text-right",
+                isActive
+                  ? "text-emerald-600"
+                  : "text-slate-400 line-through opacity-60",
               )}
             >
               {formatCurrency(profit)}
@@ -193,21 +202,23 @@ export const ProductUnitsTable = ({
         cell: ({ row }) => {
           const profit = row.original.selling_price - row.original.cost_price;
           const margin =
-            row.original.selling_price > 0 ? (profit / row.original.selling_price) * 100 : 0;
+            row.original.selling_price > 0
+              ? (profit / row.original.selling_price) * 100
+              : 0;
           const isActive = row.original.is_active;
 
           return (
             <div className="text-center font-sans">
               <span
                 className={cn(
-                  "inline-flex items-center justify-center px-2 py-0.5 rounded text-[10px] font-bold",
+                  "inline-flex items-center justify-center px-2 py-0.5 rounded text-xs font-bold",
                   !isActive
                     ? "bg-slate-100 text-slate-400 border border-slate-200 opacity-60"
                     : margin > 20
-                    ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
-                    : margin > 5
-                    ? "bg-amber-50 text-amber-600 border border-amber-100"
-                    : "bg-rose-50 text-rose-600 border border-rose-100"
+                      ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
+                      : margin > 5
+                        ? "bg-amber-50 text-amber-600 border border-amber-100"
+                        : "bg-rose-50 text-rose-600 border border-rose-100",
                 )}
               >
                 {margin.toFixed(2)}%
@@ -225,13 +236,18 @@ export const ProductUnitsTable = ({
             <div className="font-sans text-center">
               <span
                 className={cn(
-                  "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold",
+                  "inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold",
                   isActive
                     ? "bg-emerald-50 border border-emerald-200 text-emerald-700"
-                    : "bg-slate-100 border border-slate-200 text-slate-600"
+                    : "bg-slate-100 border border-slate-200 text-slate-600",
                 )}
               >
-                <span className={cn("h-1 w-1 rounded-full", isActive ? "bg-emerald-500" : "bg-slate-400")} />
+                <span
+                  className={cn(
+                    "h-1.5 w-1.5 rounded-full",
+                    isActive ? "bg-emerald-500" : "bg-slate-400",
+                  )}
+                />
                 {isActive ? "Active" : "Archived"}
               </span>
             </div>
@@ -251,7 +267,7 @@ export const ProductUnitsTable = ({
                 className="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50/10 transition shadow-sm cursor-pointer"
                 title="Edit Unit"
               >
-                <Edit2 size={12} />
+                <Edit2 size={13} />
               </button>
               <button
                 type="button"
@@ -260,18 +276,18 @@ export const ProductUnitsTable = ({
                   "p-1.5 rounded-lg border bg-white transition shadow-sm cursor-pointer",
                   pu.is_active
                     ? "border-slate-200 text-amber-600 hover:text-amber-700 hover:border-amber-200 hover:bg-amber-50/10"
-                    : "border-slate-200 text-emerald-600 hover:text-emerald-700 hover:border-emerald-200 hover:bg-emerald-50/10"
+                    : "border-slate-200 text-emerald-600 hover:text-emerald-700 hover:border-emerald-200 hover:bg-emerald-50/10",
                 )}
                 title={pu.is_active ? "Archive Unit" : "Restore Unit"}
               >
-                {pu.is_active ? <Archive size={12} /> : <RotateCcw size={12} />}
+                {pu.is_active ? <Archive size={13} /> : <RotateCcw size={13} />}
               </button>
             </div>
           );
         },
       },
     ],
-    [generalUnits, baseUnitSymbol, formatCurrency, onEdit, onToggleActive]
+    [generalUnits, baseUnitSymbol, formatCurrency, onEdit, onToggleActive],
   );
 
   return (
@@ -296,6 +312,11 @@ export const ProductUnitsTable = ({
           columns={columns}
           isLoading={false}
           getRowId={(pu: ProductUnit) => pu.id}
+          getRowClassName={(pu) =>
+            !pu.is_active
+              ? "bg-slate-50/60 text-slate-400/80 italic opacity-75"
+              : ""
+          }
         />
       </div>
 
@@ -303,9 +324,12 @@ export const ProductUnitsTable = ({
       <div className="block md:hidden p-4 space-y-4">
         {paginatedUnits.map((pu) => {
           const unit = generalUnits.find((u) => u.id === pu.unit_id);
-          const uomName = unit ? `${unit.name} (${unit.symbol})` : "Unknown Unit";
+          const uomName = unit
+            ? `${unit.name} (${unit.symbol})`
+            : "Unknown Unit";
           const profit = pu.selling_price - pu.cost_price;
-          const margin = pu.selling_price > 0 ? (profit / pu.selling_price) * 100 : 0;
+          const margin =
+            pu.selling_price > 0 ? (profit / pu.selling_price) * 100 : 0;
           const unitSymbol = unit?.symbol || "unit";
 
           return (
@@ -313,7 +337,9 @@ export const ProductUnitsTable = ({
               key={pu.id}
               className={cn(
                 "bg-white border rounded-xl p-4 shadow-xs space-y-3 transition-all duration-150",
-                pu.is_active ? "border-slate-200" : "border-slate-100 bg-slate-50/50 opacity-75"
+                pu.is_active
+                  ? "border-slate-200"
+                  : "border-slate-100 bg-slate-50/50 opacity-75",
               )}
             >
               {/* Header: Unit, SKU and Status */}
@@ -322,7 +348,8 @@ export const ProductUnitsTable = ({
                   <div
                     className={cn(
                       "h-8 w-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-extrabold text-xs uppercase tracking-wide border border-blue-100/50 shrink-0",
-                      !pu.is_active && "bg-slate-100 text-slate-400 border-slate-200"
+                      !pu.is_active &&
+                        "bg-slate-100 text-slate-400 border-slate-200",
                     )}
                   >
                     {unitSymbol}
@@ -331,7 +358,7 @@ export const ProductUnitsTable = ({
                     <h5
                       className={cn(
                         "font-bold text-slate-800 text-xs leading-snug truncate",
-                        !pu.is_active && "text-slate-400 line-through"
+                        !pu.is_active && "text-slate-400 line-through",
                       )}
                     >
                       {uomName}
@@ -355,10 +382,15 @@ export const ProductUnitsTable = ({
                     "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold shrink-0",
                     pu.is_active
                       ? "bg-emerald-50 text-emerald-700 border border-emerald-100"
-                      : "bg-slate-100 text-slate-600 border border-slate-200"
+                      : "bg-slate-100 text-slate-600 border border-slate-200",
                   )}
                 >
-                  <span className={cn("h-1 w-1 rounded-full", pu.is_active ? "bg-emerald-500" : "bg-slate-400")} />
+                  <span
+                    className={cn(
+                      "h-1 w-1 rounded-full",
+                      pu.is_active ? "bg-emerald-500" : "bg-slate-400",
+                    )}
+                  />
                   {pu.is_active ? "Active" : "Archived"}
                 </span>
               </div>
@@ -388,10 +420,10 @@ export const ProductUnitsTable = ({
                         !pu.is_active
                           ? "bg-slate-100 text-slate-400 border border-slate-200 opacity-60"
                           : margin > 20
-                          ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
-                          : margin > 5
-                          ? "bg-amber-50 text-amber-600 border border-amber-100"
-                          : "bg-rose-50 text-rose-600 border border-rose-100"
+                            ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
+                            : margin > 5
+                              ? "bg-amber-50 text-amber-600 border border-amber-100"
+                              : "bg-rose-50 text-rose-600 border border-rose-100",
                       )}
                     >
                       {margin.toFixed(1)}%
@@ -413,7 +445,7 @@ export const ProductUnitsTable = ({
                   <span
                     className={cn(
                       "font-extrabold font-mono text-slate-800",
-                      !pu.is_active && "text-slate-400 line-through"
+                      !pu.is_active && "text-slate-400 line-through",
                     )}
                   >
                     {formatCurrency(pu.selling_price)}
@@ -438,7 +470,7 @@ export const ProductUnitsTable = ({
                     "flex-1 h-9 rounded-lg border flex items-center justify-center gap-1.5 text-xs font-semibold cursor-pointer shadow-xs transition",
                     pu.is_active
                       ? "border-amber-200 bg-amber-50/20 text-amber-700 hover:bg-amber-50 hover:text-amber-800"
-                      : "border-emerald-200 bg-emerald-50/20 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
+                      : "border-emerald-200 bg-emerald-50/20 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800",
                   )}
                 >
                   {pu.is_active ? (
@@ -478,4 +510,3 @@ export const ProductUnitsTable = ({
     </div>
   );
 };
-

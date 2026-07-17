@@ -7,7 +7,7 @@ interface ProductInitEmptyStateProps {
 
 export const ProductInitEmptyState = ({ onAddClick }: ProductInitEmptyStateProps) => {
   return (
-    <div className="flex flex-col items-center justify-center text-center p-8 border border-dashed border-slate-200 bg-white rounded-2xl shadow-sm min-h-[250px] animate-in fade-in duration-200">
+    <div className="flex flex-col items-center justify-center text-center p-8 border border-dashed border-slate-200 bg-white rounded-2xl shadow-sm min-h-62.5 animate-in fade-in duration-200">
       <div className="p-4 rounded-full bg-slate-50 text-slate-400 mb-4 ring-8 ring-slate-50/50">
         <Scale className="h-8 w-8 text-blue-500" />
       </div>

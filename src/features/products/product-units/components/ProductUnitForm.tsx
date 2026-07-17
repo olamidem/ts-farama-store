@@ -45,14 +45,12 @@ export const ProductUnitsForm = ({
   } = useForm<ProductUnitFormData>({
     resolver: zodResolver(createProductUnitSchema),
     defaultValues: {
-      product_id: product.id,
       unit_id: "",
       conversion_factor: 1,
       selling_price: 0,
       cost_price: 0,
       sku: "",
       barcode: "",
-      is_active: true,
     },
   });
 
@@ -84,25 +82,21 @@ export const ProductUnitsForm = ({
   useEffect(() => {
     if (editingUnit) {
       reset({
-        product_id: editingUnit.product_id,
         unit_id: editingUnit.unit_id,
         conversion_factor: editingUnit.conversion_factor,
         selling_price: editingUnit.selling_price,
         cost_price: editingUnit.cost_price,
         sku: editingUnit.sku,
         barcode: editingUnit.barcode || "",
-        is_active: editingUnit.is_active,
       });
     } else {
       reset({
-        product_id: product.id,
         unit_id: "",
         conversion_factor: 1,
         selling_price: 0,
         cost_price: 0,
         sku: "",
         barcode: "",
-        is_active: true,
       });
     }
   }, [editingUnit, product.id, reset]);

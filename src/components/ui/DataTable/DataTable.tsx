@@ -10,6 +10,7 @@ import DataTableEmpty from "./DataTableEmpty";
 import DataTableSkeleton from "./DataTableSkeleton";
 import { Package } from "lucide-react";
 import { motion } from "motion/react";
+import { cn } from "../../../utils/cn";
 
 interface DataTableProps<T> {
   data: T[];
@@ -21,6 +22,7 @@ interface DataTableProps<T> {
   emptyTitle?: string;
   emptyDescription?: string;
   isLoading?: boolean;
+  getRowClassName?: (originalRow: T) => string;
 }
 
 const DataTable = <T,>({
@@ -33,6 +35,7 @@ const DataTable = <T,>({
   emptyTitle,
   emptyDescription,
   isLoading = false,
+  getRowClassName,
 }: DataTableProps<T>) => {
   const table = useReactTable({
     data,
@@ -94,7 +97,10 @@ const DataTable = <T,>({
                   duration: 0.18,
                   delay: Math.min(index * 0.02, 0.25),
                 }}
-                className="transition-colors hover:bg-slate-50"
+                className={cn(
+                  "transition-colors hover:bg-slate-50",
+                  getRowClassName ? getRowClassName(row.original) : "",
+                )}
               >
                 {row.getVisibleCells().map((cell) => (
                   <td
