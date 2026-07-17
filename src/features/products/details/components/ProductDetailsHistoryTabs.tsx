@@ -1,7 +1,10 @@
 import { useState } from "react";
 import type { Product } from "../../types/product";
 import { ProductDetailsOverviewTab } from "./ProductDetailsOverviewTab";
+import { ProductDetailsStockSummary } from "./ProductDetailsStockSummary";
+import { ProductDetailsActivity } from "./ProductDetailsActivity";
 import { Plus, ArrowUpRight, ArrowDownLeft } from "lucide-react";
+import ProductUnitsManager from "../../product-units/components/ProductUnitsManager";
 
 interface ProductDetailsHistoryTabsProps {
   product: Product;
@@ -22,7 +25,15 @@ export const ProductDetailsHistoryTabs = ({
   onPrintBarcode,
   onArchive,
 }: ProductDetailsHistoryTabsProps) => {
-  const [activeTab, setActiveTab] = useState<"overview" | "stock" | "sales" | "purchase">("overview");
+  const [activeTab, setActiveTab] = useState<
+    | "overview"
+    | "units"
+    | "stock"
+    | "sales"
+    | "purchase"
+    | "summary"
+    | "activities"
+  >("overview");
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("en-NG", {
@@ -34,9 +45,12 @@ export const ProductDetailsHistoryTabs = ({
 
   const tabs = [
     { id: "overview", label: "Overview" },
+    { id: "units", label: "Selling Units 🧮" },
     { id: "stock", label: "Stock History" },
     { id: "sales", label: "Sales History" },
     { id: "purchase", label: "Purchase History" },
+    { id: "summary", label: "Stock Summary" },
+    { id: "activities", label: "Product Activities" },
   ] as const;
 
   return (
@@ -47,7 +61,7 @@ export const ProductDetailsHistoryTabs = ({
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`pb-3 text-xs font-bold transition duration-150 border-b-2 relative -bottom-px ${
+            className={`pb-3 text-sm font-bold transition duration-150 border-b-2 relative -bottom-px ${
               activeTab === tab.id
                 ? "border-emerald-500 text-emerald-600"
                 : "border-transparent text-slate-500 hover:text-slate-800"
@@ -72,6 +86,8 @@ export const ProductDetailsHistoryTabs = ({
           />
         )}
 
+        {activeTab === "units" && <ProductUnitsManager product={product} />}
+
         {activeTab === "stock" && (
           <div className="space-y-4">
             <h3 className="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2">
@@ -90,37 +106,61 @@ export const ProductDetailsHistoryTabs = ({
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-xs">
                   <tr>
-                    <td className="py-2.5 font-medium text-slate-500">15 Jul 2026, 02:40 PM</td>
+                    <td className="py-2.5 font-medium text-slate-500">
+                      15 Jul 2026, 02:40 PM
+                    </td>
                     <td className="py-2.5">
                       <span className="inline-flex items-center gap-1 text-emerald-600 font-bold">
                         <ArrowUpRight size={12} /> Adjustment
                       </span>
                     </td>
-                    <td className="py-2.5 font-semibold text-slate-800">ADJ-0982</td>
-                    <td className="py-2.5 text-right font-bold text-emerald-600">+24</td>
-                    <td className="py-2.5 text-right font-bold text-slate-800">{product.stock}</td>
+                    <td className="py-2.5 font-semibold text-slate-800">
+                      ADJ-0982
+                    </td>
+                    <td className="py-2.5 text-right font-bold text-emerald-600">
+                      +24
+                    </td>
+                    <td className="py-2.5 text-right font-bold text-slate-800">
+                      {product.stock}
+                    </td>
                   </tr>
                   <tr>
-                    <td className="py-2.5 font-medium text-slate-500">15 Jul 2026, 01:15 PM</td>
+                    <td className="py-2.5 font-medium text-slate-500">
+                      15 Jul 2026, 01:15 PM
+                    </td>
                     <td className="py-2.5">
                       <span className="inline-flex items-center gap-1 text-rose-600 font-bold">
                         <ArrowDownLeft size={12} /> Sale deduction
                       </span>
                     </td>
-                    <td className="py-2.5 font-semibold text-slate-800">INV-2394</td>
-                    <td className="py-2.5 text-right font-bold text-rose-600">-2</td>
-                    <td className="py-2.5 text-right font-bold text-slate-800">{product.stock - 24}</td>
+                    <td className="py-2.5 font-semibold text-slate-800">
+                      INV-2394
+                    </td>
+                    <td className="py-2.5 text-right font-bold text-rose-600">
+                      -2
+                    </td>
+                    <td className="py-2.5 text-right font-bold text-slate-800">
+                      {product.stock - 24}
+                    </td>
                   </tr>
                   <tr>
-                    <td className="py-2.5 font-medium text-slate-500">12 Jul 2026, 10:30 AM</td>
+                    <td className="py-2.5 font-medium text-slate-500">
+                      12 Jul 2026, 10:30 AM
+                    </td>
                     <td className="py-2.5">
                       <span className="inline-flex items-center gap-1 text-emerald-600 font-bold">
                         <Plus size={12} /> Initial Stock
                       </span>
                     </td>
-                    <td className="py-2.5 font-semibold text-slate-800">PO-4820</td>
-                    <td className="py-2.5 text-right font-bold text-emerald-600">+{product.stock - 22}</td>
-                    <td className="py-2.5 text-right font-bold text-slate-800">{product.stock - 22}</td>
+                    <td className="py-2.5 font-semibold text-slate-800">
+                      PO-4820
+                    </td>
+                    <td className="py-2.5 text-right font-bold text-emerald-600">
+                      +{product.stock - 22}
+                    </td>
+                    <td className="py-2.5 text-right font-bold text-slate-800">
+                      {product.stock - 22}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -147,20 +187,44 @@ export const ProductDetailsHistoryTabs = ({
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-xs">
                   <tr>
-                    <td className="py-2.5 font-bold text-slate-800">INV-2394</td>
-                    <td className="py-2.5 font-medium text-slate-500">Walk-in Customer</td>
-                    <td className="py-2.5 font-medium text-slate-500">15 Jul 2026, 01:15 PM</td>
-                    <td className="py-2.5 text-right font-bold text-slate-800">2</td>
-                    <td className="py-2.5 text-right font-semibold text-slate-600 font-mono">{formatCurrency(product.selling_price)}</td>
-                    <td className="py-2.5 text-right font-extrabold text-slate-900 font-mono">{formatCurrency(product.selling_price * 2)}</td>
+                    <td className="py-2.5 font-bold text-slate-800">
+                      INV-2394
+                    </td>
+                    <td className="py-2.5 font-medium text-slate-500">
+                      Walk-in Customer
+                    </td>
+                    <td className="py-2.5 font-medium text-slate-500">
+                      15 Jul 2026, 01:15 PM
+                    </td>
+                    <td className="py-2.5 text-right font-bold text-slate-800">
+                      2
+                    </td>
+                    <td className="py-2.5 text-right font-semibold text-slate-600 font-mono">
+                      {formatCurrency(product.selling_price)}
+                    </td>
+                    <td className="py-2.5 text-right font-extrabold text-slate-900 font-mono">
+                      {formatCurrency(product.selling_price * 2)}
+                    </td>
                   </tr>
                   <tr>
-                    <td className="py-2.5 font-bold text-slate-800">INV-2381</td>
-                    <td className="py-2.5 font-medium text-slate-500">Olamide Yusuf</td>
-                    <td className="py-2.5 font-medium text-slate-500">14 Jul 2026, 11:20 AM</td>
-                    <td className="py-2.5 text-right font-bold text-slate-800">5</td>
-                    <td className="py-2.5 text-right font-semibold text-slate-600 font-mono">{formatCurrency(product.selling_price)}</td>
-                    <td className="py-2.5 text-right font-extrabold text-slate-900 font-mono">{formatCurrency(product.selling_price * 5)}</td>
+                    <td className="py-2.5 font-bold text-slate-800">
+                      INV-2381
+                    </td>
+                    <td className="py-2.5 font-medium text-slate-500">
+                      Olamide Yusuf
+                    </td>
+                    <td className="py-2.5 font-medium text-slate-500">
+                      14 Jul 2026, 11:20 AM
+                    </td>
+                    <td className="py-2.5 text-right font-bold text-slate-800">
+                      5
+                    </td>
+                    <td className="py-2.5 text-right font-semibold text-slate-600 font-mono">
+                      {formatCurrency(product.selling_price)}
+                    </td>
+                    <td className="py-2.5 text-right font-extrabold text-slate-900 font-mono">
+                      {formatCurrency(product.selling_price * 5)}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -188,16 +252,34 @@ export const ProductDetailsHistoryTabs = ({
                 <tbody className="divide-y divide-slate-100 text-xs">
                   <tr>
                     <td className="py-2.5 font-bold text-slate-800">PO-4820</td>
-                    <td className="py-2.5 font-medium text-slate-500">Coca-Cola Beverages Nigeria</td>
-                    <td className="py-2.5 font-medium text-slate-500">12 Jul 2026, 10:30 AM</td>
-                    <td className="py-2.5 text-right font-bold text-slate-800">100</td>
-                    <td className="py-2.5 text-right font-semibold text-slate-600 font-mono">{formatCurrency(product.cost_price)}</td>
-                    <td className="py-2.5 text-right font-extrabold text-slate-900 font-mono">{formatCurrency(product.cost_price * 100)}</td>
+                    <td className="py-2.5 font-medium text-slate-500">
+                      Coca-Cola Beverages Nigeria
+                    </td>
+                    <td className="py-2.5 font-medium text-slate-500">
+                      12 Jul 2026, 10:30 AM
+                    </td>
+                    <td className="py-2.5 text-right font-bold text-slate-800">
+                      100
+                    </td>
+                    <td className="py-2.5 text-right font-semibold text-slate-600 font-mono">
+                      {formatCurrency(product.cost_price)}
+                    </td>
+                    <td className="py-2.5 text-right font-extrabold text-slate-900 font-mono">
+                      {formatCurrency(product.cost_price * 100)}
+                    </td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
+        )}
+
+        {activeTab === "summary" && (
+          <ProductDetailsStockSummary product={product} />
+        )}
+
+        {activeTab === "activities" && (
+          <ProductDetailsActivity product={product} />
         )}
       </div>
     </div>
