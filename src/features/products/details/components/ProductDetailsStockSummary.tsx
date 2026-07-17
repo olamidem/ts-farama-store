@@ -35,54 +35,54 @@ export const ProductDetailsStockSummary = ({
       </div>
 
       <div className="relative z-10 space-y-4">
-        <h3 className="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2">
+        <h3 className="text-base font-bold text-slate-800 border-b border-slate-100 pb-2">
           Stock Summary
         </h3>
 
         <div className="space-y-3 pt-2">
           {/* Current Stock */}
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">
+            <span className="text-sm font-semibold text-slate-500">
               Current Stock
             </span>
-            <span className="text-xs font-extrabold text-emerald-600 font-mono">
+            <span className="text-sm font-extrabold text-emerald-600 font-mono">
               {stock} units
             </span>
           </div>
 
           {/* Reserved Stock */}
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">
+            <span className="text-sm font-semibold text-slate-500">
               Reserved Stock
             </span>
-            <span className="text-xs font-extrabold text-slate-800 font-mono">
+            <span className="text-sm font-extrabold text-slate-800 font-mono">
               {reservedStock} units
             </span>
           </div>
 
           {/* Available Stock */}
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">
+            <span className="text-sm font-semibold text-slate-500">
               Available Stock
             </span>
-            <span className="text-xs font-extrabold text-emerald-600 font-mono">
+            <span className="text-sm font-extrabold text-emerald-600 font-mono">
               {availableStock} units
             </span>
           </div>
 
           {/* Min Stock Alert */}
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">
+            <span className="text-sm font-semibold text-slate-500">
               Min. Stock Alert
             </span>
-            <span className="text-xs font-extrabold text-rose-600 font-mono">
+            <span className="text-sm font-extrabold text-rose-600 font-mono">
               10 units
             </span>
           </div>
         </div>
 
         {isLowStock && (
-          <div className="mt-4 p-2 rounded bg-rose-50 border border-rose-100 text-rose-700 text-[10px] font-bold text-center animate-pulse">
+          <div className="mt-4 p-2 rounded bg-rose-50 border border-rose-100 text-rose-700 text-xs font-bold text-center animate-pulse">
             ⚠️ Low Stock Alert: Reorder immediately!
           </div>
         )}
