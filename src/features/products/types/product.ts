@@ -28,3 +28,9 @@ export interface CreateProductInput {
 }
 
 export type UpdateProductInput = Partial<CreateProductInput>;
+
+export interface ProductSummary {
+  id: string;
+  name: string;
+  description?: string;
+}

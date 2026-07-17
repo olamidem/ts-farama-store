@@ -2,6 +2,7 @@ import { supabase } from "../../../api/supabase";
 import { throwSupabaseError } from "../../../utils/supabaseError";
 import { formatSentenceCase } from "../../../utils/formatSentenceCase";
 import type { Unit, CreateUnitInput, UpdateUnitInput } from "../types/unit";
+import type { ProductSummary } from "../../products/types/product";
 
 export const getUnits = async (): Promise<Unit[]> => {
   const { data, error } = await supabase
@@ -70,4 +71,12 @@ export const restoreUnit = async (
   if (error) {
     throw new Error(error.message);
   }
+};
+
+export const getProductsForUnits = async (): Promise<ProductSummary[]> => {
+  const { data, error } = await supabase
+    .from("products")
+    .select("id, name, description");
+  throwSupabaseError(error);
+  return data || [];
 };

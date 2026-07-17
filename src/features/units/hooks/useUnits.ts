@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../../lib/queryKey";
-import { getUnits } from "../services/unit.service";
+import { getProductsForUnits, getUnits } from "../services/unit.service";
 
 export const useUnits = () => {
   return useQuery({
@@ -8,3 +8,12 @@ export const useUnits = () => {
     queryFn: getUnits,
   });
 };
+
+export const useProductsForUnits = () => {
+  return useQuery({
+    queryKey: [...QUERY_KEYS.units, "products-summary"],
+    queryFn: getProductsForUnits,
+  });
+};
+
+
