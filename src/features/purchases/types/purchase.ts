@@ -1,4 +1,5 @@
-import type { PurchaseStatus } from "../constants/purchase.constants";
+
+import type { PurchaseStatus } from "../constant/purchase.constants";
 import type { PurchaseItem, CreatePurchaseItemInput } from "./purchaseItem";
 import type { Supplier } from "./supplier";
 export interface Purchase {
