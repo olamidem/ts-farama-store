@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { login } from "../../../services/auth.service";
+import { login } from "../services/auth.service";
 import { useAuthStore } from "../../../store/authStore";
 import { toast } from "sonner";
 import { getReadableError } from "../../../utils/error";

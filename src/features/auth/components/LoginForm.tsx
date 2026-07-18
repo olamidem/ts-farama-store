@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import type { AxiosError } from "axios";
 import type { ApiError } from "../../../types/api";
 import { queryClient } from "../../../lib/queryClient";
-import { getCurrentUser } from "../../../services/auth.service";
+import { getCurrentUser } from "../services/auth.service";
 
 
 const LoginForm = () => {

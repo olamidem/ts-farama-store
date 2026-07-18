@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "../../../store/authStore";
-import { getCurrentUser } from "../../../services/auth.service";
+import { getCurrentUser } from "../services/auth.service";
 
 export const useCurrentUser = () => {
   const session = useAuthStore((state) => state.session);
