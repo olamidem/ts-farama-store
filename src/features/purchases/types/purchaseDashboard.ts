@@ -1,6 +1,8 @@
 export interface PurchaseStats {
   totalOrders: number;
+  draftOrders: number;
   pendingOrders: number;
   receivedOrders: number;
-  totalValue: number;
+  partiallyReceivedOrders: number;
+  totalPurchaseValue: number;
 }
