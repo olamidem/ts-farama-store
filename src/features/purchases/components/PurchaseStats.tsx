@@ -1,104 +1,75 @@
 import {
-  ShoppingCart,
+  ShoppingBag,
   Clock,
-  CheckCircle2,
-  DollarSign,
+  PackageCheck,
+  CreditCard,
 } from "lucide-react";
 import { usePurchaseStats } from "../hook/usePurchases";
 import { formatCurrency } from "../../../utils/formatCurrenty";
 
 export default function PurchaseStats() {
   const { data: stats, isLoading } = usePurchaseStats();
-
   const cards = [
     {
       title: "Total Orders",
-      value: isLoading ? "..." : stats?.totalOrders ?? 0,
-      label: "All Orders",
-      icon: ShoppingCart,
-      color:
-        "text-blue-600 bg-blue-50 border-blue-100",
-    },
-    {
-      title: "Draft",
-      value: isLoading ? "..." : stats?.draftOrders ?? 0,
-      label: "Not Submitted",
-      icon: Clock,
-      color:
-        "text-slate-600 bg-slate-50 border-slate-100",
+      value: isLoading ? "..." : stats?.totalOrders,
+      label: "All time",
+      icon: ShoppingBag,
+      iconColor: "text-blue-600",
+      bgColor: "bg-blue-50/50",
     },
     {
       title: "Pending",
-      value: isLoading
-        ? "..."
-        : stats?.pendingOrders ?? 0,
-      label: "Awaiting Delivery",
+      value: isLoading ? "..." : stats?.pendingOrders ,
+      label: "Awaiting action",
       icon: Clock,
-      color:
-        "text-amber-600 bg-amber-50 border-amber-100",
-    },
-    {
-      title: "Partially Received",
-      value: isLoading
-        ? "..."
-        : stats?.partiallyReceivedOrders ?? 0,
-      label: "Receiving In Progress",
-      icon: ShoppingCart,
-      color:
-        "text-cyan-600 bg-cyan-50 border-cyan-100",
+      iconColor: "text-amber-600",
+      bgColor: "bg-amber-50/50",
     },
     {
       title: "Received",
-      value: isLoading
-        ? "..."
-        : stats?.receivedOrders ?? 0,
+      value: isLoading ? "..." : stats?.receivedOrders ,
       label: "Completed",
-      icon: CheckCircle2,
-      color:
-        "text-emerald-600 bg-emerald-50 border-emerald-100",
+      icon: PackageCheck,
+      iconColor: "text-emerald-600",
+      bgColor: "bg-emerald-50/50",
     },
     {
-      title: "Purchase Value",
-      value: isLoading
-        ? "..."
-        : formatCurrency(
-            stats?.totalPurchaseValue ?? 0,
-          ),
-      label: "All Time",
-      icon: DollarSign,
-      color:
-        "text-purple-600 bg-purple-50 border-purple-100",
+      title: "Total Purchase Value",
+      value: isLoading ? "..." : formatCurrency(stats?.totalPurchaseValue ?? 0 ),
+      label: "All time",
+      icon: CreditCard,
+      iconColor: "text-purple-600", 
+      bgColor: "bg-purple-50/50",
     },
   ];
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
       {cards.map((card) => {
         const Icon = card.icon;
 
         return (
           <div
             key={card.title}
-            className={`rounded-2xl border p-4 ${card.color}`}
+            className="flex items-center gap-4 bg-white rounded-2xl border border-slate-100 p-5 shadow-3xs hover:shadow-2xs transition-all duration-300"
           >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium">
-                  {card.title}
-                </p>
+            {/* Left side: Icon inside shaded rounded container */}
+            <div className={`p-3.5 rounded-xl ${card.bgColor} ${card.iconColor} shrink-0`}>
+              <Icon size={20} className="stroke-[2.2]" />
+            </div>
 
-                <h3 className="mt-2 text-2xl font-bold">
-                  {card.value}
-                </h3>
-
-                <p className="mt-1 text-xs opacity-70">
-                  {card.label}
-                </p>
-              </div>
-
-              <div className="rounded-xl bg-white/60 p-3">
-                <Icon className="h-6 w-6" />
-              </div>
+            {/* Right side: Title, Value, Subtitle */}
+            <div className="min-w-0 flex-1">
+              <span className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider block leading-none">
+                {card.title}
+              </span>
+              <span className="text-lg font-black text-slate-800 tracking-tight block mt-1.5 truncate leading-none">
+                {card.value}
+              </span>
+              <span className="text-[10px] font-semibold text-slate-400 block mt-1 leading-none">
+                {card.label}
+              </span>
             </div>
           </div>
         );
