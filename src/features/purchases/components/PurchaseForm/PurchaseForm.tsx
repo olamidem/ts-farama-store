@@ -4,9 +4,18 @@ import { Link, useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 import PageHeader from "../../../../components/ui/PageHeader";
 import Button from "../../../../components/ui/Button";
-import { useCreatePurchase } from "../../hook/usePurchasesMutations";
-import { useCatalogProducts, useCatalogProductUnits } from "../../hook/useCatalog";
+import SupplierInformation from "./SupplierInformation";
+import PurchaseItemsTable from "./PurchaseItemsTable";
+import PurchaseSummary from "./PurchaseSummary";
 import type { ItemRowValue } from "./PurchaseItemRow";
+
+import { useCreatePurchase } from "../../hook/usePurchasesMutations";
+import {
+  useCatalogProducts,
+  useCatalogProductUnits,
+} from "../../hook/useCatalog";
+
+import { getToday, getFutureDate } from "../../utils/date";
 
 interface PurchaseFormProps {
   onSuccess?: () => void;
@@ -14,12 +23,12 @@ interface PurchaseFormProps {
   isModal?: boolean;
 }
 
-const getToday = () => new Date().toISOString().split("T")[0];
-const getFutureDate = (days: number) => {
-  const date = new Date();
-  date.setDate(date.getDate() + days);
-  return date.toISOString().split("T")[0];
-};
+const createEmptyItem = (): ItemRowValue => ({
+  product_id: "",
+  product_unit_id: "",
+  quantity: 1,
+  cost_price: 0,
+});
 
 const PurchaseForm = ({
   onSuccess,
@@ -27,28 +36,29 @@ const PurchaseForm = ({
   isModal = false,
 }: PurchaseFormProps) => {
   const router = useRouter();
+
+  const createPurchaseMutation = useCreatePurchase();
+
+  const { data: products = [], isLoading: loadingProducts } =
+    useCatalogProducts();
+
+  const { data: productUnits = [], isLoading: loadingUnits } =
+    useCatalogProductUnits();
+
+  const isCatalogLoading = loadingProducts || loadingUnits;
+
+  // Form State
   const [supplierId, setSupplierId] = useState("");
   const [warehouseId, setWarehouseId] = useState("");
   const [remarks, setRemarks] = useState("");
+
   const [purchaseDate, setPurchaseDate] = useState(getToday());
+
   const [expectedDeliveryDate, setExpectedDeliveryDate] = useState(
     getFutureDate(5),
   );
 
-  const createPurchaseMutation = useCreatePurchase();
-  const { data: products = [], isLoading: loadingProducts } =
-    useCatalogProducts();
-  const { data: productUnits = [], isLoading: loadingUnits } =
-    useCatalogProductUnits();
-
-  const [items, setItems] = useState<ItemRowValue[]>([
-    {
-      product_id: "",
-      product_unit_id: "",
-      quantity: 1,
-      cost_price: 0,
-    },
-  ]);
+  const [items, setItems] = useState<ItemRowValue[]>([createEmptyItem()]);
 
   const handleItemChange = (index: number, updated: Partial<ItemRowValue>) => {
     setItems((previous) => {
@@ -64,28 +74,23 @@ const PurchaseForm = ({
   };
 
   const handleAddRow = () => {
-    setItems((previous) => [
-      ...previous,
-      {
-        product_id: "",
-        product_unit_id: "",
-        quantity: 1,
-        cost_price: 0,
-      },
-    ]);
+    setItems((previous) => [...previous, createEmptyItem()]);
   };
 
   const handleRemoveRow = (index: number) => {
     if (items.length === 1) {
-      toast.error("A purchase must contain at least one item.");
-
+      toast.error("A purchase order must contain at least one item.");
       return;
     }
-    setItems((previous) => previous.filter((_, i) => i !== index));
+
+    setItems((previous) =>
+      previous.filter((_, currentIndex) => currentIndex !== index),
+    );
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     if (!supplierId) {
       toast.error("Please select a supplier.");
       return;
@@ -107,7 +112,6 @@ const PurchaseForm = ({
         purchase_date: purchaseDate,
         expected_delivery_date: expectedDeliveryDate,
         remarks,
-
         items: validItems.map((item) => ({
           product_id: item.product_id,
           product_unit_id: item.product_unit_id,
@@ -115,7 +119,9 @@ const PurchaseForm = ({
           unit_cost: item.cost_price,
         })),
       });
-      toast.success("Purchase created successfully.");
+
+      toast.success("Purchase order created successfully.");
+
       if (onSuccess) {
         onSuccess();
         return;
@@ -126,25 +132,35 @@ const PurchaseForm = ({
       });
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to create purchase.",
+        error instanceof Error
+          ? error.message
+          : "Failed to create purchase order.",
       );
     }
   };
 
   return (
-    <div className="space-y-6">
+    <div
+      className={`w-full space-y-6 ${
+        isModal ? "py-2" : "mx-auto max-w-7xl py-4"
+      }`}
+    >
       {!isModal && (
-        <PageHeader
-          title="Create Purchase Order"
-          description="Create a new purchase order."
-        >
-          <Link to="/purchases">
-            <Button variant="secondary" size="sm">
-              <ArrowLeft size={16} />
-              Back
-            </Button>
-          </Link>
-        </PageHeader>
+        <>
+          <div>
+            <Link to="/purchases">
+              <Button variant="ghost" size="sm">
+                <ArrowLeft size={16} />
+                Back
+              </Button>
+            </Link>
+          </div>
+
+          <PageHeader
+            title="Create Purchase Order"
+            description="Create a new purchase order for your supplier."
+          />
+        </>
       )}
 
       <form
@@ -161,7 +177,7 @@ const PurchaseForm = ({
             items={items}
             products={products}
             productUnits={productUnits}
-            loading={loadingProducts || loadingUnits}
+            loading={isCatalogLoading}
             onChange={handleItemChange}
             onAddRow={handleAddRow}
             onRemoveRow={handleRemoveRow}
