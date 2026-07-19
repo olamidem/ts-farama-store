@@ -3,6 +3,7 @@ export const QUERY_KEYS = {
   categories: ["categories"],
   sales: ["sales"],
   users: ["users"],
+  suppliers: ["suppliers"],
   units: ["units"],
   productUnits: ["product-units"],
   inventoryTransactions: ["inventory-transactions"],
