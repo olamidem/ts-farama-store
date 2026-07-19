@@ -1,20 +1,30 @@
-export const formatDate = (dateString?: string) => {
-  if (!dateString) return "N/A";
-  try {
-    const date = new Date(dateString);
+export function formatDate(date?: string, includeTime = false) {
+  if (!date) return "N/A";
+
+  const d = new Date(date);
+
+  if (Number.isNaN(d.getTime())) {
+    return date;
+  }
+
+  if (includeTime) {
     return (
-      date.toLocaleDateString("en-US", {
+      d.toLocaleDateString("en-GB", {
         day: "numeric",
         month: "short",
         year: "numeric",
       }) +
-      ", " +
-      date.toLocaleTimeString("en-US", {
+      " " +
+      d.toLocaleTimeString("en-GB", {
         hour: "2-digit",
         minute: "2-digit",
       })
     );
-  } catch {
-    return "15 Jul 2026, 02:45 PM";
   }
-};
+
+  return d.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}

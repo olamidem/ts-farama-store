@@ -8,6 +8,8 @@ import {
 import PurchaseInformation from "./PurchaseInformation";
 import { PURCHASE_OVERVIEW_TABS, type PurchaseOverviewTab } from "../../constant/purchaseOverview.constants";
 import PurchaseItemsTable from "./PurchaseItemsTable";
+import PurchaseTimeline from "./PurchaseTimeline";
+import PurchaseActions from "./PurchaseActions";
 
 
 interface PurchaseOverviewProps {
