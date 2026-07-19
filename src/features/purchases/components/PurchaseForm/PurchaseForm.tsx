@@ -4,7 +4,6 @@ import { Link, useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 import PageHeader from "../../../../components/ui/PageHeader";
 import Button from "../../../../components/ui/Button";
-import SupplierInformation from "./SupplierInformation";
 import PurchaseItemsTable from "./PurchaseItemsTable";
 import PurchaseSummary from "./PurchaseSummary";
 import type { ItemRowValue } from "./PurchaseItemRow";
@@ -49,11 +48,8 @@ const PurchaseForm = ({
 
   // Form State
   const [supplierId, setSupplierId] = useState("");
-  const [warehouseId, setWarehouseId] = useState("");
   const [remarks, setRemarks] = useState("");
-
   const [purchaseDate, setPurchaseDate] = useState(getToday());
-
   const [expectedDeliveryDate, setExpectedDeliveryDate] = useState(
     getFutureDate(5),
   );
@@ -184,8 +180,6 @@ const PurchaseForm = ({
         </div>
 
         <PurchaseSummary
-          warehouseId={warehouseId}
-          setWarehouseId={setWarehouseId}
           purchaseDate={purchaseDate}
           setPurchaseDate={setPurchaseDate}
           expectedDeliveryDate={expectedDeliveryDate}

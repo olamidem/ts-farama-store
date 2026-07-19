@@ -10,6 +10,7 @@ import { PURCHASE_OVERVIEW_TABS, type PurchaseOverviewTab } from "../../constant
 import PurchaseItemsTable from "./PurchaseItemsTable";
 import PurchaseTimeline from "./PurchaseTimeline";
 import PurchaseActions from "./PurchaseActions";
+import ReceiveGoodsModal from "../PurchaseForm/ReceiveGoodsModal/ReceiveGoodModal";
 
 
 interface PurchaseOverviewProps {
@@ -171,9 +172,12 @@ const [activeTab, setActiveTab] = useState<PurchaseOverviewTab>(PURCHASE_OVERVIE
 
       {/* Receive Goods modal */}
       <ReceiveGoodsModal
+        key={purchase.id}
         purchase={purchase}
         isOpen={isReceiveModalOpen}
+        isSubmitting={receivePurchaseMutation.isPending}
         onClose={() => setIsReceiveModalOpen(false)}
+        onSubmit={handleReceiveGoods}
       />
     </div>
   );

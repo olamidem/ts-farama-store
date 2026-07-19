@@ -10,7 +10,6 @@ export interface PurchaseItem {
   unit_cost: number;
   total_cost: number;
   received_quantity: number;
-  remaining_quantity?: number;
   product?: Product;
   product_unit?: ProductUnit;
 }

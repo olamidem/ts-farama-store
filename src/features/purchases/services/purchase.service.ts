@@ -50,12 +50,6 @@ export async function getPurchase(id: string) {
       `
       *,
       supplier:suppliers(*),
-
-      warehouse:warehouses(
-        id,
-        name
-      ),
-
       items:purchase_items(
         *,
         product:products(*),
@@ -87,7 +81,6 @@ export async function createPurchase(input: CreatePurchaseInput) {
       supplier_id: input.supplier_id,
       purchase_date: input.purchase_date,
       expected_delivery_date: input.expected_delivery_date,
-      warehouse_id: input.warehouse_id,
       remarks: input.remarks,
       total_amount: total,
       status: "DRAFT",
