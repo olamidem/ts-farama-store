@@ -1,7 +1,12 @@
-
 import type { PurchaseStatus } from "../constant/purchase.constants";
 import type { PurchaseItem, CreatePurchaseItemInput } from "./purchaseItem";
 import type { Supplier } from "./supplier";
+
+export interface Warehouse {
+  id: string;
+  name: string;
+}
+
 export interface Purchase {
   id: string;
   purchase_number: string;
@@ -18,8 +23,9 @@ export interface Purchase {
   updated_at: string;
   // Relations
   supplier?: Supplier;
+  warehouse?: Warehouse;
+  // creator?: PurchaseCreator;
   items?: PurchaseItem[];
-  creator?: PurchaseCreator;
 }
 
 export interface PurchaseCreator {

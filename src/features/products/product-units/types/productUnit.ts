@@ -1,3 +1,5 @@
+import type { Unit } from "../../../units/types/unit";
+
 export interface ProductUnit {
   id: string;
   product_id: string;
@@ -12,6 +14,7 @@ export interface ProductUnit {
   sort_order: number;
   created_at: string;
   updated_at: string;
+  unit?: Unit
 }
 
 export interface CreateProductUnitInput {

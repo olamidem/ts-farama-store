@@ -1,113 +1,268 @@
-import { Calendar, Download, Search, SlidersHorizontal } from "lucide-react";
-import Button from "../../../components/ui/Button";
-import Input from "../../../components/ui/Input";
-import Label from "../../../components/ui/Label";
-import Select from "../../../components/ui/Select";
-import { PURCHASE_STATUS_OPTIONS } from "../constant/purchase.constants";
+import type { ColumnDef } from "@tanstack/react-table";
+import { Eye, Edit, Trash2 } from "lucide-react";
+import type { Purchase } from "../types/purchase";
+import { getStatusBadgeStyle, formatStatusText } from "../utils/purchaseStatus";
 
-interface PurchaseFiltersProps {
-  search: string;
-  setSearch: (value: string) => void;
-  supplierId: string;
-  setSupplierId: (value: string) => void;
-  status: string;
-  setStatus: (value: string) => void;
-  onExport?: () => void;
+interface ColumnOptions {
+  onView: (purchase: Purchase) => void;
+  onEdit: (purchase: Purchase) => void;
+  onDelete: (id: string) => void;
 }
 
-export default function PurchaseFilters({
-  search,
-  setSearch,
-  supplierId,
-  setSupplierId,
-  status,
-  setStatus,
-  onExport,
-}: PurchaseFiltersProps) {
-  const { data: suppliers = [] } = useSuppliers();
+export const createPurchaseColumns = ({
+  onView,
+  onEdit,
+  onDelete,
+  isCompact,
+}: ColumnOptions & { isCompact?: boolean }): ColumnDef<Purchase>[] => {
+  const formatNaira = (amount: number) => {
+    return new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: "NGN",
+      minimumFractionDigits: 2,
+    }).format(amount);
+  };
 
-  const supplierOptions = [
+  const formatDate = (dateStr: string) => {
+    try {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      });
+    } catch {
+      return dateStr;
+    }
+  };
+
+  if (isCompact) {
+    return [
+      {
+        accessorKey: "purchase_number",
+        header: "Purchase Order",
+        cell: ({ row }) => {
+          const purchase = row.original;
+          return (
+            <div
+              className="flex flex-col"
+              id={`purchase-col-compact-${purchase.id}`}
+            >
+              <button
+                onClick={() => onView(purchase)}
+                className="text-xs font-extrabold text-indigo-600 hover:text-indigo-800 hover:underline cursor-pointer bg-transparent border-0 p-0 text-left"
+                id={`btn-compact-view-${purchase.id}`}
+              >
+                {purchase.purchase_number}
+              </button>
+              <span className="text-[10px] text-slate-400 font-semibold truncate max-w-30 block">
+                {purchase.supplier?.name || "Unknown"}
+              </span>
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "received_percentage",
+        header: "Rec.",
+        cell: ({ row }) => {
+          const pct = row.original.received_percentage || 0;
+          let barColor = "bg-slate-200";
+          if (pct === 100) {
+            barColor = "bg-emerald-500";
+          } else if (pct > 0) {
+            barColor = "bg-indigo-500";
+          }
+
+          return (
+            <div
+              className="flex items-center gap-1"
+              id={`pct-col-compact-${row.original.id}`}
+            >
+              <span className="text-[9px] font-extrabold text-slate-500 min-w-6">
+                {pct}%
+              </span>
+              <div className="h-1.5 w-10 bg-slate-100 rounded-full overflow-hidden shrink-0">
+                <div
+                  className={`h-full rounded-full transition-all duration-300 ${barColor}`}
+                  style={{ width: `${pct}%` }}
+                />
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        id: "actions",
+        header: "Actions",
+        cell: ({ row }) => {
+          const p = row.original;
+          return (
+            <div
+              className="flex items-center gap-1"
+              id={`actions-col-compact-${p.id}`}
+            >
+              <button
+                onClick={() => onView(p)}
+                className="p-1 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 cursor-pointer transition"
+                title="View Details"
+                id={`btn-compact-eye-${p.id}`}
+              >
+                <Eye size={13} />
+              </button>
+              <button
+                onClick={() => onEdit(p)}
+                className="p-1 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-indigo-600 cursor-pointer transition"
+                title="Edit PO"
+                id={`btn-compact-edit-${p.id}`}
+              >
+                <Edit size={13} />
+              </button>
+            </div>
+          );
+        },
+      },
+    ];
+  }
+
+  return [
     {
-      label: "All Suppliers",
-      value: "all",
-    },
-    ...suppliers.map((supplier) => ({
-      label: supplier.name,
-      value: supplier.id,
-    })),
-  ];
-
-  const statusOptions = [
-    {
-      label: "All Status",
-      value: "all",
-    },
-    ...PURCHASE_STATUS_OPTIONS,
-  ];
-
-  return (
-    <div className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-4 lg:flex-row lg:items-end lg:justify-between">
-      <div className="grid flex-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <div>
-          <Label>Search</Label>
-
-          <div className="relative">
-            <Search
-              size={16}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-            />
-
-            <Input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="PO Number or Supplier"
-              className="pl-10"
-            />
-          </div>
-        </div>
-
-        <div>
-          <Label>Supplier</Label>
-          <Select
-            value={supplierId}
-            onChange={(e) => setSupplierId(e.target.value)}
-            options={supplierOptions}
-          />
-        </div>
-
-        <div>
-          <Label>Status</Label>
-          <Select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            options={statusOptions}
-          />
-        </div>
-
-        <div>
-          <Label>Date</Label>
-          <Button
-            variant="secondary"
-            className="w-full justify-start"
-            type="button"
+      accessorKey: "purchase_number",
+      header: "PO Number",
+      cell: ({ row }) => {
+        const purchase = row.original;
+        return (
+          <button
+            onClick={() => onView(purchase)}
+            className="text-xs font-extrabold text-indigo-600 hover:text-indigo-800 hover:underline cursor-pointer bg-transparent border-0 p-0 text-left"
+            id={`btn-view-${purchase.id}`}
           >
-            <Calendar size={16} />
-            All Dates
-          </Button>
-        </div>
-      </div>
+            {purchase.purchase_number}
+          </button>
+        );
+      },
+    },
+    {
+      accessorKey: "supplier.name",
+      header: "Supplier",
+      cell: ({ row }) => {
+        return (
+          <span className="text-xs font-bold text-slate-800">
+            {row.original.supplier?.name || "Unknown Supplier"}
+          </span>
+        );
+      },
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => {
+        const status = row.original.status;
+        return (
+          <span
+            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold tracking-wide uppercase ${getStatusBadgeStyle(
+              status,
+            )}`}
+          >
+            {formatStatusText(status)}
+          </span>
+        );
+      },
+    },
+    {
+      accessorKey: "total_amount",
+      header: "Total",
+      cell: ({ row }) => {
+        return (
+          <span className="font-mono text-xs font-extrabold text-slate-800">
+            {formatNaira(row.original.total_amount)}
+          </span>
+        );
+      },
+    },
+    {
+      accessorKey: "purchase_date",
+      header: "Date",
+      cell: ({ row }) => {
+        return (
+          <span className="text-xs font-semibold text-slate-500">
+            {formatDate(row.original.purchase_date)}
+          </span>
+        );
+      },
+    },
+    {
+      accessorKey: "received_percentage",
+      header: "Received",
+      cell: ({ row }) => {
+        const pct = row.original.received_percentage || 0;
+        let barColor = "bg-slate-200";
+        if (pct === 100) {
+          barColor = "bg-emerald-500";
+        } else if (pct > 0) {
+          barColor = "bg-indigo-500";
+        }
 
-      <div className="flex items-center gap-2">
-        <Button type="button" variant="secondary">
-          <SlidersHorizontal size={16} />
-          Filter
-        </Button>
-
-        <Button type="button" variant="secondary" onClick={onExport}>
-          <Download size={16} />
-          Export
-        </Button>
-      </div>
-    </div>
-  );
-}
+        return (
+          <div
+            className="flex items-center gap-2.5 max-w-28"
+            id={`pct-col-${row.original.id}`}
+          >
+            <span className="text-[10px] font-extrabold text-slate-600 min-w-8">
+              {pct}%
+            </span>
+            <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+              <div
+                className={`h-full rounded-full transition-all duration-300 ${barColor}`}
+                style={{ width: `${pct}%` }}
+              />
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      cell: ({ row }) => {
+        const p = row.original;
+        return (
+          <div className="flex items-center gap-1.5" id={`actions-col-${p.id}`}>
+            <button
+              onClick={() => onView(p)}
+              className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 cursor-pointer transition"
+              title="View Details"
+              id={`btn-eye-${p.id}`}
+            >
+              <Eye size={14} />
+            </button>
+            <button
+              onClick={() => onEdit(p)}
+              className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-indigo-600 cursor-pointer transition"
+              title="Edit PO"
+              id={`btn-edit-${p.id}`}
+            >
+              <Edit size={14} />
+            </button>
+            <button
+              onClick={() => {
+                if (
+                  window.confirm(
+                    "Are you sure you want to delete this purchase order?",
+                  )
+                ) {
+                  onDelete(p.id);
+                }
+              }}
+              className="p-1.5 rounded-lg text-slate-400 hover:bg-rose-50 hover:text-rose-600 cursor-pointer transition"
+              title="Delete PO"
+              id={`btn-delete-${p.id}`}
+            >
+              <Trash2 size={14} />
+            </button>
+          </div>
+        );
+      },
+    },
+  ];
+};

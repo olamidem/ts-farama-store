@@ -5,6 +5,7 @@ import {
   getPurchase,
   getPurchases,
   getPurchaseStats,
+  getSuppliers,
 } from "../services/purchase.service";
 
 export function usePurchases() {
@@ -16,7 +17,7 @@ export function usePurchases() {
 
 export function usePurchase(id: string) {
   return useQuery({
-    queryKey: QUERY_KEYS.purchase(id),
+    queryKey: [...QUERY_KEYS.purchases, id],
     queryFn: () => getPurchase(id),
     enabled: !!id,
   });
@@ -26,5 +27,12 @@ export function usePurchaseStats() {
   return useQuery({
     queryKey: [...QUERY_KEYS.purchases, "stats"],
     queryFn: getPurchaseStats,
+  });
+}
+
+export function useSuppliers() {
+  return useQuery({
+    queryKey: ["suppliers"],
+    queryFn: getSuppliers,
   });
 }

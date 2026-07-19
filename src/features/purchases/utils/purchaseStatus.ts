@@ -1,4 +1,6 @@
 import { PURCHASE_STATUS, type PurchaseStatus } from "../constant/purchase.constants";
+import { PURCHASE_STATUS_STYLES } from "../constant/purchaseStatusStyles";
+
 
 const STATUS_TEXT: Record<PurchaseStatus, string> = {
   [PURCHASE_STATUS.DRAFT]: "Draft",
@@ -11,5 +13,13 @@ const STATUS_TEXT: Record<PurchaseStatus, string> = {
 };
 
 export function formatPurchaseStatus(status: PurchaseStatus) {
-  return STATUS_TEXT[status];
+  return STATUS_TEXT[status] || status;
+}
+
+export function formatStatusText(status: PurchaseStatus) {
+  return STATUS_TEXT[status] || status;
+}
+
+export function getStatusBadgeStyle(status: PurchaseStatus) {
+  return PURCHASE_STATUS_STYLES[status] || "";
 }

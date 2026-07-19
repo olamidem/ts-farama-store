@@ -1,5 +1,5 @@
 export const formatDate = (dateString?: string) => {
-  if (!dateString) return "15 Jul 2026, 02:45 PM";
+  if (!dateString) return "N/A";
   try {
     const date = new Date(dateString);
     return (

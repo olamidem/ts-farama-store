@@ -54,36 +54,31 @@ export function useDeletePurchase() {
 }
 
 export function useReceivePurchase() {
-    const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
-    return useMutation({
-        mutationFn: receivePurchaseGoods,
+  return useMutation({
+    mutationFn: receivePurchaseGoods,
 
-        onSuccess: async (_, variables) => {
-            await Promise.all([
-                queryClient.invalidateQueries({
-                    queryKey: QUERY_KEYS.purchases,
-                }),
+    onSuccess: async (_, variables) => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: QUERY_KEYS.purchases,
+        }),
 
-                queryClient.invalidateQueries({
-                    queryKey: QUERY_KEYS.purchase(
-                        variables.purchaseId
-                    ),
-                }),
+        queryClient.invalidateQueries({
+          queryKey: [...QUERY_KEYS.purchases, variables.purchaseId],
+        }),
 
-                queryClient.invalidateQueries({
-                    queryKey: QUERY_KEYS.products,
-                }),
+        queryClient.invalidateQueries({
+          queryKey: QUERY_KEYS.products,
+        }),
 
-                queryClient.invalidateQueries({
-                    queryKey:
-                        QUERY_KEYS.inventoryTransactions,
-                }),
-            ]);
+        queryClient.invalidateQueries({
+          queryKey: QUERY_KEYS.inventoryTransactions,
+        }),
+      ]);
 
-            toast.success(
-                "Goods received successfully."
-            );
-        },
-    });
+      toast.success("Goods received successfully.");
+    },
+  });
 }

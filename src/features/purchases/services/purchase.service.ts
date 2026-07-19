@@ -13,6 +13,7 @@ import type { PurchaseStats } from "../types/purchaseStats";
 import type { ReceivePurchaseInput } from "../types/purchaseItem";
 import { calculateReceivedPercentage } from "../utils/calculatePurchaseTotal";
 import { generatePurchaseNumber } from "../utils/generatePurchaseNumber";
+import type { Supplier } from "../types/supplier";
 
 export async function getPurchases() {
   const { data, error } = await supabase
@@ -21,6 +22,12 @@ export async function getPurchases() {
       `
       *,
       supplier:suppliers(*),
+
+      warehouse:warehouses(
+        id,
+        name
+      ),
+
       items:purchase_items(
         *,
         product:products(*),
@@ -43,6 +50,12 @@ export async function getPurchase(id: string) {
       `
       *,
       supplier:suppliers(*),
+
+      warehouse:warehouses(
+        id,
+        name
+      ),
+
       items:purchase_items(
         *,
         product:products(*),
@@ -241,4 +254,13 @@ export async function getPurchaseStats(): Promise<PurchaseStats> {
       0,
     ),
   };
+}
+
+export async function getSuppliers() {
+  const { data, error } = await supabase
+    .from("suppliers")
+    .select("*")
+    .order("name", { ascending: true });
+  if (error) throw error;
+  return data as Supplier[];
 }
