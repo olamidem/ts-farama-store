@@ -13,7 +13,6 @@ export const useLogin = () => {
     onSuccess: ({ session, user }) => {
       setSession(session);
       setUser(user);
-      toast.success("Login successful");
     },
     onError: (error) => {
       toast.error(getReadableError(error));
