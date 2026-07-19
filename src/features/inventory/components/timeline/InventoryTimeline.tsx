@@ -5,7 +5,6 @@ import {
   TriangleAlert,
 } from "lucide-react";
 
-import { inventoryTimeline } from "../../mock/inventory.mock";
 
 const icons = {
   Purchase: ArrowDownLeft,
@@ -28,7 +27,8 @@ export default function InventoryTimeline() {
       <p className="mb-6 text-sm text-slate-500">Latest inventory movements</p>
 
       <div className="space-y-5">
-        {inventoryTimeline.map((item) => {
+        <p>nothing to show now</p>
+        {/* {inventoryTimeline.map((item) => {
           const Icon = icons[item.type as keyof typeof icons];
           const color = colors[item.type as keyof typeof colors];
 
@@ -54,7 +54,7 @@ export default function InventoryTimeline() {
               </div>
             </div>
           );
-        })}
+        })} */}
       </div>
     </div>
   );

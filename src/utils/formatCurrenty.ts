@@ -1,5 +1,5 @@
 export const formatCurrency = (
-  amount: number,
+  amount: number | undefined,
   locale = "en-NG",
   currency = "NGN",
 ) => {
@@ -7,5 +7,5 @@ export const formatCurrency = (
     style: "currency",
     currency,
     minimumFractionDigits: 2,
-  }).format(amount);
+  }).format(amount ?? 0);
 };

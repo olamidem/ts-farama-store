@@ -50,7 +50,13 @@ const Button = ({
       disabled={disabled || loading}
       {...props}
     >
-      {loading ? "Loading..." : children}
+      <>
+        {loading && (
+          <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+        )}
+
+        {!loading && children}
+      </>
     </button>
   );
 };

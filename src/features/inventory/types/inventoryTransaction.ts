@@ -24,6 +24,7 @@ export interface InventoryTransaction {
 
 export interface RecordInventoryTransactionInput {
   product_id: string;
+  product_unit_id: string;
   transaction_type: InventoryTransactionType;
   quantity: number;
   reason: string;
