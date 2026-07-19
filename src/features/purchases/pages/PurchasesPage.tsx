@@ -83,8 +83,7 @@ export const PurchasesPage = () => {
   return (
     <div className="w-full h-full space-y-6">
       {/* Top action row containing "+ New Purchase Order" button right aligned */}
-      <div className="flex justify-between items-center shrink-0">
-        <div></div>
+      <div className="flex justify-end items-center shrink-0">
         <button
           onClick={() => setIsCreateModalOpen(true)}
           type="button"
@@ -96,7 +95,7 @@ export const PurchasesPage = () => {
       </div>
 
       {/* Main split-view or full-width grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-12 gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: KPI cards, Filters, Table */}
         <div
           className={`${activeSelected ? "lg:col-span-7" : "lg:col-span-12"} space-y-6 transition-all duration-300`}
@@ -130,7 +129,7 @@ export const PurchasesPage = () => {
 
         {/* Right Column: Selected Purchase Order Detail view */}
         {activeSelected && (
-          <div className="lg:col-span-5 bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-md h-[calc(100vh-140px)] sticky top-4 z-20 flex flex-col">
+          <div className="lg:col-span-5 bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-md lg:h-[calc(100vh-140px)] lg:sticky lg:top-4 z-20 flex flex-col">
             <PurchaseOverview
               key={activeSelected.id}
               purchase={activeSelected}

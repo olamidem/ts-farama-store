@@ -16,26 +16,26 @@ const PurchaseActions = ({
 
   return (
     <div
-      className="flex items-center justify-between gap-3 w-full"
+      className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 w-full"
       id={`purchase-actions-${purchase.id}`}
     >
       {/* Edit Purchase Button */}
       <button
         onClick={onEdit}
         type="button"
-        className="flex items-center gap-1.5 px-4.5 py-2.5 text-xs font-bold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer transition shadow-3xs"
+        className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-4.5 py-2.5 text-xs font-bold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer transition shadow-3xs"
       >
         <Edit size={13} className="text-slate-500" />
         <span>Edit Purchase</span>
       </button>
 
       {/* Receive Goods Button (Split) */}
-      <div className="flex items-center shrink-0">
+      <div className="flex w-full sm:w-auto items-center">
         <button
           onClick={onReceive}
           disabled={isFullyReceived}
           type="button"
-          className="flex items-center gap-2 px-5 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:hover:bg-blue-600 rounded-l-xl transition shadow-3xs border-0 cursor-pointer"
+          className="flex-1 flex items-center justify-center gap-2 px-5 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:hover:bg-blue-600 rounded-l-xl transition shadow-3xs border-0 cursor-pointer"
         >
           <PackageOpen size={13} />
           <span>Receive Goods</span>

@@ -3,13 +3,11 @@ import { PURCHASE_STATUS_STYLES } from "../constant/purchaseStatusStyles";
 
 
 const STATUS_TEXT: Record<PurchaseStatus, string> = {
-  [PURCHASE_STATUS.DRAFT]: "Draft",
   [PURCHASE_STATUS.PENDING]: "Pending",
   [PURCHASE_STATUS.APPROVED]: "Approved",
   [PURCHASE_STATUS.ORDERED]: "Ordered",
   [PURCHASE_STATUS.PARTIALLY_RECEIVED]: "Partially Received",
   [PURCHASE_STATUS.RECEIVED]: "Received",
-  [PURCHASE_STATUS.CLOSED]: "Closed",
 };
 
 export function formatPurchaseStatus(status: PurchaseStatus) {

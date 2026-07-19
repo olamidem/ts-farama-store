@@ -78,7 +78,7 @@ export async function createPurchase(input: CreatePurchaseInput) {
       expected_delivery_date: input.expected_delivery_date,
       remarks: input.remarks,
       total_amount: total,
-      status: "DRAFT",
+       status: PURCHASE_STATUS.PENDING,
     })
     .select()
     .single();
@@ -211,10 +211,6 @@ export async function getPurchaseStats(): Promise<PurchaseStats> {
 
   return {
     totalOrders: purchases.length,
-
-    draftOrders: purchases.filter(
-      (purchase) => purchase.status === PURCHASE_STATUS.DRAFT,
-    ).length,
 
     pendingOrders: purchases.filter((purchase) =>
       pendingStatuses.includes(purchase.status),

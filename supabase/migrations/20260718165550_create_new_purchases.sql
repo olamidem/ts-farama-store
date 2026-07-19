@@ -7,13 +7,11 @@ create table if not exists purchases (
     status text not null
         check (
             status in (
-                'DRAFT',
                 'PENDING',
                 'APPROVED',
                 'ORDERED',
                 'PARTIALLY_RECEIVED',
                 'RECEIVED',
-                'CLOSED'
             )
         ),
     total_amount numeric(12,2) default 0,

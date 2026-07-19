@@ -17,23 +17,23 @@ const PurchaseInformation = ({ purchase }: PurchaseInformationProps) => {
         </h4>
 
         <div className="space-y-3.5 text-xs">
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
             <span className="text-slate-400 font-semibold">Supplier Name</span>
-            <span className="font-bold text-slate-800 text-right">
+            <span className="font-bold text-slate-800 text-left sm:text-right">
               {purchase.supplier?.name ?? "Unknown"}
             </span>
           </div>
 
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
             <span className="text-slate-400 font-semibold">Phone</span>
-            <span className="font-semibold text-slate-700 text-right">
+            <span className="font-semibold text-slate-700 text-left sm:text-right">
               {purchase.supplier?.phone ?? "+234 810 123 4567"}
             </span>
           </div>
 
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
             <span className="text-slate-400 font-semibold">Email</span>
-            <span className="font-semibold text-slate-700 break-all text-right max-w-50">
+            <span className="font-semibold text-slate-700 break-all text-left sm:text-right max-w-full sm:max-w-50">
               {purchase.supplier?.email ?? "contact@nestle.com"}
             </span>
           </div>
@@ -48,25 +48,25 @@ const PurchaseInformation = ({ purchase }: PurchaseInformationProps) => {
         </h4>
 
         <div className="space-y-3.5 text-xs">
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
             <span className="text-slate-400 font-semibold">Purchase Date</span>
-            <span className="font-bold text-slate-800 text-right">
+            <span className="font-bold text-slate-800 text-left sm:text-right">
               {formatDate(purchase.purchase_date)}
             </span>
           </div>
 
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
             <span className="text-slate-400 font-semibold">
               Expected Delivery
             </span>
-            <span className="font-bold text-slate-800 text-right">
+            <span className="font-bold text-slate-800 text-left sm:text-right">
               {formatDate(purchase.expected_delivery_date)}
             </span>
           </div>
 
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
             <span className="text-slate-400 font-semibold">Created By</span>
-            <span className="font-bold text-slate-800 text-right">
+            <span className="font-bold text-slate-800 text-left sm:text-right">
               {purchase.created_by || "Admin User"}
             </span>
           </div>

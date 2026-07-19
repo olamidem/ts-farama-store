@@ -77,7 +77,7 @@ export const PurchaseOverview = ({
       </div>
 
       {/* Tabs Navigation */}
-      <div className="flex border-b border-slate-200 bg-white px-5 shrink-0">
+      <div className="flex flex-wrap gap-1 border-b border-slate-200 bg-white px-5 shrink-0">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
           return (

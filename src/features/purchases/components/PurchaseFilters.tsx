@@ -26,9 +26,9 @@ export const PurchaseFilters = ({
   return (
     <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 bg-white p-4.5 rounded-2xl border border-slate-100 shadow-2xs">
       {/* Search & Selectors Group */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-3.5 flex-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5 flex-1">
         {/* Search Input */}
-        <div className="relative">
+        <div className="relative col-span-1 sm:col-span-2 xl:col-span-1">
           <span className="absolute inset-y-0 left-3 flex items-center text-slate-400">
             <Search size={15} />
           </span>
@@ -65,13 +65,10 @@ export const PurchaseFilters = ({
             className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-1 focus:ring-indigo-500/30 focus:border-indigo-500 text-slate-600 font-semibold cursor-pointer transition"
           >
             <option value="all">All Status</option>
-            <option value="DRAFT">Draft</option>
             <option value="PENDING">Pending</option>
             <option value="APPROVED">Approved</option>
-            <option value="ORDERED">Ordered</option>
             <option value="PARTIALLY_RECEIVED">Partially Received</option>
             <option value="RECEIVED">Received</option>
-            <option value="CLOSED">Closed</option>
           </select>
         </div>
 
@@ -85,7 +82,7 @@ export const PurchaseFilters = ({
       </div>
 
       {/* Filter and Export buttons */}
-      <div className="flex items-center gap-2 shrink-0">
+      <div className="flex flex-wrap items-center justify-end gap-2 shrink-0">
         <button
           type="button"
           className="flex items-center gap-1.5 px-4.5 py-2 text-xs border border-slate-200 bg-white text-slate-600 font-bold rounded-xl hover:bg-slate-50 cursor-pointer shadow-3xs hover:text-slate-800 transition"

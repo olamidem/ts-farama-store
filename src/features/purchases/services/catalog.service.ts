@@ -1,4 +1,8 @@
 import { supabase } from "../../../api/supabase";
+import type {
+  CatalogProductUnit,
+  CatalogUnit,
+} from "../types/catalogProductUnit";
 
 export async function getCatalogProducts() {
   const { data, error } = await supabase
@@ -11,11 +15,6 @@ export async function getCatalogProducts() {
 
   return data;
 }
-
-import type {
-  CatalogProductUnit,
-  CatalogUnit,
-} from "../types/catalogProductUnit";
 
 export async function getCatalogProductUnits(): Promise<CatalogProductUnit[]> {
   const { data, error } = await supabase.from("product_units").select(`
@@ -32,7 +31,7 @@ export async function getCatalogProductUnits(): Promise<CatalogProductUnit[]> {
   if (error) throw error;
 
   return (
-    data?.map((item: any) => ({
+    data?.map((item: { id: string; product_id: string; conversion_factor: number; unit: CatalogUnit | CatalogUnit[] | null }) => ({
       ...item,
       unit: Array.isArray(item.unit)
         ? ((item.unit[0] as CatalogUnit) ?? null)

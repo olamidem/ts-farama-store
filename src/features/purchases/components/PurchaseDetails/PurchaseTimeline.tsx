@@ -18,14 +18,6 @@ const PurchaseTimeline = ({ purchase }: PurchaseTimelineProps) => {
       isActive: false,
     },
     {
-      title: "Awaiting Delivery",
-      description: `${formatDate(purchase.updated_at, true)}`,
-      isCompleted:
-        status !== PURCHASE_STATUS.DRAFT && status !== PURCHASE_STATUS.PENDING,
-      isActive:
-        status === PURCHASE_STATUS.PENDING || status === PURCHASE_STATUS.DRAFT,
-    },
-    {
       title: "Goods Received",
       description:
         status === PURCHASE_STATUS.RECEIVED ? "Fully Received" : "Pending",
