@@ -81,16 +81,13 @@ const PurchaseForm = ({
 
       return;
     }
-
     setItems((previous) => previous.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-
     if (!supplierId) {
       toast.error("Please select a supplier.");
-
       return;
     }
 
@@ -100,7 +97,6 @@ const PurchaseForm = ({
 
     if (!validItems.length) {
       toast.error("Please add at least one product.");
-
       return;
     }
 

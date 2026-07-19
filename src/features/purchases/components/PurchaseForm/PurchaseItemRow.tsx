@@ -3,6 +3,8 @@ import Input from "../../../../components/ui/Input";
 import Select from "../../../../components/ui/Select";
 import Button from "../../../../components/ui/Button";
 import { formatCurrency } from "../../../../utils/formatCurrenty";
+import type { CatalogProduct } from "../../types/catalogProduct";
+import type { CatalogProductUnit } from "../../types/catalogProductUnit";
 
 
 export interface ItemRowValue {
