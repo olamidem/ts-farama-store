@@ -108,7 +108,6 @@ const PurchaseForm = ({
     try {
       await createPurchaseMutation.mutateAsync({
         supplier_id: supplierId,
-        warehouse_id: warehouseId,
         purchase_date: purchaseDate,
         expected_delivery_date: expectedDeliveryDate,
         remarks,

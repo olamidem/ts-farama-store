@@ -69,14 +69,6 @@ const PurchaseInformation = ({ purchase }: PurchaseInformationProps) => {
           </div>
 
           <div className="flex justify-between">
-            <span className="text-slate-500">Warehouse</span>
-
-            <span className="font-semibold text-slate-800">
-              {purchase.warehouse?.name ?? "Main Warehouse"}
-            </span>
-          </div>
-
-          <div className="flex justify-between">
             <span className="text-slate-500">Created By</span>
 
             <span className="font-semibold text-slate-800">

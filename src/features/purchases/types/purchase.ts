@@ -11,7 +11,6 @@ export interface Purchase {
   id: string;
   purchase_number: string;
   supplier_id: string;
-  warehouse_id?: string;
   status: PurchaseStatus;
   total_amount: number;
   purchase_date: string;
@@ -23,7 +22,6 @@ export interface Purchase {
   updated_at: string;
   // Relations
   supplier?: Supplier;
-  warehouse?: Warehouse;
   // creator?: PurchaseCreator;
   items?: PurchaseItem[];
 }
@@ -38,7 +36,6 @@ export interface CreatePurchaseInput {
   supplier_id: string;
   purchase_date: string;
   expected_delivery_date?: string;
-  warehouse_id?: string;
   remarks?: string;
   items: CreatePurchaseItemInput[];
 }

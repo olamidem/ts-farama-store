@@ -2,11 +2,8 @@ import { Calendar, FileText } from "lucide-react";
 import Button from "../../../../components/ui/Button";
 import Input from "../../../../components/ui/Input";
 import Label from "../../../../components/ui/Label";
-import Select from "../../../../components/ui/Select";
 
 interface PurchaseSummaryProps {
-  warehouseId: string;
-  setWarehouseId: (value: string) => void;
 
   purchaseDate: string;
   setPurchaseDate: (value: string) => void;
@@ -22,8 +19,6 @@ interface PurchaseSummaryProps {
 }
 
 const PurchaseSummary = ({
-  warehouseId,
-  setWarehouseId,
   purchaseDate,
   setPurchaseDate,
   expectedDeliveryDate,
@@ -65,31 +60,6 @@ const PurchaseSummary = ({
             onChange={(e) =>
               setExpectedDeliveryDate(e.target.value)
             }
-          />
-        </div>
-
-        <div>
-          <Label>Warehouse</Label>
-
-          <Select
-            value={warehouseId}
-            onChange={(e) =>
-              setWarehouseId(e.target.value)
-            }
-            options={[
-              {
-                label: "Main Warehouse",
-                value: "main-warehouse",
-              },
-              {
-                label: "Lagos Distribution Hub",
-                value: "lagos-distribution-hub",
-              },
-              {
-                label: "Abuja Annex Store",
-                value: "abuja-annex-store",
-              },
-            ]}
           />
         </div>
 
