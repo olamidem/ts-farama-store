@@ -10,6 +10,8 @@ import {
   getProductStats,
   restoreProduct,
   updateProduct,
+  getProductStockHistory,
+  getProductPurchaseHistory,
 } from "../services/product.service";
 import type { CreateProductInput, UpdateProductInput } from "../types/product";
 import { toast } from "sonner";
@@ -153,3 +155,20 @@ export const useBulkDeactivateProducts = () => {
     },
   });
 };
+
+export const useProductStockHistory = (productId: string) => {
+  return useQuery({
+    queryKey: [...QUERY_KEYS.products, productId, "stock-history"],
+    queryFn: () => getProductStockHistory(productId),
+    enabled: !!productId,
+  });
+};
+
+export const useProductPurchaseHistory = (productId: string) => {
+  return useQuery({
+    queryKey: [...QUERY_KEYS.products, productId, "purchase-history"],
+    queryFn: () => getProductPurchaseHistory(productId),
+    enabled: !!productId,
+  });
+};
+
