@@ -10,6 +10,8 @@ import PurchaseSummary from "../components/PurchaseForm/PurchaseSummary";
 import { getFutureDate, getToday } from "../utils/date";
 import Button from "../../../components/ui/Button";
 import PageHeader from "../../../components/ui/PageHeader";
+import { useCreatePurchase, useUpdatePurchase } from "../hook/usePurchasesMutations";
+import { useCatalogProducts, useCatalogProductUnits } from "../hook/useCatalog";
 
 
 interface PurchaseFormProps {
@@ -36,12 +38,8 @@ const PurchaseForm = ({
 
   const createPurchaseMutation = useCreatePurchase();
   const updatePurchaseMutation = useUpdatePurchase();
-
-  const { data: products = [], isLoading: loadingProducts } =
-    useCatalogProducts();
-
-  const { data: productUnits = [], isLoading: loadingUnits } =
-    useCatalogProductUnits();
+  const { data: products = [], isLoading: loadingProducts } = useCatalogProducts();
+  const { data: productUnits = [], isLoading: loadingUnits } = useCatalogProductUnits();
 
   const isCatalogLoading = loadingProducts || loadingUnits;
 

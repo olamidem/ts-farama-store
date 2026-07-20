@@ -1,13 +1,15 @@
-import { ArrowLeft, Pencil, Barcode, Trash2 } from "lucide-react";
+import { ArrowLeft, Pencil, Barcode, Trash2, ShoppingCart } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 
 interface ProductDetailsHeaderProps {
+  productId: string;
   onEdit: () => void;
   onArchive: () => void;
   onPrintBarcode: () => void;
 }
 
 export const ProductDetailsHeader = ({
+  productId,
   onEdit,
   onArchive,
   onPrintBarcode,
@@ -36,6 +38,15 @@ export const ProductDetailsHeader = ({
 
         {/* Action buttons */}
         <div className="flex flex-wrap items-center gap-2">
+          <Link
+            to="/purchases"
+            search={{ productId } as Record<string, string>}
+            className="flex items-center gap-1.5 h-10 px-4 rounded-xl border border-transparent bg-emerald-600 text-base font-bold text-white hover:bg-emerald-700 transition shadow-sm"
+          >
+            <ShoppingCart size={15} />
+            <span>Reorder / Purchase</span>
+          </Link>
+
           <button
             onClick={onEdit}
             className="flex items-center gap-1.5 h-10 px-4 rounded-xl border border-slate-200 bg-white text-base font-bold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition shadow-sm"
@@ -64,3 +75,4 @@ export const ProductDetailsHeader = ({
     </div>
   );
 };
+

@@ -8,14 +8,7 @@ import EditProductModal from "../components/EditProductModal";
 import DeleteProductModal from "../components/DeleteProductModal";
 import { toast } from "sonner";
 import { motion } from "motion/react";
-import {
-  ArrowLeft,
-  AlertTriangle,
-  Landmark,
-  Tag,
-  TrendingUp,
-  Package,
-} from "lucide-react";
+import { ArrowLeft, AlertTriangle, Landmark, Tag, TrendingUp, Package } from "lucide-react";
 
 export const ProductDetailsPage = () => {
   const { productId } = useParams({ strict: false }) as { productId: string };
@@ -26,11 +19,7 @@ export const ProductDetailsPage = () => {
   const [isArchiveOpen, setIsArchiveOpen] = useState(false);
 
   // Queries
-  const {
-    data: product,
-    isLoading: isProductLoading,
-    isError,
-  } = useProduct(productId);
+  const { data: product, isLoading: isProductLoading, isError } = useProduct(productId);
   const { data: categories = [] } = useCategories();
 
   if (isProductLoading) {
@@ -54,12 +43,9 @@ export const ProductDetailsPage = () => {
         <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-rose-50 text-rose-600 mb-4 border border-rose-100 shadow-sm">
           <AlertTriangle size={32} />
         </div>
-        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
-          Product Not Found
-        </h2>
+        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Product Not Found</h2>
         <p className="text-base text-slate-500 mt-2">
-          We couldn't find the product details you requested. The item may have
-          been deleted.
+          We couldn't find the product details you requested. The item may have been deleted.
         </p>
         <button
           onClick={() => navigate({ to: "/products" })}
@@ -73,9 +59,7 @@ export const ProductDetailsPage = () => {
   }
 
   // Find Category Name
-  const category = categories.find(
-    (c) => String(c.id) === String(product.category_id),
-  );
+  const category = categories.find((c) => String(c.id) === String(product.category_id));
   const categoryName = category?.name || "General";
 
   const handlePrintBarcode = () => {
@@ -83,9 +67,7 @@ export const ProductDetailsPage = () => {
   };
 
   const handleAdjustStock = () => {
-    toast.info(
-      "Adjust Stock wizard triggered. Modify stock values from details panels.",
-    );
+    toast.info("Adjust Stock wizard triggered. Modify stock values from details panels.");
   };
 
   const handleDuplicate = () => {
@@ -115,6 +97,7 @@ export const ProductDetailsPage = () => {
     >
       {/* Header */}
       <ProductDetailsHeader
+        productId={product.id}
         onEdit={() => setIsEditOpen(true)}
         onPrintBarcode={handlePrintBarcode}
         onArchive={() => setIsArchiveOpen(true)}
@@ -128,9 +111,7 @@ export const ProductDetailsPage = () => {
             <Landmark size={24} />
           </div>
           <div>
-            <span className="block text-sm font-bold text-slate-500 uppercase tracking-wide">
-              Cost Price
-            </span>
+            <span className="block text-sm font-bold text-slate-500 uppercase tracking-wide">Cost Price</span>
             <span className="text-xl md:text-2xl font-extrabold text-slate-900 font-mono block mt-1">
               {formatCurrency(costPrice)}
             </span>
@@ -143,9 +124,7 @@ export const ProductDetailsPage = () => {
             <Tag size={24} />
           </div>
           <div>
-            <span className="block text-sm font-bold text-slate-500 uppercase tracking-wide">
-              Selling Price
-            </span>
+            <span className="block text-sm font-bold text-slate-500 uppercase tracking-wide">Selling Price</span>
             <span className="text-xl md:text-2xl font-extrabold text-slate-900 font-mono block mt-1">
               {formatCurrency(sellingPrice)}
             </span>
@@ -158,9 +137,7 @@ export const ProductDetailsPage = () => {
             <TrendingUp size={24} />
           </div>
           <div>
-            <span className="block text-sm font-bold text-slate-500 uppercase tracking-wide">
-              Est. Unit Profit
-            </span>
+            <span className="block text-sm font-bold text-slate-500 uppercase tracking-wide">Est. Unit Profit</span>
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-xl md:text-2xl font-extrabold text-slate-900 font-mono">
                 {formatCurrency(profit)}
@@ -178,9 +155,7 @@ export const ProductDetailsPage = () => {
             <Package size={24} />
           </div>
           <div>
-            <span className="block text-sm font-bold text-slate-500 uppercase tracking-wide">
-              Current Stock
-            </span>
+            <span className="block text-sm font-bold text-slate-500 uppercase tracking-wide">Current Stock</span>
             <span className="text-xl md:text-2xl font-extrabold text-slate-900 block mt-1">
               {stock} units
             </span>
