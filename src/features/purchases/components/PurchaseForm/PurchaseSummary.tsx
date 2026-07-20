@@ -1,4 +1,5 @@
 import { Calendar, FileText } from "lucide-react";
+
 import Button from "../../../../components/ui/Button";
 import Input from "../../../../components/ui/Input";
 import Label from "../../../../components/ui/Label";
@@ -15,6 +16,7 @@ interface PurchaseSummaryProps {
 
   isSubmitting: boolean;
   onCancel: () => void;
+  buttonText?: string;
 }
 
 const PurchaseSummary = ({
@@ -26,6 +28,7 @@ const PurchaseSummary = ({
   setRemarks,
   isSubmitting,
   onCancel,
+  buttonText = "Create Purchase Order",
 }: PurchaseSummaryProps) => {
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -85,7 +88,7 @@ const PurchaseSummary = ({
             fullWidth
             loading={isSubmitting}
           >
-            Create Purchase Order
+            {buttonText}
           </Button>
 
           <Button
