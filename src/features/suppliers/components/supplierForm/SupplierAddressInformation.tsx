@@ -1,6 +1,7 @@
 import type { UseFormRegister } from "react-hook-form";
 import type { SupplierFormData } from "../../validations/supplierSchema";
-import { DEFAULT_PAYMENT_TERMS } from "../../constants/supplier.constants";
+import { DEFAULT_PAYMENT_TERMS } from "../../constants/supplier.constant";
+
 
 interface SupplierAddressInformationProps {
   register: UseFormRegister<SupplierFormData>;
