@@ -63,7 +63,7 @@ export const ProductDetailsHistoryTabs = ({
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`pb-3 text-sm font-bold transition duration-150 border-b-2 relative -bottom-[1px] whitespace-nowrap ${
+            className={`pb-3 text-sm font-bold transition duration-150 border-b-2 relative -bottom-px whitespace-nowrap ${
               activeTab === tab.id
                 ? "border-emerald-500 text-emerald-600"
                 : "border-transparent text-slate-500 hover:text-slate-800"
