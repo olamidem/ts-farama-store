@@ -26,14 +26,14 @@ export const createProduct = async (
     .select()
     .single();
   throwSupabaseError(error);
-   try {
-     await createDefaultProductUnit(data);
-     return data;
-   } catch (error) {
-     await supabase.from("products").delete().eq("id", data.id);
+  try {
+    await createDefaultProductUnit(data);
+    return data;
+  } catch (error) {
+    await supabase.from("products").delete().eq("id", data.id);
 
-     throw error;
-   }
+    throw error;
+  }
 };
 
 export const getProducts = async ({
@@ -101,9 +101,16 @@ export const getProductStats = async () => {
   }
   const products = data ?? [];
   const total = products.length;
-  const active = products.filter((p) => p.is_active).length;
-  const lowStock = products.filter((p) => p.is_active && p.stock <= p.min_stock_alert && p.stock > 0).length;
-  const outOfStock = products.filter((p) => p.is_active && p.stock === 0).length;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const active = products.filter((p: any) => p.is_active).length;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const lowStock = products.filter(
+    (p: any) => p.is_active && p.stock <= p.min_stock_alert && p.stock > 0,
+  ).length;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const outOfStock = products.filter(
+    (p: any) => p.is_active && p.stock === 0,
+  ).length;
   return {
     total,
     active,
@@ -203,6 +210,13 @@ export const bulkCreateImportProducts = async (
 ): Promise<void> => {
   if (products.length === 0) return;
 
+  // Fetch a default base unit from the units table to use if none is provided
+  const { data: unitsData } = await supabase
+    .from("units")
+    .select("id")
+    .limit(1);
+  const defaultUnitId = unitsData?.[0]?.id || "";
+
   const categorySkuCounters: Record<string, number> = {};
   const uniqueCategoryIds = [...new Set(products.map((p) => p.category_id))];
 
@@ -245,6 +259,7 @@ export const bulkCreateImportProducts = async (
 
     return buildProductPayload({
       ...product,
+      base_unit_id: product.base_unit_id || defaultUnitId,
       sku,
     });
   });
@@ -254,7 +269,6 @@ export const bulkCreateImportProducts = async (
     throw new Error(error.message);
   }
 };
-
 
 export const bulkUpdateImportProducts = async (
   products: ValidatedImportRecord[],
@@ -272,7 +286,6 @@ export const bulkUpdateImportProducts = async (
       category_id: product.category_id,
       min_stock_alert: product.min_stock_alert,
       base_unit_id: product.base_unit_id,
-   
     });
     const { error } = await supabase
       .from("products")
@@ -282,6 +295,50 @@ export const bulkUpdateImportProducts = async (
       throw new Error(error.message);
     }
   }
+};
+
+export const getProductStockHistory = async (productId: string) => {
+  const { data, error } = await supabase
+    .from("inventory_transactions")
+    .select(
+      `
+      *,
+      product_unit:product_units(
+        *,
+        unit:units(*)
+      )
+    `,
+    )
+    .eq("product_id", productId)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+};
+
+export const getProductPurchaseHistory = async (productId: string) => {
+  const { data, error } = await supabase
+    .from("purchase_items")
+    .select(
+      `
+      *,
+      purchase:purchases(
+        id,
+        purchase_number,
+        purchase_date,
+        supplier:suppliers(name)
+      )
+    `,
+    )
+    .eq("product_id", productId)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
 };
 
 // export const bulkUpdateImportProducts = async (
