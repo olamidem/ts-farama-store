@@ -12,14 +12,30 @@ export type InventoryTransactionType =
 export interface InventoryTransaction {
   id: string;
   product_id: string;
-  product_unit_id?: string | null;
-  transaction_type: InventoryTransactionType;
+  product_unit_id: string;
   quantity: number;
   balance_after: number;
-  reference?: string | null;
-  remarks?: string | null;
-  created_by?: string | null;
+  transaction_type: "PURCHASE" | "SALE" | "ADJUSTMENT" | "RETURN" | "TRANSFER";
+  reference: string | null;
+  remarks: string | null;
   created_at: string;
+  created_by: string | null;
+  product?: {
+    id: string;
+    name: string;
+    sku: string;
+  };
+
+  product_unit?: {
+    id: string;
+    conversion_factor: number;
+
+    unit?: {
+      id: string;
+      name: string;
+      abbreviation: string;
+    };
+  };
 }
 
 export interface RecordInventoryTransactionInput {

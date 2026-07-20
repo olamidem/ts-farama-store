@@ -4,7 +4,7 @@ import { getInventoryTransactions } from "../services/inventory.service";
 
 export function useInventoryTransactions() {
   return useQuery({
-    queryKey: QUERY_KEYS.inventoryTransactions,
+    queryKey: QUERY_KEYS.inventory,
     queryFn: getInventoryTransactions,
   });
 }

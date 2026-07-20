@@ -1,7 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../../../api/supabase";
-import { QUERY_KEYS } from "../../../lib/queryKey";
-import { toast } from "sonner";
+import type { CreateInventoryTransactionInput } from "../types/inventory";
 import type { RecordInventoryTransactionInput } from "../types/inventoryTransaction";
 
 export async function getInventoryTransactions() {
@@ -13,11 +11,30 @@ export async function getInventoryTransactions() {
         id,
         name,
         sku
+      ),
+      product_unit:product_units(
+        id,
+        conversion_factor,
+        unit:units(
+          id,
+          name,
+          abbreviation
+        )
       )
     `)
     .order("created_at", { ascending: false });
+
   if (error) throw error;
-  return data;
+
+  return data ?? [];
+}
+
+export async function createInventoryTransaction(
+  input: CreateInventoryTransactionInput,
+) {
+  const { error } = await supabase.from("inventory_transactions").insert(input);
+
+  if (error) throw error;
 }
 
 export async function recordInventoryTransaction(
@@ -31,22 +48,6 @@ export async function recordInventoryTransaction(
     p_reason: input.reason,
     p_remarks: input.remarks,
   });
+
   if (error) throw error;
 }
-
-export function useRecordInventoryTransaction() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: recordInventoryTransaction,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.products,
-      });
-      await queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.inventoryTransactions,
-      });
-      toast.success("Inventory updated successfully.");
-    },
-  });
-}
-
