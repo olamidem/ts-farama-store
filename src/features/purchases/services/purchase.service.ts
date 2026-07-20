@@ -78,7 +78,7 @@ export async function createPurchase(input: CreatePurchaseInput) {
       expected_delivery_date: input.expected_delivery_date,
       remarks: input.remarks,
       total_amount: total,
-       status: PURCHASE_STATUS.PENDING,
+      status: PURCHASE_STATUS.PENDING,
     })
     .select()
     .single();
@@ -178,12 +178,15 @@ export async function receivePurchaseGoods({
     .single();
 
   if (purchaseGetError) throw purchaseGetError;
-  const purchaseNumber = purchase?.purchase_number || `PO-${purchaseId.substring(0, 8)}`;
+  const purchaseNumber =
+    purchase?.purchase_number || `PO-${purchaseId.substring(0, 8)}`;
 
   /**
    * Get current authenticated user
    */
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   const createdBy = user ? user.id : null;
 
   /**
@@ -283,7 +286,10 @@ export async function receivePurchaseGoods({
         .insert(transactionPayload);
 
       if (txErr) {
-        console.warn("Failed to log inventory transaction due to RLS or constraints:", txErr);
+        console.warn(
+          "Failed to log inventory transaction due to RLS or constraints:",
+          txErr,
+        );
       }
     } catch (err) {
       console.warn("Error logging inventory transaction:", err);
