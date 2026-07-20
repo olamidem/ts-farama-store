@@ -10,7 +10,8 @@ export const ProductDetailsStockSummary = ({
   const stock = product.stock || 0;
   const reservedStock = 0;
   const availableStock = stock - reservedStock;
-  const isLowStock = stock <= 10;
+  const minStockAlert = product.min_stock_alert || 10;
+  const isLowStock = stock <= minStockAlert;
 
   return (
     <div className="relative overflow-hidden p-6 rounded-2xl border border-slate-200 bg-white shadow-sm h-full">
@@ -76,7 +77,7 @@ export const ProductDetailsStockSummary = ({
               Min. Stock Alert
             </span>
             <span className="text-sm font-extrabold text-rose-600 font-mono">
-              10 units
+              {minStockAlert} units
             </span>
           </div>
         </div>
