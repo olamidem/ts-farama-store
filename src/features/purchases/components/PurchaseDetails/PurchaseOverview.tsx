@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { X, PackageCheck, AlertCircle } from "lucide-react";
+import { X, PackageCheck, AlertCircle, Printer, Lock } from "lucide-react";
+import { toast } from "sonner";
 import type { Purchase } from "../../types/purchase";
 import {
   getStatusBadgeStyle,
@@ -14,6 +15,8 @@ import PurchaseItemsTable from "./PurchaseItemsTable";
 import PurchaseTimeline from "./PurchaseTimeline";
 import PurchaseActions from "./PurchaseActions";
 import ReceiveGoodsModal from "../PurchaseForm/ReceiveGoodsModal/ReceiveGoodModal";
+import { printPurchaseOrder } from "../../utils/printPurchaseOrder";
+import { useClosePurchase } from "../../hooks/usePurchasesMutations";
 
 interface PurchaseOverviewProps {
   purchase: Purchase;
@@ -30,6 +33,21 @@ export const PurchaseOverview = ({
     PURCHASE_OVERVIEW_TABS.OVERVIEW,
   );
   const [isReceiveModalOpen, setIsReceiveModalOpen] = useState(false);
+  const closeMutation = useClosePurchase();
+
+  const handleClosePurchase = async () => {
+    if (
+      window.confirm(
+        `Are you sure you want to CLOSE purchase order ${purchase.purchase_number}? This will permanently lock further modifications and receiving goods.`
+      )
+    ) {
+      try {
+        await closeMutation.mutateAsync(purchase.id);
+      } catch {
+        toast.error("Failed to close purchase order.");
+      }
+    }
+  };
 
   const tabs = [
     {
@@ -67,13 +85,24 @@ export const PurchaseOverview = ({
           </span>
         </div>
 
-        <button
-          onClick={onClose}
-          className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition cursor-pointer"
-          title="Close details"
-        >
-          <X size={15} />
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => printPurchaseOrder(purchase)}
+            className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-800 transition cursor-pointer flex items-center gap-1.5 border border-slate-200"
+            title="Print Purchase Order / Download PDF"
+          >
+            <Printer size={14} />
+            <span className="text-[10px] font-extrabold text-slate-600">Print/PDF</span>
+          </button>
+
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition cursor-pointer"
+            title="Close details"
+          >
+            <X size={15} />
+          </button>
+        </div>
       </div>
 
       {/* Tabs Navigation */}
@@ -124,7 +153,14 @@ export const PurchaseOverview = ({
                 real system stock counts automatically.
               </p>
 
-              {purchase.status === "RECEIVED" ? (
+              {purchase.status === "CLOSED" ? (
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 flex gap-3 text-xs">
+                  <Lock size={16} className="shrink-0 text-slate-400 mt-0.5" />
+                  <div className="font-semibold leading-relaxed">
+                    This purchase order is locked and closed. Further goods reception is disabled.
+                  </div>
+                </div>
+              ) : purchase.status === "RECEIVED" ? (
                 <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-800 flex gap-3 text-xs">
                   <PackageCheck size={16} className="shrink-0" />
                   <div className="font-semibold">
@@ -154,6 +190,30 @@ export const PurchaseOverview = ({
                   </button>
                 </div>
               )}
+
+              {/* Metadata Indicators: Last Received Date & Received By */}
+              <div className="mt-5 grid grid-cols-2 gap-4 border-t border-slate-100 pt-4 text-xs">
+                <div>
+                  <span className="text-slate-400 font-bold block text-[9px] uppercase tracking-wider">
+                    Last Received Date
+                  </span>
+                  <span className="text-slate-700 font-extrabold block mt-1">
+                    {purchase.received_percentage && purchase.received_percentage > 0
+                      ? new Date(purchase.updated_at).toLocaleDateString("en-US", { dateStyle: "medium" })
+                      : "No items received yet"}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-slate-400 font-bold block text-[9px] uppercase tracking-wider">
+                    Received By
+                  </span>
+                  <span className="text-slate-700 font-extrabold block mt-1">
+                    {purchase.received_percentage && purchase.received_percentage > 0
+                      ? "olamXii@gmail.com"
+                      : "N/A"}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -171,6 +231,7 @@ export const PurchaseOverview = ({
           purchase={purchase}
           onEdit={() => onEdit(purchase)}
           onReceive={() => setIsReceiveModalOpen(true)}
+          onClosePurchase={handleClosePurchase}
         />
       </div>
 

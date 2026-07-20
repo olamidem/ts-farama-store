@@ -10,7 +10,7 @@ interface PurchaseTimelineProps {
 const PurchaseTimeline = ({ purchase }: PurchaseTimelineProps) => {
   const createdTime = new Date(purchase.created_at).getTime();
   const updatedTime = new Date(purchase.updated_at).getTime();
-  const isEdited = updatedTime - createdTime > 3000; // Updated at least 3 seconds after creation
+  const isEdited = (updatedTime - createdTime) > 3000; // Updated at least 3 seconds after creation
 
   const steps = [
     {
@@ -35,8 +35,7 @@ const PurchaseTimeline = ({ purchase }: PurchaseTimelineProps) => {
             ? `All items received (100%)`
             : `Partially received (${purchase.received_percentage}%)`
           : "Awaiting delivery from supplier",
-      isCompleted:
-        !!purchase.received_percentage && purchase.received_percentage > 0,
+      isCompleted: !!purchase.received_percentage && purchase.received_percentage > 0,
       isActive: !purchase.received_percentage && purchase.status === "APPROVED",
     },
     {

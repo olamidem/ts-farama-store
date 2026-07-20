@@ -1,6 +1,13 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { PurchaseItem } from "../../types/purchaseItem";
-import { formatCurrency } from "../../../../utils/formatCurrenty";
+
+const formatNaira = (amount: number) => {
+  return new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
+    minimumFractionDigits: 2,
+  }).format(amount);
+};
 
 export const purchaseItemsColumns: ColumnDef<PurchaseItem>[] = [
   {
@@ -17,12 +24,8 @@ export const purchaseItemsColumns: ColumnDef<PurchaseItem>[] = [
     accessorKey: "product_unit",
     header: "UNIT",
     cell: ({ row }) => {
-      const unitName =
-        (row.original.product_unit as unknown as { unit?: { name: string } })
-          ?.unit?.name ?? "Carton";
-      return (
-        <span className="text-slate-500 font-semibold text-xs">{unitName}</span>
-      );
+      const unitName = (row.original.product_unit as unknown as { unit?: { name: string } })?.unit?.name ?? "Carton";
+      return <span className="text-slate-500 font-semibold text-xs">{unitName}</span>;
     },
   },
 
@@ -37,11 +40,34 @@ export const purchaseItemsColumns: ColumnDef<PurchaseItem>[] = [
   },
 
   {
+    accessorKey: "received_quantity",
+    header: "RECEIVED",
+    cell: ({ row }) => (
+      <div className="text-left font-mono font-bold text-emerald-600 text-xs">
+        {row.original.received_quantity ?? 0}
+      </div>
+    ),
+  },
+
+  {
+    id: "remaining_quantity",
+    header: "REMAINING",
+    cell: ({ row }) => {
+      const remaining = row.original.quantity - (row.original.received_quantity ?? 0);
+      return (
+        <div className="text-left font-mono font-bold text-slate-500 text-xs">
+          {remaining}
+        </div>
+      );
+    },
+  },
+
+  {
     accessorKey: "unit_cost",
     header: "COST PRICE",
     cell: ({ row }) => (
       <span className="font-semibold text-slate-700 text-xs">
-        {formatCurrency(row.original.unit_cost)}
+        {formatNaira(row.original.unit_cost)}
       </span>
     ),
   },
@@ -51,7 +77,7 @@ export const purchaseItemsColumns: ColumnDef<PurchaseItem>[] = [
     header: "TOTAL",
     cell: ({ row }) => (
       <span className="font-bold text-slate-800 text-xs text-right block">
-        {formatCurrency(row.original.total_cost)}
+        {formatNaira(row.original.total_cost)}
       </span>
     ),
   },
