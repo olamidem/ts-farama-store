@@ -1,5 +1,6 @@
 import type { Supplier, SupplierWithStats } from "../types/supplier";
 
+
 // Parse remarks column. If it's structured JSON, extract values. Otherwise, treat as plain text.
 export function parseSupplierRemarks(remarksStr: string | undefined): {
   contact_person: string;
