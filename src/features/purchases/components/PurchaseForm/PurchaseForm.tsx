@@ -8,13 +8,6 @@ import SupplierInformation from "./SupplierInformation";
 import PurchaseItemsTable from "./PurchaseItemsTable";
 import PurchaseSummary from "./PurchaseSummary";
 import type { ItemRowValue } from "./PurchaseItemRow";
-
-import { useCreatePurchase, useUpdatePurchase } from "../../hooks/usePurchasesMutations";
-import {
-  useCatalogProducts,
-  useCatalogProductUnits,
-} from "../../hooks/useCatalog";
-
 import { getToday, getFutureDate } from "../../utils/date";
 import type { Purchase } from "../../types/purchase";
 
