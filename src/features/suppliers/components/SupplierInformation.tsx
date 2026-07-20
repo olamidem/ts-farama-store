@@ -2,7 +2,7 @@ import { User, Phone, Mail, MapPin } from "lucide-react";
 import type { SupplierWithStats } from "../types/supplier";
 
 interface SupplierInformationProps {
-  supplier: SupplierWithStats;
+  supplier?: SupplierWithStats;
 }
 
 export default function SupplierInformation({
@@ -11,22 +11,22 @@ export default function SupplierInformation({
   const infoItems = [
     {
       label: "Contact Person",
-      value: supplier.contact_person || "Not Specified",
+      value: supplier?.contact_person || "Not Specified",
       icon: User,
     },
     {
       label: "Phone",
-      value: supplier.phone || "Not Specified",
+      value: supplier?.phone || "Not Specified",
       icon: Phone,
     },
     {
       label: "Email",
-      value: supplier.email || "Not Specified",
+      value: supplier?.email || "Not Specified",
       icon: Mail,
     },
     {
       label: "Address",
-      value: supplier.address || "Not Specified",
+      value: supplier?.address || "Not Specified",
       icon: MapPin,
     },
   ];
