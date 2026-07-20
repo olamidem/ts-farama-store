@@ -38,7 +38,7 @@ export const PurchaseOverview = ({
   const handleClosePurchase = async () => {
     if (
       window.confirm(
-        `Are you sure you want to CLOSE purchase order ${purchase.purchase_number}? This will permanently lock further modifications and receiving goods.`,
+        `Are you sure you want to CLOSE purchase order ${purchase.purchase_number}? This will permanently lock further modifications and receiving goods.`
       )
     ) {
       try {
@@ -92,9 +92,7 @@ export const PurchaseOverview = ({
             title="Print Purchase Order / Download PDF"
           >
             <Printer size={14} />
-            <span className="text-[10px] font-extrabold text-slate-600">
-              Print/PDF
-            </span>
+            <span className="text-[10px] font-extrabold text-slate-600">Print/PDF</span>
           </button>
 
           <button
@@ -159,8 +157,7 @@ export const PurchaseOverview = ({
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 flex gap-3 text-xs">
                   <Lock size={16} className="shrink-0 text-slate-400 mt-0.5" />
                   <div className="font-semibold leading-relaxed">
-                    This purchase order is locked and closed. Further goods
-                    reception is disabled.
+                    This purchase order is locked and closed. Further goods reception is disabled.
                   </div>
                 </div>
               ) : purchase.status === "RECEIVED" ? (
@@ -201,12 +198,8 @@ export const PurchaseOverview = ({
                     Last Received Date
                   </span>
                   <span className="text-slate-700 font-extrabold block mt-1">
-                    {purchase.received_percentage &&
-                    purchase.received_percentage > 0
-                      ? new Date(purchase.updated_at).toLocaleDateString(
-                          "en-US",
-                          { dateStyle: "medium" },
-                        )
+                    {purchase.received_percentage && purchase.received_percentage > 0
+                      ? new Date(purchase.updated_at).toLocaleDateString("en-US", { dateStyle: "medium" })
                       : "No items received yet"}
                   </span>
                 </div>
@@ -215,8 +208,7 @@ export const PurchaseOverview = ({
                     Received By
                   </span>
                   <span className="text-slate-700 font-extrabold block mt-1">
-                    {purchase.received_percentage &&
-                    purchase.received_percentage > 0
+                    {purchase.received_percentage && purchase.received_percentage > 0
                       ? "olamXii@gmail.com"
                       : "N/A"}
                   </span>
