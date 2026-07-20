@@ -27,9 +27,7 @@ export const PurchasesPage = () => {
     null,
   );
   const [isClosedManually, setIsClosedManually] = useState(true);
-  const [purchaseToDeleteId, setPurchaseToDeleteId] = useState<string | null>(
-    null,
-  );
+  const [purchaseToDeleteId, setPurchaseToDeleteId] = useState<string | null>(null);
   const [purchaseToEdit, setPurchaseToEdit] = useState<Purchase | null>(null);
 
   // Modal State for New Purchase Order
@@ -87,12 +85,7 @@ export const PurchasesPage = () => {
   });
 
   const handleFilterClick = () => {
-    if (
-      search !== "" ||
-      supplierId !== "all" ||
-      status !== "all" ||
-      dateFilter !== "all"
-    ) {
+    if (search !== "" || supplierId !== "all" || status !== "all" || dateFilter !== "all") {
       setSearch("");
       setSupplierId("all");
       setStatus("all");
@@ -128,15 +121,7 @@ export const PurchasesPage = () => {
       toast.error("No purchase orders to export.");
       return;
     }
-    const headers = [
-      "PO Number",
-      "Supplier",
-      "Purchase Date",
-      "Expected Delivery Date",
-      "Total Amount",
-      "Status",
-      "Received %",
-    ];
+    const headers = ["PO Number", "Supplier", "Purchase Date", "Expected Delivery Date", "Total Amount", "Status", "Received %"];
     const rows = purchases.map((p) => [
       p.purchase_number,
       p.supplier?.name || "Unknown",
@@ -144,22 +129,17 @@ export const PurchasesPage = () => {
       p.expected_delivery_date || "",
       p.total_amount,
       p.status,
-      p.received_percentage || 0,
+      p.received_percentage || 0
     ]);
     const csvContent = [headers, ...rows]
-      .map((e) =>
-        e.map((val) => `"${String(val).replace(/"/g, '""')}"`).join(","),
-      )
+      .map((e) => e.map(val => `"${String(val).replace(/"/g, '""')}"`).join(","))
       .join("\n");
-
+    
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.setAttribute("href", url);
-    link.setAttribute(
-      "download",
-      `purchase_orders_export_${new Date().toISOString().slice(0, 10)}.csv`,
-    );
+    link.setAttribute("download", `purchase_orders_export_${new Date().toISOString().slice(0, 10)}.csv`);
     link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
@@ -195,7 +175,7 @@ export const PurchasesPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: KPI cards, Filters, Table */}
         <div
-          className={`${isLoading || activeSelected ? "lg:col-span-7" : "lg:col-span-12"} space-y-6 transition-all duration-300`}
+          className={`${(isLoading || activeSelected) ? "lg:col-span-7" : "lg:col-span-12"} space-y-6 transition-all duration-300`}
         >
           <PurchaseStats />
 
