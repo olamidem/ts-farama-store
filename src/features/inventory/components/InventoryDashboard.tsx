@@ -21,34 +21,23 @@ import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../../lib/queryKey";
 import { cn } from "../../../utils/cn";
 import { motion, AnimatePresence } from "motion/react";
-
 import InventorySummaryCards from "./cards/InventorySummaryCards";
 import InventoryTransactionsTable from "./tables/InventoryTransactionsTable";
 import StockAdjustmentModal from "./StockAdjustmentModal";
 import { SalesHistoryPanel } from "./SalesHistoryPanel";
-
 import {
   useInventorySummary,
   useProductStockOverview,
 } from "../hooks/useInventory";
 import { useInventoryTransactions } from "../hooks/useInventoryTransactions";
 import { useCreateStockAdjustment } from "../hooks/useInventoryMutations";
-
 import type { InventoryTransactionWithRelations } from "../types/inventoryTransaction";
+import { OpeningStockFormPanel, StockTransferFormPanel, type InventorySettings } from "./StockFormPanels";
+import StockCountPanel from "./StockCountPanel";
+import ProductLedgerPanel from "./ProductLedgerPanel";
+import { InventoryReportsPanel, InventorySettingsFormPanel, LowStockAlertsPanel } from "./InventoryReportsAndAlerts";
 
-// Reusable components
-import {
-  StockTransferFormPanel,
-  OpeningStockFormPanel,
-  type InventorySettings,
-} from "./StockFormPanels";
-import { StockCountPanel } from "./StockCountPanel";
-import { ProductLedgerPanel } from "./ProductLedgerPanel";
-import {
-  InventoryReportsPanel,
-  LowStockAlertsPanel,
-  InventorySettingsFormPanel,
-} from "./InventoryReportsAndAlerts";
+
 
 export const InventoryDashboard = () => {
   const queryClient = useQueryClient();
