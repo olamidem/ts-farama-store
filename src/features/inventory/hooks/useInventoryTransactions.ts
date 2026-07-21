@@ -2,9 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../../lib/queryKey";
 import { getInventoryTransactions } from "../services/inventory.service";
 
-export function useInventoryTransactions() {
+export const useInventoryTransactions = () => {
   return useQuery({
-    queryKey: QUERY_KEYS.inventoryTransactions,
+    queryKey: [...QUERY_KEYS.inventory, "transactions"],
     queryFn: getInventoryTransactions,
   });
-}
+};

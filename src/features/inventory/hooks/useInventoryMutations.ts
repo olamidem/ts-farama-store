@@ -1,16 +1,28 @@
-import { supabase } from "../../../api/supabase";
-import type { RecordInventoryTransactionInput } from "../types/inventoryTransaction";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEYS } from "../../../lib/queryKey";
+import { createStockAdjustment } from "../services/inventory.service";
+import type { StockAdjustmentInput } from "../types/inventory";
+import { toast } from "sonner";
 
-export async function createInventoryTransaction(
-  input: RecordInventoryTransactionInput,
-) {
-  const { error } = await supabase.rpc("record_inventory_transaction", {
-    p_product_id: input.product_id,
-    p_transaction_type: input.transaction_type,
-    p_quantity: input.quantity,
-    p_reason: input.reason,
-    p_remarks: input.remarks,
+export const useCreateStockAdjustment = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (input: StockAdjustmentInput) => createStockAdjustment(input),
+    onSuccess: () => {
+      // Invalidate all inventory-related queries
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.inventory,
+      });
+      // Invalidate products so that stock levels update on products pages
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.products,
+      });
+
+      toast.success("Stock adjustment completed successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to complete stock adjustment");
+    },
   });
-
-  if (error) throw error;
-}
+};
