@@ -2,14 +2,20 @@ import { useAuthStore } from "../../store/authStore";
 
 const Dashboard = () => {
   const user = useAuthStore((state) => state.user);
-return (
+  const profile = useAuthStore((state) => state.profile);
+
+  const userName =
+    profile?.full_name ||
+    (user?.user_metadata as Record<string, string>)?.full_name ||
+    user?.email ||
+    "User";
+
+  return (
     <section className="space-y-3">
       <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
       <p className="text-slate-600">
-        Welcome back,
-        <span className="font-semibold text-slate-900">
-          {user?.name ?? "User"}
-        </span>
+        Welcome back,{" "}
+        <span className="font-semibold text-slate-900">{userName}</span>
         👋
       </p>
       <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
