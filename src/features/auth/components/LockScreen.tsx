@@ -1,7 +1,7 @@
 import {  LogOut } from "lucide-react";
 import { motion } from "motion/react";
 import useAuthStore from "../store/authStore";
-import useLockScreen from "../hooks/useLockScreen";
+import useLockScreen from "../hooks/useLockScreenController";
 import NumberPad from "./NumberPad";
 import UserAvatar from "./USerAvatar";
 
