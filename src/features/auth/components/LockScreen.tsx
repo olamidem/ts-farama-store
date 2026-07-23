@@ -7,13 +7,10 @@ import useAuthStore from "../store/authStore";
 export const LockScreen = () => {
   const user = useAuthStore((state) => state.user);
   const profile = useAuthStore((state) => state.profile);
-  const setLocked = useAuthStore((state) => state.setLocked);
   const logout = useAuthStore((state) => state.logout);
 
   const [pin, setPin] = useState<string>("");
-  const [isVerifying, setIsVerifying] = useState<boolean>(false);
-  const [errorCount, setErrorCount] = useState<number>(0);
-  const [shakeTrigger, setShakeTrigger] = useState<boolean>(false);
+
 
   const handleKeyPress = (num: string) => {
     if (pin.length < 6) {
@@ -29,36 +26,36 @@ export const LockScreen = () => {
     setPin("");
   };
 
-  const handleUnlock = async () => {
-    if (!user) return;
-    setIsVerifying(true);
-    try {
-      const isValid = await unlockWithPin(user.id, pin);
-      if (isValid) {
-        setLocked(false);
-        toast.success("Welcome back, screen unlocked!");
-      } else {
-        setErrorCount((prev) => prev + 1);
-        setShakeTrigger(true);
-        setTimeout(() => setShakeTrigger(false), 500);
-        setPin("");
-        toast.error("Incorrect PIN. Please try again.");
-      }
-    } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : "Unlock failed.");
-    } finally {
-      setIsVerifying(false);
-    }
-  };
+  // const handleUnlock = async () => {
+  //   if (!user) return;
+  //   setIsVerifying(true);
+  //   try {
+  //     const isValid = await unlockWithPin(user.id, pin);
+  //     if (isValid) {
+  //       setLocked(false);
+  //       toast.success("Welcome back, screen unlocked!");
+  //     } else {
+  //       setErrorCount((prev) => prev + 1);
+  //       setShakeTrigger(true);
+  //       setTimeout(() => setShakeTrigger(false), 500);
+  //       setPin("");
+  //       toast.error("Incorrect PIN. Please try again.");
+  //     }
+  //   } catch (err: unknown) {
+  //     toast.error(err instanceof Error ? err.message : "Unlock failed.");
+  //   } finally {
+  //     setIsVerifying(false);
+  //   }
+  // };
 
   // Automated submit if length is 4 or 6 (common standard PIN lengths)
-  const handleSubmitPin = () => {
-    if (pin.length >= 4) {
-      handleUnlock();
-    } else {
-      toast.error("PIN must be at least 4 digits.");
-    }
-  };
+  // const handleSubmitPin = () => {
+  //   if (pin.length >= 4) {
+  //     handleUnlock();
+  //   } else {
+  //     toast.error("PIN must be at least 4 digits.");
+  //   }
+  // };
 
   const handleSwitchAccount = async () => {
     await logout();
@@ -121,7 +118,7 @@ export const LockScreen = () => {
 
         {/* PIN Entry Dot Matrix with shake animation */}
         <motion.div
-          animate={shakeTrigger ? { x: [-10, 10, -10, 10, -5, 5, 0] } : {}}
+          // animate={shakeTrigger ? { x: [-10, 10, -10, 10, -5, 5, 0] } : {}}
           transition={{ duration: 0.4 }}
           className="flex flex-col items-center space-y-4"
         >
@@ -143,11 +140,11 @@ export const LockScreen = () => {
           </div>
 
           {/* Feedback Label */}
-          {errorCount > 0 && !shakeTrigger && (
+          {/* {errorCount > 0 && !shakeTrigger && (
             <p className="text-xs text-rose-400 font-bold tracking-wide">
               Wrong PIN. Try again.
             </p>
-          )}
+          )} */}
         </motion.div>
 
         {/* Custom Numeric Grid pad */}
@@ -189,7 +186,7 @@ export const LockScreen = () => {
 
         {/* Bottom Actions Form */}
         <div className="flex flex-col space-y-3 w-full max-w-[260px] pt-2">
-          <button
+          {/* <button
             disabled={pin.length < 4 || isVerifying}
             onClick={handleSubmitPin}
             className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-extrabold text-xs uppercase tracking-widest rounded-2xl shadow-xl shadow-indigo-600/20 active:scale-[0.98] transition cursor-pointer flex items-center justify-center gap-2"
@@ -202,7 +199,7 @@ export const LockScreen = () => {
             ) : (
               <span>Unlock Session</span>
             )}
-          </button>
+          </button> */}
 
           <button
             onClick={handleSwitchAccount}
