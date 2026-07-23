@@ -18,9 +18,7 @@ export const usePermissions = () => {
   const hasRole = (role: string): boolean => {
     if (!profile?.role) return false;
 
-    return (
-      profile.role.name.toLowerCase() === role.toLowerCase()
-    );
+    return profile.role.name.toLowerCase() === role.toLowerCase();
   };
 
   const hasLevel = (level: number): boolean => {
