@@ -119,7 +119,7 @@ export const updateProfile = async (
  * PIN
  * ========================================================================== */
 
-export const verifyPin = async (
+export const unlockWithPin = async (
   userId: string,
   pin: string,
 ): Promise<boolean> => {

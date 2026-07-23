@@ -1,16 +1,13 @@
 import { useState } from "react";
 import { toast } from "sonner";
-
 import { useAuthStore } from "../store/authStore";
-import { unlockWithPin } from "../services/auth.service";
-import { useLogout } from "./useLogout";
+
 
 const PIN_LENGTH = 4;
 
 export const useLockScreen = () => {
   const user = useAuthStore((state) => state.user);
   const setLocked = useAuthStore((state) => state.setLocked);
-
   const { mutateAsync: logout } = useLogout();
 
   const [pin, setPin] = useState("");
