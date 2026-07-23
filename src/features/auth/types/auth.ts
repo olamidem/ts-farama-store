@@ -1,5 +1,6 @@
 import type { Session, User } from "@supabase/supabase-js";
-import type { Permission, Profile } from "./profile";
+import type { Profile } from "./profile";
+import type { Permission } from "./permission";
 
 export interface LoginRequest {
   email: string;
