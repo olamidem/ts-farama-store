@@ -1,6 +1,6 @@
+import { createStockAdjustment } from './../services/inventory.service';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../../lib/queryKey";
-import { createStockAdjustment } from "../services/inventory.service";
 import type { StockAdjustmentInput } from "../types/inventory";
 import { toast } from "sonner";
 

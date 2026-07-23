@@ -4,8 +4,9 @@ import { toast } from "sonner";
 import type {
   ProductStockOverviewItem,
   StockAdjustmentInput,
+  InventorySettings,
 } from "../types/inventory";
-import type { InventorySettings } from "./StockFormPanels";
+
 
 interface StockCountPanelProps {
   stockOverview: ProductStockOverviewItem[];

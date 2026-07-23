@@ -1,6 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { InventoryTransactionWithRelations } from "../types/inventoryTransaction";
 import { MoreVertical } from "lucide-react";
+import type { InventoryTransactionWithRelations } from "../types/inventoryTransaction";
 import { formatDate } from "../../../utils/formatDate";
 
 interface InventoryTransactionColumnsProps {
@@ -15,7 +15,11 @@ export const getInventoryTransactionColumns = ({
     header: "DATE",
     cell: ({ row }) => {
       const date = new Date(row.original.created_at);
-      return <span className="text-slate-500 font-semibold text-xs">{formatDate(date.toLocaleDateString())}</span>;
+      return (
+        <span className="text-slate-500 font-semibold text-xs">
+          {formatDate(date.toLocaleDateString())}
+        </span>
+      );
     },
   },
   {
@@ -26,11 +30,14 @@ export const getInventoryTransactionColumns = ({
       const name = product?.name ?? "Unknown Product";
       return (
         <div className="flex items-center gap-2.5">
-          <div className="h-7 w-7 rounded-lg bg-indigo-50/70 border border-indigo-100/30 flex items-center justify-center font-bold text-[10px] text-indigo-700 uppercase shrink-0">
+          <div className="h-7 w-7 rounded-lg bg-indigo-50/70 border border-indigo-100/30 flex items-center justify-center font-bold text-[12px] text-indigo-900 uppercase shrink-0">
             {name.slice(0, 2)}
           </div>
           <div>
-            <p className="font-extrabold text-slate-800 leading-tight truncate max-w-37.5" title={name}>
+            <p
+              className="font-extrabold text-slate-800 leading-tight truncate max-w-37.5"
+              title={name}
+            >
               {name}
             </p>
             <p className="text-[10px] font-mono font-bold text-slate-400 mt-0.5">
@@ -79,7 +86,9 @@ export const getInventoryTransactionColumns = ({
       }
 
       return (
-        <span className={`inline-flex items-center px-2 py-0.5 rounded-sm text-[10px] font-extrabold border uppercase ${badgeClass}`}>
+        <span
+          className={`inline-flex items-center px-2 py-0.5 rounded-sm text-[10px] font-extrabold border uppercase ${badgeClass}`}
+        >
           {type}
         </span>
       );
@@ -92,10 +101,13 @@ export const getInventoryTransactionColumns = ({
       const qty = row.original.quantity;
       const isPositive = qty > 0;
       const sign = isPositive ? "+" : "";
-      const textClass = isPositive ? "text-emerald-600 font-extrabold" : "text-rose-600 font-extrabold";
+      const textClass = isPositive
+        ? "text-emerald-600 font-extrabold"
+        : "text-rose-600 font-extrabold";
       return (
         <span className={`font-mono text-xs ${textClass}`}>
-          {sign}{qty}
+          {sign}
+          {qty}
         </span>
       );
     },
@@ -104,22 +116,29 @@ export const getInventoryTransactionColumns = ({
     accessorKey: "balance_after",
     header: "BALANCE",
     cell: ({ row }) => (
-      <span className="font-mono font-bold text-slate-700">{row.original.balance_after}</span>
+      <span className="font-mono font-bold text-slate-700">
+        {row.original.balance_after}
+      </span>
     ),
   },
   {
     accessorKey: "reference",
     header: "REFERENCE",
     cell: ({ row }) => (
-      <span className="font-mono text-xs font-bold text-slate-500">{row.original.reference}</span>
+      <span className="font-mono text-xs font-bold text-slate-500">
+        {row.original.reference}
+      </span>
     ),
   },
   {
     accessorKey: "profiles",
     header: "USER",
     cell: ({ row }) => {
-      const name = row.original.profiles?.raw_user_meta_data?.name || "Admin User";
-      return <span className="text-slate-500 font-semibold text-xs">{name}</span>;
+      const name =
+        row.original.profiles?.raw_user_meta_data?.name || "Admin User";
+      return (
+        <span className="text-slate-500 font-semibold text-xs">{name}</span>
+      );
     },
   },
   {

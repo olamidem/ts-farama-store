@@ -11,15 +11,21 @@ const Logo = ({ theme = "light" }: { theme?: "light" | "dark" }) => {
         </div>
       </div>
       <div className="flex flex-col text-left">
-        <span className={`font-black text-sm tracking-widest leading-none transition-colors ${
-          isDark ? "text-white group-hover:text-blue-400" : "text-slate-900 group-hover:text-blue-600"
-        }`}>
-          FARAMA STORE
+        <span
+          className={`font-black text-sm tracking-widest leading-none transition-colors ${
+            isDark
+              ? "text-white group-hover:text-blue-400"
+              : "text-slate-900 group-hover:text-blue-600"
+          }`}
+        >
+          FARAMA POS
         </span>
-        <span className={`text-[9px] font-extrabold tracking-wider uppercase mt-1 ${
-          isDark ? "text-slate-500" : "text-slate-400"
-        }`}>
-          Inventory Management System
+        <span
+          className={`text-[9px] font-extrabold tracking-wider uppercase mt-1 ${
+            isDark ? "text-slate-500" : "text-slate-400"
+          }`}
+        >
+          Smart Business Suite
         </span>
       </div>
     </div>

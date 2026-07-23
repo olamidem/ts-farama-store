@@ -28,3 +28,10 @@ export interface ProductStockOverviewItem {
   min_stock_alert: number;
   default_product_unit_id?: string;
 }
+
+export interface InventorySettings {
+  defaultMinAlert: number;
+  refPrefix: string;
+  operatorName: string;
+}
+

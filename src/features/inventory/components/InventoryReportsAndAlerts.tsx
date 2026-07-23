@@ -23,9 +23,10 @@ import {
 import type {
   ProductStockOverviewItem,
   InventorySummary,
+  InventorySettings,
 } from "../types/inventory";
 import type { InventoryTransactionWithRelations } from "../types/inventoryTransaction";
-import type { InventorySettings } from "./StockFormPanels";
+
 
 // ==========================================
 // 1. Inventory Valuation & Reports Panel

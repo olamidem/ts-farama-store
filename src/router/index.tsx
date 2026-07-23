@@ -15,6 +15,10 @@ import ProductDetailsPage from "../features/products/details/ProductDetailsPage"
 import InventoryPage from "../pages/InventoryPage";
 import PurchasesPage from "../features/purchases/pages/PurchasesPage";
 import SuppliersPage from "../features/suppliers/pages/SuppliersPage";
+import StaffPage from "../pages/Staff/StaffPage";
+import ProfilePage from "../pages/Profile/ProfilePage";
+
+
 
 const rootRoute = createRootRoute();
 const loginRoute = createRoute({
@@ -78,6 +82,36 @@ const suppliersRoute = createRoute({
   component: SuppliersPage,
 });
 
+const staffRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
+  path: "/staff",
+  component: StaffPage,
+});
+
+// const settingsRoute = createRoute({
+//   getParentRoute: () => appLayoutRoute,
+//   path: "/settings",
+//   component: SettingsPage,
+// });
+
+const profileRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
+  path: "/profile",
+  component: ProfilePage,
+});
+
+// const salesRoute = createRoute({
+//   getParentRoute: () => appLayoutRoute,
+//   path: "/sales",
+//   component: SalesPage,
+// });
+
+// const customersRoute = createRoute({
+//   getParentRoute: () => appLayoutRoute,
+//   path: "/customers",
+//   component: CustomersPage,
+// });
+
 /**
  * Route Tree
  */
@@ -91,7 +125,12 @@ const routeTree = rootRoute.addChildren([
     inventoryRoute,
     productDetailsRoute,
     purchasesRoute,
-    suppliersRoute
+    suppliersRoute,
+    staffRoute,
+    // settingsRoute,
+    profileRoute,
+    // salesRoute,
+    // customersRoute,
   ]),
 ]);
 

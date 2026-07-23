@@ -1,22 +1,14 @@
 import { AlertCircle, Eye, EyeOff, Lock, LogIn, Mail } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import {
-  loginSchema,
-  type LoginFormData,
-} from "../validation/loginSchema";
+import { loginSchema, type LoginFormData } from "../validation/loginSchema";
 import { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import type { AxiosError } from "axios";
-import type { ApiError } from "../../../types/api";
-import { queryClient } from "../../../lib/queryClient";
-import { getCurrentUser } from "../services/auth.service";
-
 
 const LoginForm = () => {
-  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -24,25 +16,20 @@ const LoginForm = () => {
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
-const navigate = useNavigate();
-const loginMutation = useLogin();
+  const navigate = useNavigate();
+  const loginMutation = useLogin();
 
-const onSubmit = async (data: LoginFormData) => {
-  try {
-    await loginMutation.mutateAsync(data);
-     await queryClient.fetchQuery({
-       queryKey: ["current-user"],
-       queryFn: getCurrentUser,
-     });
-    toast.success("Welcome back!");
-    navigate({
-      to: "/dashboard",
-    });
-  } catch (error) {
-    const axiosError = error as AxiosError<ApiError>;
-    toast.error(axiosError.response?.data?.message ?? "Unable to sign in.");
-  }
-};
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      await loginMutation.mutateAsync(data);
+      toast.success("Welcome back!");
+      navigate({
+        to: "/dashboard",
+      });
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : "Unable to sign in.");
+    }
+  };
   
   return (
     <div>
@@ -61,12 +48,13 @@ const onSubmit = async (data: LoginFormData) => {
             />
           </div>
           {errors.email && (
-            <div className="flex items-center gap-1 text-red-500">
+            <div className="flex items-center gap-1 text-red-500 mt-1">
               <AlertCircle className="h-3 w-3" />
               <p className="text-xs font-medium">{errors.email.message}</p>
             </div>
           )}
         </div>
+        
         <div className="space-y-1.5 text-left">
           <label className="block text-xs font-bold text-slate-600 uppercase tracking-wide">
             Password
@@ -82,7 +70,7 @@ const onSubmit = async (data: LoginFormData) => {
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition-colors hover:text-slate-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition-colors hover:text-slate-600 cursor-pointer"
             >
               {showPassword ? (
                 <EyeOff className="h-4 w-4" />
@@ -92,7 +80,7 @@ const onSubmit = async (data: LoginFormData) => {
             </button>
           </div>
           {errors.password && (
-            <div className="flex items-center gap-1 text-red-500">
+            <div className="flex items-center gap-1 text-red-500 mt-1">
               <AlertCircle className="h-3 w-3" />
               <p className="text-xs font-medium">{errors.password.message}</p>
             </div>
@@ -109,7 +97,7 @@ const onSubmit = async (data: LoginFormData) => {
           </label>
           <button
             type="button"
-            className="text-xs font-medium text-blue-600 hover:underline"
+            className="text-xs font-medium text-blue-600 hover:underline cursor-pointer bg-transparent border-0"
           >
             Forgot password?
           </button>
@@ -118,7 +106,7 @@ const onSubmit = async (data: LoginFormData) => {
         <button
           type="submit"
           disabled={loginMutation.isPending}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-blue-500/20 transition-all hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-blue-500/20 transition-all hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70 cursor-pointer"
         >
           {loginMutation.isPending ? (
             <>

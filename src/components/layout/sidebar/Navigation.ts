@@ -69,11 +69,6 @@ export const navigation = [
         to: "/units",
         icon: Scale,
       },
-      {
-        label: "Staff",
-        to: "/staff",
-        icon: UserCog,
-      },
     ],
   },
 
@@ -89,6 +84,17 @@ export const navigation = [
         label: "Inventory",
         to: "/inventory",
         icon: Boxes,
+      },
+    ],
+  },
+
+  {
+    title: "Staff (Administration)",
+    items: [
+      {
+        label: "Staff Portal",
+        to: "/staff",
+        icon: UserCog,
       },
     ],
   },

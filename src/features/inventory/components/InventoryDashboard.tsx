@@ -30,14 +30,14 @@ import {
   useProductStockOverview,
 } from "../hooks/useInventory";
 import { useInventoryTransactions } from "../hooks/useInventoryTransactions";
-import { useCreateStockAdjustment } from "../hooks/useInventoryMutations";
 import type { InventoryTransactionWithRelations } from "../types/inventoryTransaction";
-import { OpeningStockFormPanel, StockTransferFormPanel, type InventorySettings } from "./StockFormPanels";
+import { OpeningStockFormPanel } from "./OpeningStockFormPanel";
+import { StockTransferFormPanel } from "./StockTransferFormPanel";
+import type { InventorySettings } from "../types/inventory";
 import StockCountPanel from "./StockCountPanel";
 import ProductLedgerPanel from "./ProductLedgerPanel";
 import { InventoryReportsPanel, InventorySettingsFormPanel, LowStockAlertsPanel } from "./InventoryReportsAndAlerts";
-
-
+import { useCreateStockAdjustment } from "../hooks/useInventoryMutations";
 
 export const InventoryDashboard = () => {
   const queryClient = useQueryClient();
