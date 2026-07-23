@@ -59,7 +59,6 @@ export const getCurrentProfile = async (
       role:roles (
         id,
         name,
-        level,
         description,
         role_permissions (
           role_id,
