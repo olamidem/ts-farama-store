@@ -3,8 +3,17 @@ import type { Role, Permission } from "./permission";
 import type { UserStatus } from "./enums";
 
 export interface Profile {
-  ...
+  id: string;
+  full_name: string | null;
+  email: string | null;
+  phone: string | null;
+  avatar_url: string | null;
+  avatar_color: string | null;
   status: UserStatus;
+  role_id: string | null;
+  pin_hash?: string | null;
+  created_at: string;
+  updated_at: string;
   role: Role | null;
 }
 
