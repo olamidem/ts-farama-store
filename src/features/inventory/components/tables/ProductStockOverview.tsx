@@ -61,7 +61,7 @@ export const ProductStockOverview = ({ items, isLoading }: ProductStockOverviewP
                           <div className="h-7 w-7 rounded-lg bg-indigo-50/70 border border-indigo-100/30 flex items-center justify-center font-bold text-[10px] text-indigo-700 uppercase shrink-0">
                             {item.name.slice(0, 2)}
                           </div>
-                          <span className="truncate max-w-[150px]" title={item.name}>{item.name}</span>
+                          <span className="truncate max-w-37.5" title={item.name}>{item.name}</span>
                         </div>
                       </td>
                       <td className="py-3.5 pr-2 text-xs font-mono font-bold text-slate-400">{item.sku || "N/A"}</td>

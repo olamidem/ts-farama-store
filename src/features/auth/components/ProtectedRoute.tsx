@@ -1,8 +1,6 @@
 import { useEffect, type ReactNode } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useAuthStore } from "../store/authStore";
-import useLockScreen from "../hooks/useLockScreen";
-
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -21,7 +19,7 @@ export const ProtectedRoute = ({
     (state) => state.isLoading,
   );
 
-  const { isLocked } = useLockScreen();
+  const isLocked = useAuthStore((state) => state.isLocked);
 
   useEffect(() => {
     if (isLoading) return;

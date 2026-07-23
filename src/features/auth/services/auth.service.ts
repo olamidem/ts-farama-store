@@ -59,7 +59,6 @@ export const getCurrentProfile = async (
       role:roles (
         id,
         name,
-        level,
         description,
         role_permissions (
           role_id,
@@ -119,7 +118,7 @@ export const updateProfile = async (
  * PIN
  * ========================================================================== */
 
-export const verifyPin = async (
+export const unlockWithPin = async (
   userId: string,
   pin: string,
 ): Promise<boolean> => {

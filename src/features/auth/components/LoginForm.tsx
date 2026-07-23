@@ -10,26 +10,23 @@ import { toast } from "sonner";
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
-  });
+  register,
+  handleSubmit,
+  formState: { errors, isSubmitting },
+} = useForm<LoginFormData>({
+  resolver: zodResolver(loginSchema),
+});
   const navigate = useNavigate();
   const loginMutation = useLogin();
 
-  const onSubmit = async (data: LoginFormData) => {
-    try {
-      await loginMutation.mutateAsync(data);
-      toast.success("Welcome back!");
-      navigate({
-        to: "/dashboard",
-      });
-    } catch (error: unknown) {
-      toast.error(error instanceof Error ? error.message : "Unable to sign in.");
-    }
-  };
+ const onSubmit = async (data: LoginFormData) => {
+  await loginMutation.mutateAsync(data);
+  toast.success("Welcome back!");
+  navigate({
+    to: "/dashboard",
+    replace: true,
+  });
+};
   
   return (
     <div>
@@ -88,13 +85,6 @@ const LoginForm = () => {
         </div>
 
         <div className="flex items-center justify-between pt-1">
-          <label className="flex cursor-pointer items-center gap-2 text-xs text-slate-500">
-            <input
-              type="checkbox"
-              className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-            />
-            Remember me
-          </label>
           <button
             type="button"
             className="text-xs font-medium text-blue-600 hover:underline cursor-pointer bg-transparent border-0"
@@ -105,7 +95,7 @@ const LoginForm = () => {
 
         <button
           type="submit"
-          disabled={loginMutation.isPending}
+         disabled={loginMutation.isPending || isSubmitting}
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-blue-500/20 transition-all hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70 cursor-pointer"
         >
           {loginMutation.isPending ? (
