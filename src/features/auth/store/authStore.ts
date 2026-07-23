@@ -7,7 +7,7 @@ import {
 } from "../services/auth.service";
 import { extractPermissions } from "./permissionHelpers";
 
-export const useAuthStore = create<AuthStore>((set, get) => ({
+export const useAuthStore = create<AuthStore>((set) => ({
   // ==========================
   // STATE
   // ==========================
