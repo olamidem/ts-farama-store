@@ -8,10 +8,19 @@ interface HeaderProps {
 
 const Header = ({ onMenuToggle }: HeaderProps) => {
   const user = useAuthStore((state) => state.user);
+  const profile = useAuthStore((state) => state.profile);
   const location = useLocation();
 
+  const userName =
+    profile?.full_name ||
+    (user?.user_metadata as Record<string, string>)?.full_name ||
+    user?.email ||
+    "User";
+
+  const userRole = profile?.role?.name || "Staff";
+
   const initials =
-    user?.name
+    userName
       ?.split(" ")
       .map((word: string) => word[0])
       .join("")
@@ -66,11 +75,9 @@ const Header = ({ onMenuToggle }: HeaderProps) => {
 
         <div className="text-right hidden sm:block">
           <p className="font-semibold text-slate-900 text-sm leading-tight">
-            {user?.name}
+            {userName}
           </p>
-          <p className="text-xs text-slate-500 capitalize mt-0.5">
-            {user?.role}
-          </p>
+          <p className="text-xs text-slate-500 capitalize mt-0.5">{userRole}</p>
         </div>
       </div>
     </header>
