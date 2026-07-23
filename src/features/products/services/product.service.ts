@@ -99,17 +99,21 @@ export const getProductStats = async () => {
   if (error) {
     throw new Error(error.message);
   }
-  const products = data ?? [];
+   const products = (data ?? []) as Array<{
+    is_active?: boolean;
+    stock: number;
+    min_stock_alert: number;
+  }>;
   const total = products.length;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const active = products.filter((p: any) => p.is_active).length;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+  const active = products.filter((p) => p.is_active).length;
+
   const lowStock = products.filter(
-    (p: any) => p.is_active && p.stock <= p.min_stock_alert && p.stock > 0,
+    (p) => p.is_active && p.stock <= p.min_stock_alert && p.stock > 0,
   ).length;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
   const outOfStock = products.filter(
-    (p: any) => p.is_active && p.stock === 0,
+    (p) => p.is_active && p.stock === 0,
   ).length;
   return {
     total,

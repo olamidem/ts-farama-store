@@ -1,33 +1,7 @@
-/**
- * Permission record from the permissions table
- */
-export interface Permission {
-  id: string;
-  module: string;
-  action: string;
-  code: string;
-}
+import type { User } from "@supabase/supabase-js";
+import type { Role, Permission } from "./permission";
+import type { UserStatus } from "./enums";
 
-/**
- * Join record linking a role to a permission
- */
-export interface RolePermission {
-  permission: Permission | null;
-}
-
-/**
- * Role record from the roles table
- */
-export interface Role {
-  id: string;
-  name: string;
-  description: string | null;
-  role_permissions: RolePermission[];
-}
-
-/**
- * User profile from the profiles table, with nested role & permissions
- */
 export interface Profile {
   id: string;
   full_name: string | null;
@@ -35,10 +9,25 @@ export interface Profile {
   phone: string | null;
   avatar_url: string | null;
   avatar_color: string | null;
-  status: string | null;
+  status: UserStatus;
   role_id: string | null;
-  pin_hash: string | null;
+  pin_hash?: string | null;
   created_at: string;
   updated_at: string;
   role: Role | null;
+}
+
+export interface CurrentUser {
+  user: User;
+  profile: Profile;
+  permissions: Permission[];
+}
+
+export interface UnlockRequest {
+  pin: string;
+}
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
 }
