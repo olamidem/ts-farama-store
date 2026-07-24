@@ -20,11 +20,14 @@ export interface ActivityLog {
   id: string;
   operator_id: string;
   operator_name: string;
+  operator: string;
   role: string;
   action: string;
   details: string;
   ip_address: string | null;
+  ipAddress: string;
   created_at: string;
+  timestamp: string;
 }
 
 export interface RoleData {

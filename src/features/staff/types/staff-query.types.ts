@@ -1,4 +1,5 @@
 import type { RoleName } from "../../auth/types/enums";
+import type { Employee } from "./staff";
 
 export interface PermissionQuery {
   code: string;
@@ -54,4 +55,26 @@ export interface CreateActivityLogDto {
   action: string;
   details: string;
   ip_address: string;
+}
+
+export interface UpdateEmployeeDto {
+  full_name?: string;
+  email?: string;
+  phone?: string;
+  role_id?: string;
+  status?: Employee["status"];
+  avatar_color?: string | null;
+  avatar_url?: string | null;
+  pin_hash?: string | null;
+}
+
+export interface CreateEmployeeDto {
+  full_name: string;
+  email: string;
+  phone: string;
+  role_id: string;
+  status: Employee["status"];
+  avatar_color: string | null;
+  avatar_url: string | null;
+  pin_hash: string;
 }

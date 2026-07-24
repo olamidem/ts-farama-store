@@ -1,6 +1,5 @@
 import { supabase } from "../../../api/supabase";
 import type { Employee, ActivityLog, RoleData } from "../types/staff";
-import { USER_STATUS } from "../../auth/types/enums";
 import {
   ROLE_SELECT,
   EMPLOYEE_SELECT,
@@ -11,8 +10,12 @@ import type {
   RoleQueryResult,
   AuditLogQueryResult,
   CreateActivityLogDto,
+  UpdateEmployeeDto,
+  CreateEmployeeDto,
 } from "../types/staff-query.types";
 import { mapEmployee } from "../utils/mapEmployee";
+import { mapAuditLog } from "../utils/mapAuditLog";
+import { mapRole } from "../utils/mapRole";
 
 const getRoles = async (): Promise<RoleData[]> => {
   const { data, error } = await supabase.from("roles").select(ROLE_SELECT)
@@ -20,19 +23,8 @@ const getRoles = async (): Promise<RoleData[]> => {
   if (error) {
     throw new Error(error.message);
   }
-
   const roles = (data ?? []) as unknown as RoleQueryResult[];
-
-  return roles.map((role) => ({
-    id: role.id,
-    name: role.name,
-    description: role.description,
-    member_count: 0,
-    permissions:
-      role.role_permissions
-        ?.map((rp) => rp.permission?.code)
-        .filter(Boolean) as string[],
-  }));
+  return roles.map(mapRole);
 };
 
 const getEmployees = async (): Promise<Employee[]> => {
@@ -49,16 +41,6 @@ const getEmployees = async (): Promise<Employee[]> => {
   return employees.map(mapEmployee);
 };
 
-interface CreateEmployeeDto {
-  full_name: string;
-  email: string;
-  phone: string;
-  role_id: string;
-  status: Employee["status"];
-  avatar_color: string | null;
-  avatar_url: string | null;
-  pin_hash: string;
-}
 
 const createEmployee = async (
   payload: CreateEmployeeDto,
@@ -73,37 +55,10 @@ const createEmployee = async (
     throw new Error(error.message);
   }
 
-  const employee = data as unknown as EmployeeQueryResult;
-  const roleData = Array.isArray(employee.role)
-    ? employee.role[0]
-    : employee.role;
+ const employee = data as unknown as EmployeeQueryResult;
 
-  return {
-    id: employee.id,
-    full_name: employee.full_name ?? "",
-    email: employee.email ?? "",
-    phone: employee.phone ?? "",
-    role: roleData ? roleData.name : "Unassigned",
-    status: (employee.status as Employee["status"]) ?? USER_STATUS.ACTIVE,
-    avatar_color: employee.avatar_color ?? "#3b82f6",
-    avatar_url: employee.avatar_url ?? "",
-    last_login: employee.last_login ?? "",
-    created_at: employee.created_at ?? "",
-    updated_at: employee.updated_at ?? "",
-    pin_hash: employee.pin_hash ?? "",
-  };
+return mapEmployee(employee);
 };
-
-interface UpdateEmployeeDto {
-  full_name?: string;
-  email?: string;
-  phone?: string;
-  role_id?: string;
-  status?: Employee["status"];
-  avatar_color?: string | null;
-  avatar_url?: string | null;
-  pin_hash?: string | null;
-}
 
 const updateEmployee = async (
   id: string,
@@ -120,25 +75,8 @@ const updateEmployee = async (
     throw new Error(error.message);
   }
 
-  const employee = data as unknown as EmployeeQueryResult;
-  const roleData = Array.isArray(employee.role)
-    ? employee.role[0]
-    : employee.role;
-
-  return {
-    id: employee.id,
-    full_name: employee.full_name ?? "",
-    email: employee.email ?? "",
-    phone: employee.phone ?? "",
-    role: roleData ? roleData.name : "Unassigned",
-    status: (employee.status as Employee["status"]) ?? USER_STATUS.ACTIVE,
-    avatar_color: employee.avatar_color ?? "#3b82f6",
-    avatar_url: employee.avatar_url ?? "",
-    last_login: employee.last_login ?? "",
-    created_at: employee.created_at ?? "",
-    updated_at: employee.updated_at ?? "",
-    pin_hash: employee.pin_hash ?? "",
-  };
+ const employee = data as unknown as EmployeeQueryResult;
+return mapEmployee(employee);
 };
 
 const deleteEmployee = async (id: string): Promise<void> => {
@@ -160,22 +98,8 @@ const getLogs = async (): Promise<ActivityLog[]> => {
   if (error) {
     throw new Error(error.message);
   }
-
   const logs = (data ?? []) as unknown as AuditLogQueryResult[];
-
-  return logs.map((log) => ({
-    id: log.id,
-    operator_id: log.operator_id ?? "",
-    operator_name: log.operator_name ?? "System",
-    operator: log.operator_name ?? "System", // Kept for UI compatibility if needed
-    role: log.role ?? "Unknown",
-    action: log.action ?? "",
-    details: log.details ?? "",
-    ip_address: log.ip_address,
-    ipAddress: log.ip_address ?? "", // Kept for UI compatibility if needed
-    created_at: log.created_at ?? "",
-    timestamp: log.created_at ?? "", // Kept for UI compatibility if needed
-  }));
+ return logs.map(mapAuditLog);
 };
 
 const logActivity = async (payload: CreateActivityLogDto): Promise<void> => {
