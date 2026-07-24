@@ -1,5 +1,9 @@
 import { create } from "zustand";
-import type { Employee, RoleData, ActivityLog } from "../types/staff";
+import type {
+  Employee,
+  RoleData,
+  ActivityLog,
+} from "../types/staff";
 
 interface StaffStore {
   employees: Employee[];
@@ -14,17 +18,23 @@ interface StaffStore {
   reset: () => void;
 }
 
-export const useStaffStore = create<StaffStore>((set) => ({
+const useStaffStore = create<StaffStore>((set) => ({
   employees: [],
   roles: [],
   logs: [],
-
   isLoading: false,
 
-  setEmployees: (employees) => set({ employees }),
-  setRoles: (roles) => set({ roles }),
-  setLogs: (logs) => set({ logs }),
-  setLoading: (loading) => set({ isLoading: loading }),
+  setEmployees: (employees) =>
+    set({ employees }),
+
+  setRoles: (roles) =>
+    set({ roles }),
+
+  setLogs: (logs) =>
+    set({ logs }),
+
+  setLoading: (loading) =>
+    set({ isLoading: loading }),
 
   reset: () =>
     set({
