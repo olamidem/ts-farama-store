@@ -2,17 +2,22 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { staffService } from "../services/staff.service";
 import { staffKeys } from "../queryKeys";
-import type { CreateEmployeeDto } from "../types/staff-query.types";
+import type { UpdateEmployeeDto } from "../types/staff-query.types";
 
-export const useCreateEmployee = () => {
+interface UpdatePayload {
+  id: string;
+  updates: UpdateEmployeeDto;
+}
+
+export const useUpdateEmployee = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (payload: CreateEmployeeDto) =>
-      staffService.createEmployee(payload),
+    mutationFn: ({ id, updates }: UpdatePayload) =>
+      staffService.updateEmployee(id, updates),
 
     onSuccess: () => {
-      toast.success("Employee created successfully.");
+      toast.success("Employee updated successfully.");
 
       queryClient.invalidateQueries({
         queryKey: staffKeys.employees,
