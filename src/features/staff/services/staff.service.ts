@@ -117,6 +117,23 @@ const logActivity = async (payload: CreateActivityLogDto): Promise<void> => {
   }
 };
 
+const resetPin = async (
+  id: string,
+  pin_hash: string,
+): Promise<void> => {
+  const { error } = await supabase
+    .from("profiles")
+    .update({
+      pin_hash,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+};
+
 export const staffService = {
   getRoles,
   getEmployees,
@@ -125,6 +142,7 @@ export const staffService = {
   deleteEmployee,
   getLogs,
   logActivity,
+  resetPin,
 };
 
 export default staffService;
