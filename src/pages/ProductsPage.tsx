@@ -24,7 +24,6 @@ import type { Product } from "../features/products/types/product";
 import ConfirmDialog from "../components/ui/ConfirmDialog";
 import {
   Plus,
-  Bell,
   ChevronDown,
   Upload,
   Download,
@@ -239,14 +238,6 @@ const ProductsPage = () => {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          {/* Bell Icon Notification */}
-          <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 transition cursor-pointer shadow-sm">
-            <Bell size={18} />
-            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[9px] font-black text-white ring-2 ring-white">
-              2
-            </span>
-          </div>
-
           {/* Add Product Button */}
           <button
             onClick={() => setIsAddModalOpen(true)}

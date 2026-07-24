@@ -19,13 +19,15 @@ import StaffPage from "../pages/Staff/StaffPage";
 import ProfilePage from "../pages/Profile/ProfilePage";
 import LockScreenPage from "../features/auth/pages/LockScreenPage";
 
-
-
 const rootRoute = createRootRoute();
 const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
   component: LoginScreen,
+  staticData: {
+    title: "Sign In",
+    subtitle: "Access your ERP account",
+  },
 });
 
 /**
@@ -42,51 +44,90 @@ const dashboardRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
   path: "/dashboard",
   component: Dashboard,
+  staticData: {
+    title: "Dashboard",
+    subtitle: "Overview of today's business",
+  },
 });
 
 const productsRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
   path: "/products",
   component: ProductsPage,
+  staticData: {
+    title: "Products",
+    subtitle: "Manage your product catalog",
+  },
 });
-const CategoryRoute = createRoute({
-  getParentRoute: () => appLayoutRoute,
-  path: "/categories",
-  component: CategoryPage,
-});
-const unitsRoute = createRoute({
-  getParentRoute: () => appLayoutRoute,
-  path: "/units",
-  component: UnitsPage,
-});
+
 const productDetailsRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
   path: "/products/$productId",
   component: ProductDetailsPage,
+  staticData: {
+    title: "Product Details",
+    subtitle: "View and update product information",
+  },
+});
+
+const CategoryRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
+  path: "/categories",
+  component: CategoryPage,
+  staticData: {
+    title: "Categories",
+    subtitle: "Organize products into categories",
+  },
+});
+
+const unitsRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
+  path: "/units",
+  component: UnitsPage,
+  staticData: {
+    title: "Units",
+    subtitle: "Manage measurement units",
+  },
 });
 
 const inventoryRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
   path: "/inventory",
   component: InventoryPage,
+  staticData: {
+    title: "Inventory",
+    subtitle: "Monitor stock levels and availability",
+  },
 });
 
 const purchasesRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
   path: "/purchases",
   component: PurchasesPage,
+  staticData: {
+    title: "Purchases",
+    subtitle: "Manage supplier purchases",
+  },
 });
 
 const suppliersRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
   path: "/suppliers",
   component: SuppliersPage,
+  staticData: {
+    title: "Suppliers",
+    subtitle: "Manage supplier information",
+  },
 });
 
 const staffRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
   path: "/staff",
   component: StaffPage,
+  staticData: {
+    title: "Staff",
+    subtitle: "Manage employees, roles and permissions",
+  },
 });
 
 // const settingsRoute = createRoute({
@@ -99,12 +140,20 @@ const profileRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
   path: "/profile",
   component: ProfilePage,
+  staticData: {
+    title: "My Profile",
+    subtitle: "Manage your account information",
+  },
 });
 
 const lockScreenRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/lock-screen",
   component: LockScreenPage,
+  staticData: {
+    title: "Session Locked",
+    subtitle: "Unlock your session to continue",
+  },
 });
 
 // const salesRoute = createRoute({
