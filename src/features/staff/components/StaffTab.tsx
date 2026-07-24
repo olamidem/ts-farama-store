@@ -18,9 +18,7 @@ interface StaffTabProps {
   onToggleStatus: (id: string) => void;
   onDeleteClick: (emp: Employee) => void;
   onRoleChange: (id: string, role: string) => void;
-  onTabChange: (
-    tab: "employees" | "roles" | "permissions" | "logs"
-  ) => void;
+  onTabChange: (tab: "employees" | "roles" | "permissions" | "logs") => void;
 }
 
 export const StaffTab = ({
