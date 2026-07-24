@@ -12,6 +12,7 @@ import type {
   AuditLogQueryResult,
   CreateActivityLogDto,
 } from "../types/staff-query.types";
+import { mapEmployee } from "../utils/mapEmployee";
 
 const getRoles = async (): Promise<RoleData[]> => {
   const { data, error } = await supabase.from("roles").select(ROLE_SELECT)
@@ -45,26 +46,7 @@ const getEmployees = async (): Promise<Employee[]> => {
   }
 
   const employees = (data ?? []) as unknown as EmployeeQueryResult[];
-  return employees.map((employee) => {
-    const roleData = Array.isArray(employee.role)
-      ? employee.role[0]
-      : employee.role;
-
-    return {
-      id: employee.id,
-      full_name: employee.full_name ?? "",
-      email: employee.email ?? "",
-      phone: employee.phone ?? "",
-      role: roleData ? roleData.name : "Unassigned",
-      status: (employee.status as Employee["status"]) ?? USER_STATUS.ACTIVE,
-      avatar_color: employee.avatar_color ?? "#3b82f6",
-      avatar_url: employee.avatar_url ?? "",
-      last_login: employee.last_login ?? "",
-      created_at: employee.created_at ?? "",
-      updated_at: employee.updated_at ?? "",
-      pin_hash: employee.pin_hash ?? "",
-    };
-  });
+  return employees.map(mapEmployee);
 };
 
 interface CreateEmployeeDto {
