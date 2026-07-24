@@ -87,9 +87,7 @@ export const ResetPinModal = ({
               {employee.full_name}
             </p>
 
-            <p className="text-sm text-slate-500">
-              {employee.role}
-            </p>
+            <p className="text-sm text-slate-500">{employee.role?.name}</p>
           </div>
 
           <div className="space-y-2">
