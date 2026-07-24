@@ -4,12 +4,14 @@ export const USER_STATUS = {
   SUSPENDED: "SUSPENDED",
 } as const;
 
+export type UserStatus = (typeof USER_STATUS)[keyof typeof USER_STATUS];
 
-export type RoleName =
-  | "Administrator"
-  | "Manager"
-  | "Accountant"
-  | "Storekeeper"
-  | "Cashier";
+export const ROLE_NAME = {
+  ADMINISTRATOR: "Administrator",
+  MANAGER: "Manager",
+  ACCOUNTANT: "Accountant",
+  STOREKEEPER: "Storekeeper",
+  CASHIER: "Cashier",
+} as const;
 
-  export type UserStatus = (typeof USER_STATUS)[keyof typeof USER_STATUS];
+export type RoleName = (typeof ROLE_NAME)[keyof typeof ROLE_NAME];

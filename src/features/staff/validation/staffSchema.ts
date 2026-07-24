@@ -24,7 +24,11 @@ export const staffSchema = z.object({
 });
 
 export const editStaffSchema = staffSchema.omit({ pin: true }).extend({
-  status: z.nativeEnum(USER_STATUS),
+  status: z.enum([
+    USER_STATUS.ACTIVE,
+    USER_STATUS.INACTIVE,
+    USER_STATUS.SUSPENDED,
+  ]),
 });
 
 export type StaffFormData = z.infer<typeof staffSchema>;
